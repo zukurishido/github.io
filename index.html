@@ -1,1 +1,201 @@
+// index.html
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' telegram.org *.telegram.org data: 'unsafe-inline' 'unsafe-eval';">
+    <title>Admin Dashboard</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 16px;
+            background: var(--tg-theme-bg-color, #fff);
+            color: var(--tg-theme-text-color, #000);
+        }
+        .card {
+            background: var(--tg-theme-secondary-bg-color, #f5f5f5);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .button {
+            background: var(--tg-theme-button-color, #3390ec);
+            color: var(--tg-theme-button-text-color, #fff);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            width: 100%;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .button:active {
+            opacity: 0.8;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+        .error {
+            color: #ff3b30;
+            text-align: center;
+            padding: 12px;
+            margin-bottom: 16px;
+            background: rgba(255,59,48,0.1);
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="loading">Загрузка...</div>
+    </div>
 
+    <script>
+        // Initialize Telegram Mini App
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        class AdminDashboard {
+            constructor() {
+                this.app = document.getElementById('app');
+                this.currentView = 'main';
+                this.apiBase = 'https://your-api-domain.com'; // Замените на ваш домен API
+                this.stats = null;
+                this.initData = tg.initData;
+                
+                this.initialize();
+            }
+
+            async initialize() {
+                try {
+                    await this.fetchStats();
+                    this.render();
+                } catch (error) {
+                    console.error('Initialization error:', error);
+                    this.showError('Ошибка инициализации. Попробуйте позже.');
+                }
+            }
+
+            async fetchStats() {
+                try {
+                    const response = await fetch(`${this.apiBase}/api/stats`, {
+                        headers: {
+                            'X-Telegram-Init-Data': this.initData,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    
+                    this.stats = await response.json();
+                } catch (error) {
+                    console.error('API error:', error);
+                    throw error;
+                }
+            }
+
+            showError(message) {
+                this.app.innerHTML = `
+                    <div class="error">${message}</div>
+                    <button class="button" onclick="location.reload()">Попробовать снова</button>
+                `;
+            }
+
+            handleBack() {
+                if (this.currentView !== 'main') {
+                    this.currentView = 'main';
+                    this.render();
+                    tg.BackButton.hide();
+                }
+            }
+
+            formatNumber(num) {
+                return new Intl.NumberFormat('ru-RU').format(num);
+            }
+
+            renderMainMenu() {
+                if (!this.stats) return '<div class="loading">Загрузка данных...</div>';
+
+                return `
+                    <h2>Панель управления</h2>
+                    <div class="card stats-grid">
+                        <div>
+                            <h3>👥 Подписчики</h3>
+                            <p>${this.formatNumber(this.stats.subscribers)}</p>
+                        </div>
+                        <div>
+                            <h3>📈 Прирост</h3>
+                            <p>+${this.stats.growth}</p>
+                        </div>
+                    </div>
+                    <button class="button" onclick="dashboard.setView('stats')">📊 Статистика</button>
+                    <button class="button" onclick="dashboard.setView('income')">💰 Доход</button>
+                    <button class="button" onclick="dashboard.setView('analytics')">📈 Аналитика</button>
+                    <button class="button" onclick="dashboard.setView('settings')">⚙️ Настройки</button>
+                `;
+            }
+
+            renderStats() {
+                if (!this.stats) return '<div class="loading">Загрузка статистики...</div>';
+
+                return `
+                    <h2>📊 Статистика канала</h2>
+                    <div class="card">
+                        <p>👥 Подписчики: ${this.formatNumber(this.stats.subscribers)}</p>
+                        <p>📈 Прирост: +${this.stats.growth} за 24ч</p>
+                        <p>💰 Доход: $${this.formatNumber(this.stats.revenue)}</p>
+                        <p>📊 Рост: +${this.stats.revenue_growth}%</p>
+                    </div>
+                    <h3>⚡️ Лучшее время публикаций:</h3>
+                    <div class="card">
+                        <p>• 12:00 - 14:00</p>
+                        <p>• 18:00 - 20:00</p>
+                        <p>• 21:00 - 22:00</p>
+                    </div>
+                `;
+            }
+
+            setView(view) {
+                this.currentView = view;
+                if (view !== 'main') {
+                    tg.BackButton.show();
+                } else {
+                    tg.BackButton.hide();
+                }
+                this.render();
+            }
+
+            render() {
+                const views = {
+                    'main': () => this.renderMainMenu(),
+                    'stats': () => this.renderStats(),
+                    'income': () => `<h2>💰 Доходы</h2><div class="card">Скоро будет доступно</div>`,
+                    'analytics': () => `<h2>📈 Аналитика</h2><div class="card">Скоро будет доступно</div>`,
+                    'settings': () => `<h2>⚙️ Настройки</h2><div class="card">Скоро будет доступно</div>`
+                };
+
+                this.app.innerHTML = views[this.currentView]();
+            }
+        }
+
+        // Initialize dashboard when document is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            window.dashboard = new AdminDashboard();
+            tg.ready();
+        });
+    </script>
+</body>
+</html>
