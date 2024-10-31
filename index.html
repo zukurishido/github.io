@@ -6,6 +6,19 @@
     <title>Элитные Игровые Смартфоны 2024</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4338ca;
+            --secondary: #ec4899;
+            --background: #0f172a;
+            --surface: #1e293b;
+            --text: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --success: #22c55e;
+            --warning: #eab308;
+            --error: #ef4444;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,230 +27,236 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0a0c1b;
-            color: #e2e8f0;
+            background: var(--background);
+            color: var(--text);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .hero {
-            background: linear-gradient(135deg, #1a237e, #311b92);
-            padding: 40px 20px;
-            text-align: center;
             position: relative;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
             overflow: hidden;
         }
 
         .hero::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, 
-                rgba(33, 150, 243, 0.1) 0%,
-                rgba(156, 39, 176, 0.1) 50%,
-                rgba(233, 30, 99, 0.1) 100%);
-            animation: gradientBG 15s ease infinite;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: rotate 20s linear infinite;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         .hero-content {
             position: relative;
             z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
         }
 
         .hero h1 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin-bottom: 1rem;
-            background: linear-gradient(to right, #fff, #c2c2c2);
+            background: linear-gradient(to right, #fff, #e2e8f0);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            animation: slideIn 1s ease-out;
         }
 
         .hero p {
-            font-size: 1.1rem;
-            color: #b3e5fc;
-            max-width: 600px;
-            margin: 0 auto;
+            font-size: 1.25rem;
+            color: rgba(255,255,255,0.9);
+            animation: fadeIn 1s ease-out 0.5s both;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 2rem;
+        }
+
+        .phone-grid {
+            display: grid;
+            gap: 2rem;
+            padding: 1rem;
         }
 
         .phone-card {
-            background: linear-gradient(145deg, #1e213a, #161927);
-            border-radius: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            background: var(--surface);
+            border-radius: 1.5rem;
             overflow: hidden;
-            transform: translateY(0);
-            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transition: transform 0.3s ease;
         }
 
         .phone-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         }
 
         .phone-header {
-            background: linear-gradient(to right, #1e213a, #2a2d4a);
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
             position: relative;
+            padding: 2rem;
+            background: linear-gradient(45deg, var(--primary-dark), var(--primary));
+            cursor: pointer;
             overflow: hidden;
         }
 
-        .phone-header::after {
+        .phone-header::before {
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
+            left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, 
-                transparent 0%,
-                rgba(255,255,255,0.1) 50%,
-                transparent 100%);
-            transform: translateX(-100%);
-            transition: transform 0.5s ease;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
         }
 
-        .phone-header:hover::after {
-            transform: translateX(100%);
+        .phone-header:hover::before {
+            left: 100%;
         }
 
         .phone-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .phone-name {
             font-size: 1.5rem;
             font-weight: 700;
             color: #fff;
         }
 
         .phone-price {
-            font-size: 1.3rem;
-            color: #4caf50;
+            font-size: 1.25rem;
+            color: var(--success);
             font-weight: 600;
         }
 
         .phone-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .phone-content.active {
-            max-height: 2000px;
+            max-height: 3000px;
         }
 
         .specs-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 1.5rem;
         }
 
-        .spec-category {
+        .spec-section {
             background: rgba(255,255,255,0.05);
-            border-radius: 15px;
-            padding: 20px;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            transform: translateZ(20px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        .spec-category h3 {
-            color: #64b5f6;
-            margin-bottom: 15px;
-            font-size: 1.2rem;
+        .spec-title {
+            font-size: 1.25rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0.5rem;
         }
 
         .spec-item {
-            margin-bottom: 12px;
+            background: rgba(255,255,255,0.03);
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 0.75rem;
+            transition: transform 0.3s ease;
+        }
+
+        .spec-item:hover {
+            transform: translateX(5px);
+            background: rgba(255,255,255,0.05);
         }
 
         .spec-label {
-            color: #b3e5fc;
-            font-size: 0.9rem;
-            margin-bottom: 4px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
         }
 
         .spec-value {
-            color: #fff;
+            font-size: 1rem;
+            color: var(--text);
             font-weight: 500;
         }
 
-        .gaming-features {
-            background: rgba(33, 150, 243, 0.05);
-            padding: 20px;
-            margin-top: 20px;
+        .performance-chart {
+            padding: 1.5rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 1rem;
+            margin: 1.5rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
         }
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            padding: 1.5rem;
         }
 
         .feature-item {
-            background: rgba(255,255,255,0.05);
-            padding: 15px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+            padding: 1rem;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .feature-item::before {
-            content: "🎮";
-            font-size: 1.2rem;
+        .feature-item:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
         }
 
-        .performance-charts {
-            padding: 20px;
-            background: rgba(0,0,0,0.2);
+        .cooling-system {
+            background: linear-gradient(to right, rgba(99,102,241,0.1), rgba(236,72,153,0.1));
+            padding: 1.5rem;
+            border-radius: 1rem;
+            margin: 1.5rem;
         }
 
-        .charts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .chart-container {
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-            padding: 15px;
-        }
-
-        .benchmark-score {
-            text-align: center;
-            padding: 20px;
-            background: linear-gradient(145deg, #1e213a, #161927);
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-
-        .score-value {
-            font-size: 2rem;
-            color: #64b5f6;
-            font-weight: 700;
-        }
-
-        .score-label {
-            color: #b3e5fc;
-            margin-top: 5px;
+        .cooling-icon {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
         }
 
         @media (max-width: 768px) {
@@ -247,339 +266,165 @@
             .specs-grid {
                 grid-template-columns: 1fr;
             }
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
         }
 
-        .highlight {
-            color: #29b6f6;
+        .benchmark-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border-radius: 2rem;
+            margin: 0.5rem;
             font-weight: 600;
         }
 
-        .pros-cons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 20px;
-            background: rgba(0,0,0,0.2);
+        .gaming-features {
+            background: linear-gradient(45deg, rgba(99,102,241,0.1), rgba(236,72,153,0.1));
+            padding: 1.5rem;
+            border-radius: 1rem;
+            margin: 1.5rem;
         }
 
-        .pros, .cons {
-            background: rgba(255,255,255,0.05);
-            padding: 20px;
-            border-radius: 10px;
-        }
-
-        .pros h4 {
-            color: #4caf50;
-            margin-bottom: 10px;
-        }
-
-        .cons h4 {
-            color: #f44336;
-            margin-bottom: 10px;
-        }
-
-        .pros-cons ul {
-            list-style: none;
-        }
-
-        .pros-cons li {
-            margin-bottom: 8px;
-            padding-left: 20px;
-            position: relative;
-        }
-
-        .pros li::before {
-            content: "✓";
-            color: #4caf50;
-            position: absolute;
+        .loading-bar {
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0;
+            position: fixed;
+            top: 0;
             left: 0;
+            animation: loading 2s ease-in-out forwards;
         }
 
-        .cons li::before {
-            content: "×";
-            color: #f44336;
+        @keyframes loading {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+
+        .category-badge {
             position: absolute;
-            left: 0;
+            top: -10px;
+            right: -10px;
+            background: var(--warning);
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transform: rotate(15deg);
         }
-
-        .cooling-system {
-            padding: 20px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 10px;
-            margin: 20px;
-        }
-
-        .cooling-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .cooling-feature {
-            background: rgba(255,255,255,0.05);
-            padding: 15px;
-            border-radius: 8px;
-        }
-
     </style>
 </head>
 <body>
+    <div class="loading-bar"></div>
+    
     <div class="hero">
         <div class="hero-content">
             <h1>Элитные Игровые Смартфоны 2024</h1>
-            <p>Полный обзор лучших геймерских смартфонов с продвинутыми системами охлаждения и экстремальной производительностью</p>
+            <p>Экстремальная производительность для максимального gaming-опыта</p>
         </div>
     </div>
 
     <div class="container" id="phones-container"></div>
 
     <script>
-        const phones = [
-            {
-                model: "ASUS ROG Phone 7",
-                price: 69990,
-                specs: {
-                    performance: {
-                        title: "Производительность",
-                        items: {
-                            "Процессор": "Snapdragon 8 Gen 2 (4 нм)",
-                            "Частота CPU": "До 3.2 ГГц (1× Cortex-X3)",
-                            "Графика": "Adreno 740",
-                            "GPU частота": "680 MHz",
-                            "RAM": "16 ГБ LPDDR5X",
-                            "Частота RAM": "6400 МГц",
-                            "Память": "512 ГБ UFS 4.0",
-                            "Скорость чтения": "До 4200 МБ/с"
-                        }
-                    },
-                    display: {
-                        title: "Дисплей",
-                        items: {
-                            "Тип": "Samsung E4 AMOLED",
-                            "Диагональ": "6.78″ (17.22 см)",
-                            "Разрешение": "2448 × 1080 (FHD+)",
-                            "Частота": "165 Гц адаптивная",
-                            "Яркость": "1500 нит (пиковая)",
-                            "Защита": "Gorilla Glass Victus",
-                            "HDR": "HDR10+",
-                            "Отклик": "1 мс",
-                            "Сенсор": "720 Гц тактильная частота"
-                        }
-                    },
-                    battery: {
-                        title: "Батарея и зарядка",
-                        items: {
-                            "Ёмкость": "6000 мАч (два аккумулятора)",
-                            "Быстрая зарядка": "65 Вт HyperCharge",
-                            "Время зарядки": "0-100% за 42 минуты",
-                            "Беспроводная зарядка": "15 Вт Qi",
-                            "Обратная зарядка": "10 Вт",
-                            "Технологии": "PowerMaster, Bypass Charging"
-                        }
-                    }
-                },
-                cooling: {
-                    title: "GameCool 7",
-                    features: [
-                        "360° CPU Cooling",
-                        "Vapor Chamber (площадь 4000 мм²)",
-                        "Графитовые пластины",
-                        "Медный радиатор",
-                        "Термоинтерфейс Boron Nitride",
-                        "AeroActive Cooler 7 (опционально)"
-                    ]
-                },
-                gaming: {
-                    title: "Игровые технологии",
-                    features: [
-                        "AirTrigger 7 ультразвуковые триггеры",
-                        "Game Genie центр управления",
-                        "X-Mode+ разгон",
-                        "Армейская вибрация X-Haptics",
-                        "ESS Sabre ES9280AC Pro ЦАП",
-                        "Фронтальные стерео динамики 5-магнит"
-                    ]
-                },
-                benchmarks: {
-                    "AnTuTu v9": 1320000,
-                    "GeekBench 5": 2050,
-                    "3DMark Wild Life": 3350
-                },
-                pros: [
-                    "Лучшая система охлаждения",
-                    "Мощный звук и вибрация",
-                    "Огромная батарея",
-                    "165 Гц AMOLED дисплей",
-                    "Полный набор игровых функций"
-                ],
-                cons: [
-                    "Высокая цена",
-                    "Большой вес (239г)",
-                    "Нет защиты от воды"
-                ]
-            },
-            // Добавьте аналогичные подробные данные для других телефонов
-        ];
-
-        function createPerformanceChart(canvasId, phone) {
-            const ctx = document.getElementById(canvasId).getContext('2d');
-            return new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: ['CPU', 'GPU', 'RAM', 'Storage', 'Cooling', 'Display'],
-                    datasets: [{
-                        label: 'Производительность',
-                        data: [95, 98, 90, 85, 92, 88],
-                        fill: true,
-                        backgroundColor: 'rgba(33, 150, 243, 0.2)',
-                        borderColor: 'rgba(33, 150, 243, 1)',
-                        pointBackgroundColor: 'rgba(33, 150, 243, 1)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgba(33, 150, 243, 1)'
-                    }]
-                },
-                options: {
-                    scales: {
-                        r: {
-                            angleLines: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            },
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            },
-                            pointLabels: {
-                                color: '#b3e5fc'
-                            },
-                            ticks: {
-                                color: '#b3e5fc',
-                                backdropColor: 'transparent'
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    }
-                }
-            });
-        }
+        // Тот же массив phones из предыдущего примера
 
         const container = document.getElementById('phones-container');
+        const phoneGrid = document.createElement('div');
+        phoneGrid.className = 'phone-grid';
 
         phones.forEach((phone, index) => {
             const card = document.createElement('div');
             card.className = 'phone-card';
+            card.setAttribute('data-aos', 'fade-up');
+            card.style.animationDelay = `${index * 0.2}s`;
 
-            // Создаем секции спецификаций
-            const specsHtml = Object.entries(phone.specs)
-                .map(([category, data]) => `
-                    <div class="spec-category">
-                        <h3>${data.title}</h3>
-                        ${Object.entries(data.items)
-                            .map(([label, value]) => `
-                                <div class="spec-item">
-                                    <div class="spec-label">${label}</div>
-                                    <div class="spec-value">${value}</div>
-                                </div>
-                            `).join('')}
+            // Создаем радарную диаграмму для характеристик
+            const chartData = {
+                labels: ['CPU', 'GPU', 'RAM', 'Storage', 'Display', 'Battery'],
+                datasets: [{
+                    label: 'Характеристики',
+                    data: [95, 90, 85, 88, 92, 87], // Примерные значения
+                    backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                    borderColor: 'rgba(99, 102, 241, 1)',
+                    pointBackgroundColor: 'rgba(99, 102, 241, 1)',
+                    borderWidth: 2
+                }]
+            };
+
+            const content = `
+                <div class="phone-header">
+                    <div class="phone-title">
+                        <span class="phone-name">${phone.name}</span>
+                        <span class="phone-price">${phone.price.toLocaleString()}₽</span>
                     </div>
-                `).join('');
-
-            // Создаем секцию охлаждения
-            const coolingHtml = `
-                <div class="cooling-system">
-                    <h3>${phone.cooling.title}</h3>
-                    <div class="cooling-details">
-                        ${phone.cooling.features.map(feature => `
-                            <div class="cooling-feature">
-                                <div class="feature-value">${feature}</div>
+                    ${index === 0 ? '<span class="category-badge">ТОП-1</span>' : ''}
+                </div>
+                <div class="phone-content">
+                    <div class="performance-chart">
+                        <canvas id="chart${index}"></canvas>
+                    </div>
+                    <div class="specs-grid">
+                        ${Object.entries(phone.specs).map(([section, specs]) => `
+                            <div class="spec-section">
+                                <div class="spec-title">
+                                    <span class="cooling-icon">💫</span>
+                                    ${section}
+                                </div>
+                                ${Object.entries(specs).map(([label, value]) => `
+                                    <div class="spec-item">
+                                        <div class="spec-label">${label}</div>
+                                        <div class="spec-value">${value}</div>
+                                    </div>
+                                `).join('')}
                             </div>
                         `).join('')}
                     </div>
                 </div>
             `;
 
-            // Создаем секцию игровых функций
-            const gamingHtml = `
-                <div class="gaming-features">
-                    <h3>${phone.gaming.title}</h3>
-                    <div class="features-grid">
-                        ${phone.gaming.features.map(feature => `
-                            <div class="feature-item">${feature}</div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
+            card.innerHTML = content;
+            phoneGrid.appendChild(card);
 
-            // Создаем секцию производительности
-            const performanceHtml = `
-                <div class="performance-charts">
-                    <div class="charts-grid">
-                        <div class="chart-container">
-                            <canvas id="perfChart${index}"></canvas>
-                        </div>
-                        <div class="benchmark-scores">
-                            ${Object.entries(phone.benchmarks).map(([test, score]) => `
-                                <div class="benchmark-score">
-                                    <div class="score-value">${score.toLocaleString()}</div>
-                                    <div class="score-label">${test}</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                </div>
-            `;
+            // Инициализация после добавления в DOM
+            setTimeout(() => {
+                const ctx = document.getElementById(`chart${index}`).getContext('2d');
+                new Chart(ctx, {
+                    type: 'radar',
+                    data: chartData,
+                    options: {
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: {
+                                    color: '#94a3b8'
+                                },
+                                grid: {
+                                    color: 'rgba(148, 163, 184, 0.1)'
+                                },
+                                pointLabels: {
+                                    color: '#f1f5f9'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }, 100);
 
-            // Создаем секцию плюсов и минусов
-            const prosConsHtml = `
-                <div class="pros-cons">
-                    <div class="pros">
-                        <h4>Преимущества</h4>
-                        <ul>
-                            ${phone.pros.map(pro => `<li>${pro}</li>`).join('')}
-                        </ul>
-                    </div>
-                    <div class="cons">
-                        <h4>Недостатки</h4>
-                        <ul>
-                            ${phone.cons.map(con => `<li>${con}</li>`).join('')}
-                        </ul>
-                    </div>
-                </div>
-            `;
-
-            card.innerHTML = `
-                <div class="phone-header">
-                    <div class="phone-title">${phone.model}</div>
-                    <div class="phone-price">${phone.price.toLocaleString()}₽</div>
-                </div>
-                <div class="phone-content">
-                    <div class="specs-grid">${specsHtml}</div>
-                    ${coolingHtml}
-                    ${gamingHtml}
-                    ${performanceHtml}
-                    ${prosConsHtml}
-                </div>
-            `;
-
-            container.appendChild(card);
-
-            // Инициализируем график после добавления карточки в DOM
-            createPerformanceChart(`perfChart${index}`, phone);
-
-            // Добавляем обработчик клика для раскрытия/скрытия контента
+            // Обработчик клика
             const header = card.querySelector('.phone-header');
-            const content = card.querySelector('.phone-content');
+            const phoneContent = card.querySelector('.phone-content');
             header.addEventListener('click', () => {
-                content.classList.toggle('active');
+                phoneContent.classList.toggle('active');
             });
         });
+
+        container.appendChild(phoneGrid);
     </script>
 </body>
 </html>
