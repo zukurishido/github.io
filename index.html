@@ -3,75 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Лучшие игровые смартфоны 2024</title>
+    <title>Топ игровых смартфонов 2024</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            margin: 0;
+            background: #f0f2f5;
+            color: #1f2937;
+            line-height: 1.5;
             padding: 16px;
-            background: #f5f5f5;
         }
+
         .header {
-            margin-bottom: 20px;
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a237e, #311b92);
+            color: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         .header h1 {
             font-size: 24px;
-            margin: 0 0 8px 0;
-            text-align: center;
+            margin-bottom: 8px;
         }
+
         .header p {
             font-size: 16px;
-            color: #666;
-            margin: 0;
-            text-align: center;
+            opacity: 0.9;
         }
+
+        .phones-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
         .phone-card {
             background: white;
             border-radius: 12px;
-            padding: 16px;
             margin-bottom: 16px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
+
+        .phone-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .phone-header {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+        }
+
         .phone-title {
-            font-size: 18px;
             font-weight: 600;
-            margin: 0 0 12px 0;
-            color: #1a1a1a;
+            color: #1a237e;
         }
+
         .phone-price {
-            font-size: 20px;
-            font-weight: 700;
-            color: #2563eb;
-            margin: 0 0 12px 0;
+            font-weight: 600;
+            color: #2e7d32;
         }
+
+        .phone-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .phone-details.active {
+            max-height: 1000px;
+        }
+
         .specs-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            font-size: 14px;
+            gap: 12px;
+            padding: 16px;
+            border-top: 1px solid #e5e7eb;
         }
-        .spec-item {
-            padding: 8px;
-            background: #f8f9fa;
-            border-radius: 6px;
-        }
-        .spec-label {
-            color: #666;
-            margin-bottom: 4px;
-            font-size: 12px;
-        }
-        .spec-value {
-            color: #1a1a1a;
-            font-weight: 500;
-        }
-        @media (min-width: 768px) {
-            body {
-                max-width: 600px;
-                margin: 0 auto;
-            }
+
+        @media (min-width: 640px) {
             .specs-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
+        }
+
+        .spec-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .spec-label {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+
+        .spec-value {
+            font-size: 14px;
+            font-weight: 500;
+            color: #1f2937;
+        }
+
+        .highlight {
+            color: #1a237e;
+            font-weight: 600;
+        }
+
+        .gaming-features {
+            background: #f3f4f6;
+            padding: 12px 16px;
+            margin-top: 8px;
+        }
+
+        .gaming-features h4 {
+            font-size: 14px;
+            color: #4a5568;
+            margin-bottom: 8px;
+        }
+
+        .features-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feature-item::before {
+            content: "🎮";
+            font-size: 14px;
         }
     </style>
 </head>
@@ -81,7 +161,7 @@
         <p>Актуальный рейтинг на 2024 год</p>
     </div>
 
-    <div id="phones-container"></div>
+    <div class="phones-container" id="phones-container"></div>
 
     <script>
         const phones = [
@@ -89,70 +169,120 @@
                 model: "ASUS ROG Phone 7",
                 price: 69990,
                 specs: {
-                    "RAM": "16 ГБ",
-                    "Память": "512 ГБ",
-                    "Процессор": "Snapdragon 8 Gen 2",
-                    "Дисплей": "6.78″ 165Hz",
+                    "Процессор": "Snapdragon 8 Gen 2 (4 нм)",
+                    "Графика": "Adreno 740",
+                    "RAM": "16 ГБ LPDDR5X",
+                    "Память": "512 ГБ UFS 4.0",
+                    "Дисплей": "6.78″ AMOLED 165 Гц",
+                    "Разрешение": "2448 × 1080 (FHD+)",
                     "Батарея": "6000 мАч",
-                    "Охлаждение": "Vapor Chamber"
-                }
+                    "Зарядка": "65 Вт быстрая",
+                    "Охлаждение": "GameCool 7"
+                },
+                features: [
+                    "Сенсорные триггеры AirTrigger 7",
+                    "Двойные фронтальные динамики",
+                    "Режим X-Mode для игр",
+                    "ROG Gaming UI",
+                    "Bypass Charging"
+                ]
             },
             {
                 model: "Red Magic 8 Pro+",
                 price: 65990,
                 specs: {
-                    "RAM": "16 ГБ",
-                    "Память": "512 ГБ",
-                    "Процессор": "Snapdragon 8 Gen 2",
-                    "Дисплей": "6.8″ 120Hz",
+                    "Процессор": "Snapdragon 8 Gen 2 (4 нм)",
+                    "Графика": "Adreno 740",
+                    "RAM": "16 ГБ LPDDR5X",
+                    "Память": "512 ГБ UFS 4.0",
+                    "Дисплей": "6.8″ AMOLED 120 Гц",
+                    "Разрешение": "2480 × 1116 (FHD+)",
                     "Батарея": "5000 мАч",
-                    "Охлаждение": "Active Fan"
-                }
+                    "Зарядка": "80 Вт быстрая",
+                    "Охлаждение": "ICE 11.0 + Вентилятор"
+                },
+                features: [
+                    "Встроенный кулер с RGB",
+                    "Сенсорные триггеры 520 Гц",
+                    "Game Space центр",
+                    "Редактор макросов",
+                    "Режим MAGIC GPU Boost"
+                ]
             },
             {
                 model: "iPhone 14 Pro",
                 price: 69990,
                 specs: {
-                    "RAM": "6 ГБ",
-                    "Память": "128 ГБ",
-                    "Процессор": "A16 Bionic",
-                    "Дисплей": "6.1″ 120Hz",
+                    "Процессор": "Apple A16 Bionic",
+                    "Графика": "Apple GPU (5-core)",
+                    "RAM": "6 ГБ LPDDR5",
+                    "Память": "128 ГБ NVMe",
+                    "Дисплей": "6.1″ OLED 120 Гц",
+                    "Разрешение": "2556 × 1179",
                     "Батарея": "3200 мАч",
-                    "Охлаждение": "Стандартное"
-                }
+                    "Зарядка": "20 Вт быстрая",
+                    "Охлаждение": "Графитовое"
+                },
+                features: [
+                    "Metal 3 API",
+                    "ProMotion адаптивная частота",
+                    "Dynamic Island",
+                    "Игровой центр",
+                    "SharePlay для игр"
+                ]
             },
             {
                 model: "Black Shark 5 Pro",
                 price: 62990,
                 specs: {
-                    "RAM": "12 ГБ",
-                    "Память": "256 ГБ",
                     "Процессор": "Snapdragon 8 Gen 1",
-                    "Дисплей": "6.67″ 144Hz",
+                    "Графика": "Adreno 730",
+                    "RAM": "12 ГБ LPDDR5",
+                    "Память": "256 ГБ UFS 3.1",
+                    "Дисплей": "6.67″ AMOLED 144 Гц",
+                    "Разрешение": "2400 × 1080 (FHD+)",
                     "Батарея": "4650 мАч",
-                    "Охлаждение": "Liquid Cool"
-                }
+                    "Зарядка": "120 Вт HyperCharge",
+                    "Охлаждение": "Sandwich Liquid Cooling"
+                },
+                features: [
+                    "Магнитные триггеры",
+                    "Shark Space 4.0",
+                    "Master Touch 2.0",
+                    "Режим Ludicrous Mode",
+                    "Anti-gravity дизайн"
+                ]
             },
             {
                 model: "OnePlus 11",
                 price: 59990,
                 specs: {
-                    "RAM": "16 ГБ",
-                    "Память": "256 ГБ",
                     "Процессор": "Snapdragon 8 Gen 2",
-                    "Дисплей": "6.7″ 120Hz",
+                    "Графика": "Adreno 740",
+                    "RAM": "16 ГБ LPDDR5X",
+                    "Память": "256 ГБ UFS 4.0",
+                    "Дисплей": "6.7″ AMOLED 120 Гц",
+                    "Разрешение": "3216 × 1440 (QHD+)",
                     "Батарея": "5000 мАч",
-                    "Охлаждение": "Vapor Chamber"
-                }
+                    "Зарядка": "100 Вт SUPERVOOC",
+                    "Охлаждение": "3D Vapor Chamber"
+                },
+                features: [
+                    "HyperBoost Gaming Engine",
+                    "Game Focus Mode",
+                    "O-Sync 2.0",
+                    "GPA Frame Stabilizer",
+                    "Dual Gaming Antennas"
+                ]
             }
         ];
 
         const container = document.getElementById('phones-container');
-        
+
         phones.forEach(phone => {
             const card = document.createElement('div');
             card.className = 'phone-card';
-            
+
             const specs = Object.entries(phone.specs)
                 .map(([key, value]) => `
                     <div class="spec-item">
@@ -161,14 +291,34 @@
                     </div>
                 `).join('');
 
+            const features = phone.features
+                .map(feature => `
+                    <div class="feature-item">${feature}</div>
+                `).join('');
+
             card.innerHTML = `
-                <div class="phone-title">${phone.model}</div>
-                <div class="phone-price">${phone.price.toLocaleString()}₽</div>
-                <div class="specs-grid">
-                    ${specs}
+                <div class="phone-header">
+                    <div class="phone-title">${phone.model}</div>
+                    <div class="phone-price">${phone.price.toLocaleString()}₽</div>
+                </div>
+                <div class="phone-details">
+                    <div class="specs-grid">
+                        ${specs}
+                    </div>
+                    <div class="gaming-features">
+                        <h4>Игровые особенности</h4>
+                        <div class="features-list">
+                            ${features}
+                        </div>
+                    </div>
                 </div>
             `;
-            
+
+            card.querySelector('.phone-header').addEventListener('click', () => {
+                const details = card.querySelector('.phone-details');
+                details.classList.toggle('active');
+            });
+
             container.appendChild(card);
         });
     </script>
