@@ -1,51 +1,436 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Топ Игровых Смартфонов 2024</title>
-    <!-- Сначала подключаем стили -->
-    <link rel="stylesheet" href="styles.css">
-    <!-- Затем все внешние библиотеки -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-</head>
-<body>
-    <!-- Контейнер для частиц -->
-    <div id="particles-container"></div>
-    
-    <!-- Основной контент -->
-    <main>
-        <header class="cyber-header">
-            <div class="glitch-container">
-                <h1 class="glitch" data-text="Топ-5 Игровых Смартфонов 2024">Топ-5 Игровых Смартфонов 2024</h1>
-            </div>
-        </header>
+<head>    <!-- строка 1 -->
+    <meta charset="UTF-8">    <!-- строка 2 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <!-- строка 3 -->
+    <title>Топ 5 Игровых Смартфонов 2024</title>    <!-- строка 4 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>    <!-- строка 5 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>    <!-- строка 6 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>    <!-- строка 7 -->
+    <style>    <!-- строка 8 -->
+        :root {    <!-- строка 9 -->
+            --primary: #2a2a72;    <!-- строка 10 -->
+            --secondary: #009ffd;    <!-- строка 11 -->
+            --accent: #0066ff;    <!-- строка 12 -->
+            --neon: #00ff88;    <!-- строка 13 -->
+        }    <!-- строка 14 -->
 
-        <!-- Сетка телефонов -->
-        <div id="phones-grid" class="phones-grid"></div>
+        @keyframes gradientBG {    <!-- строка 15 -->
+            0% { background-position: 0% 50%; }    <!-- строка 16 -->
+            50% { background-position: 100% 50%; }    <!-- строка 17 -->
+            100% { background-position: 0% 50%; }    <!-- строка 18 -->
+        }    <!-- строка 19 -->
+
+        @keyframes float {    <!-- строка 20 -->
+            0% { transform: translateY(0px); }    <!-- строка 21 -->
+            50% { transform: translateY(-20px); }    <!-- строка 22 -->
+            100% { transform: translateY(0px); }    <!-- строка 23 -->
+        }    <!-- строка 24 -->
+
+        body {    <!-- строка 25 -->
+            margin: 0;    <!-- строка 26 -->
+            font-family: 'Segoe UI', sans-serif;    <!-- строка 27 -->
+            background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #243b55);    <!-- строка 28 -->
+            background-size: 400% 400%;    <!-- строка 29 -->
+            animation: gradientBG 15s ease infinite;    <!-- строка 30 -->
+            color: white;    <!-- строка 31 -->
+            min-height: 100vh;    <!-- строка 32 -->
+            overflow-x: hidden;    <!-- строка 33 -->
+        }    <!-- строка 34 -->
+
+        #particles-js {    <!-- строка 35 -->
+            position: fixed;    <!-- строка 36 -->
+            top: 0;    <!-- строка 37 -->
+            left: 0;    <!-- строка 38 -->
+            width: 100%;    <!-- строка 39 -->
+            height: 100%;    <!-- строка 40 -->
+            z-index: 0;    <!-- строка 41 -->
+        }    <!-- строка 42 -->
+
+        .container {    <!-- строка 43 -->
+            max-width: 1200px;    <!-- строка 44 -->
+            margin: 0 auto;    <!-- строка 45 -->
+            padding: 2rem;    <!-- строка 46 -->
+            position: relative;    <!-- строка 47 -->
+            z-index: 1;    <!-- строка 48 -->
+        }    <!-- строка 49 -->
+
+        .title {    <!-- строка 50 -->
+            text-align: center;    <!-- строка 51 -->
+            font-size: 3.5rem;    <!-- строка 52 -->
+            margin-bottom: 3rem;    <!-- строка 53 -->
+            position: relative;    <!-- строка 54 -->
+            text-shadow: 0 0 10px var(--neon),    <!-- строка 55 -->
+                       0 0 20px var(--neon),    <!-- строка 56 -->
+                       0 0 30px var(--neon);    <!-- строка 57 -->
+            animation: float 6s ease-in-out infinite;    <!-- строка 58 -->
+        }    <!-- строка 59 -->
+
+        .title::after {    <!-- строка 60 -->
+            content: '';    <!-- строка 61 -->
+            position: absolute;    <!-- строка 62 -->
+            bottom: -10px;    <!-- строка 63 -->
+            left: 50%;    <!-- строка 64 -->
+            transform: translateX(-50%);    <!-- строка 65 -->
+            width: 100px;    <!-- строка 66 -->
+            height: 3px;    <!-- строка 67 -->
+            background: var(--neon);    <!-- строка 68 -->
+            box-shadow: 0 0 10px var(--neon);    <!-- строка 69 -->
+        }    <!-- строка 70 -->
+
+        .phones-grid {    <!-- строка 71 -->
+            display: grid;    <!-- строка 72 -->
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));    <!-- строка 73 -->
+            gap: 2rem;    <!-- строка 74 -->
+            perspective: 1000px;    <!-- строка 75 -->
+        }    <!-- строка 76 -->
+
+        .phone-card {    <!-- строка 77 -->
+            background: rgba(255, 255, 255, 0.1);    <!-- строка 78 -->
+            border-radius: 15px;    <!-- строка 79 -->
+            padding: 2rem;    <!-- строка 80 -->
+            backdrop-filter: blur(10px);    <!-- строка 81 -->
+            border: 1px solid rgba(255, 255, 255, 0.2);    <!-- строка 82 -->
+            transform-style: preserve-3d;    <!-- строка 83 -->
+            cursor: pointer;    <!-- строка 84 -->
+        }    <!-- строка 85 -->
+
+        .phone-img {    <!-- строка 86 -->
+            width: 100%;    <!-- строка 87 -->
+            height: 200px;    <!-- строка 88 -->
+            object-fit: contain;    <!-- строка 89 -->
+            transform: translateZ(30px);    <!-- строка 90 -->
+            filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.5));    <!-- строка 91 -->
+        }    <!-- строка 92 -->
+
+        .phone-name {    <!-- строка 93 -->
+            font-size: 1.8rem;    <!-- строка 94 -->
+            margin: 1rem 0;    <!-- строка 95 -->
+            color: var(--neon);    <!-- строка 96 -->
+            transform: translateZ(20px);    <!-- строка 97 -->
+            text-shadow: 0 0 5px var(--neon);    <!-- строка 98 -->
+        }    <!-- строка 99 -->
+
+        .modal {    <!-- строка 100 -->
+            display: none;    <!-- строка 101 -->
+            position: fixed;    <!-- строка 102 -->
+            top: 0;    <!-- строка 103 -->
+            left: 0;    <!-- строка 104 -->
+            width: 100%;    <!-- строка 105 -->
+            height: 100%;    <!-- строка 106 -->
+            background: rgba(0, 0, 0, 0.9);    <!-- строка 107 -->
+            backdrop-filter: blur(10px);    <!-- строка 108 -->
+            z-index: 1000;    <!-- строка 109 -->
+        }    <!-- строка 110 -->
+
+        .modal-content {    <!-- строка 111 -->
+            position: relative;    <!-- строка 112 -->
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(22, 33, 62, 0.9));    <!-- строка 113 -->
+            margin: 5% auto;    <!-- строка 114 -->
+            padding: 2rem;    <!-- строка 115 -->
+            width: 85%;    <!-- строка 116 -->
+            max-width: 1200px;    <!-- строка 117 -->
+            border-radius: 20px;    <!-- строка 118 -->
+            border: 1px solid var(--neon);    <!-- строка 119 -->
+            box-shadow: 0 0 20px var(--neon);    <!-- строка 120 -->
+            transform-origin: top;    <!-- строка 121 -->
+            animation: modalOpen 0.5s cubic-bezier(0.4, 0, 0.2, 1);    <!-- строка 122 -->
+        }    <!-- строка 123 -->
+
+        @keyframes modalOpen {    <!-- строка 124 -->
+            from {    <!-- строка 125 -->
+                opacity: 0;    <!-- строка 126 -->
+                transform: scale(0.8) translateY(-50px);    <!-- строка 127 -->
+            }    <!-- строка 128 -->
+            to {    <!-- строка 129 -->
+                opacity: 1;    <!-- строка 130 -->
+                transform: scale(1) translateY(0);    <!-- строка 131 -->
+            }    <!-- строка 132 -->
+        }    <!-- строка 133 -->
+
+        .specs-grid {    <!-- строка 134 -->
+            display: grid;    <!-- строка 135 -->
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));    <!-- строка 136 -->
+            gap: 1.5rem;    <!-- строка 137 -->
+            margin-top: 2rem;    <!-- строка 138 -->
+        }    <!-- строка 139 -->
+
+        .spec-item {    <!-- строка 140 -->
+            background: rgba(255, 255, 255, 0.1);    <!-- строка 141 -->
+            padding: 1.5rem;    <!-- строка 142 -->
+            border-radius: 15px;    <!-- строка 143 -->
+            border: 1px solid rgba(0, 255, 136, 0.3);    <!-- строка 144 -->
+            transition: all 0.3s ease;    <!-- строка 145 -->
+        }    <!-- строка 146 -->
+
+        .spec-item:hover {    <!-- строка 147 -->
+            transform: translateY(-5px);    <!-- строка 148 -->
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.2);    <!-- строка 149 -->
+        }    <!-- строка 150 -->
+
+        .charts-container {    <!-- строка 151 -->
+            display: grid;    <!-- строка 152 -->
+            grid-template-columns: 1fr 1fr;    <!-- строка 153 -->
+            gap: 2rem;    <!-- строка 154 -->
+            margin-top: 2rem;    <!-- строка 155 -->
+        }    <!-- строка 156 -->
+
+        .chart-wrapper {    <!-- строка 157 -->
+            background: rgba(255, 255, 255, 0.1);    <!-- строка 158 -->
+            padding: 1.5rem;    <!-- строка 159 -->
+            border-radius: 15px;    <!-- строка 160 -->
+            border: 1px solid rgba(0, 255, 136, 0.3);    <!-- строка 161 -->
+            transform: translateZ(0);    <!-- строка 162 -->
+            transition: transform 0.3s ease;    <!-- строка 163 -->
+        }    <!-- строка 164 -->
+
+        .chart-wrapper:hover {    <!-- строка 165 -->
+            transform: scale(1.02);    <!-- строка 166 -->
+        }    <!-- строка 167 -->
+
+        .close-btn {    <!-- строка 168 -->
+            position: absolute;    <!-- строка 169 -->
+            right: 1.5rem;    <!-- строка 170 -->
+            top: 1rem;    <!-- строка 171 -->
+            font-size: 2rem;    <!-- строка 172 -->
+            cursor: pointer;    <!-- строка 173 -->
+            color: var(--neon);    <!-- строка 174 -->
+            transition: all 0.3s ease;    <!-- строка 175 -->
+        }    <!-- строка 176 -->
+
+        .close-btn:hover {    <!-- строка 177 -->
+            transform: rotate(90deg);    <!-- строка 178 -->
+            text-shadow: 0 0 10px var(--neon);    <!-- строка 179 -->
+        }    <!-- строка 180 -->
+
+        .price-tag {    <!-- строка 181 -->
+            background: var(--neon);    <!-- строка 182 -->
+            color: #000;    <!-- строка 183 -->
+            padding: 0.5rem 1rem;    <!-- строка 184 -->
+            border-radius: 20px;    <!-- строка 185 -->
+            display: inline-block;    <!-- строка 186 -->
+            transform: translateZ(15px);    <!-- строка 187 -->
+            box-shadow: 0 0 15px var(--neon);    <!-- строка 188 -->
+        }    <!-- строка 189 -->
+
+        .performance-meter {    <!-- строка 190 -->
+            height: 6px;    <!-- строка 191 -->
+            background: rgba(255, 255, 255, 0.1);    <!-- строка 192 -->
+            border-radius: 3px;    <!-- строка 193 -->
+            margin-top: 10px;    <!-- строка 194 -->
+            overflow: hidden;    <!-- строка 195 -->
+        }    <!-- строка 196 -->
+
+        .performance-fill {    <!-- строка 197 -->
+            height: 100%;    <!-- строка 198 -->
+            background: var(--neon);    <!-- строка 199 -->
+            box-shadow: 0 0 10px var(--neon);    <!-- строка 200 -->
+            transition: width 1s ease-in-out;    <!-- строка 201 -->
+        }    <!-- строка 202 -->
+
+        @media (max-width: 768px) {    <!-- строка 203 -->
+            .charts-container {    <!-- строка 204 -->
+                grid-template-columns: 1fr;    <!-- строка 205 -->
+            }    <!-- строка 206 -->
+            .title {    <!-- строка 207 -->
+                font-size: 2.5rem;    <!-- строка 208 -->
+            }    <!-- строка 209 -->
+        }    <!-- строка 210 -->
+    </style>    <!-- строка 211 -->
+</head>    <!-- строка 212 -->
+<body>    <!-- строка 213 -->
+    <div id="particles-js"></div>    <!-- строка 214 -->
+    <div class="container">    <!-- строка 215 -->
+        <h1 class="title">Топ 5 Игровых Смартфонов 2024</h1>    <!-- строка 216 -->
+        <div class="phones-grid"></div>    <!-- строка 217 -->
+    </div>    <!-- строка 218 -->
+
+    <div class="modal" id="phoneModal">    <!-- строка 219 -->
+        <div class="modal-content">    <!-- строка 220 -->
+            <span class="close-btn">&times;</span>    <!-- строка 221 -->
+            <h2 id="modalTitle"></h2>    <!-- строка 222 -->
+            <div class="specs-grid" id="specsGrid"></div>    <!-- строка 223 -->
+            <div class="charts-container">    <!-- строка 224 -->
+                <div class="chart-wrapper">    <!-- строка 225 -->
+                    <canvas id="performanceChart"></canvas>    <!-- строка 226 -->
+                </div>    <!-- строка 227 -->
+                <div class="chart-wrapper">    <!-- строка 228 -->
+                    <canvas id="batteryChart"></canvas>    <!-- строка 229 -->
+                </div>    <!-- строка 230 -->
+            </div>    <!-- строка 231 -->
+        </div>    <!-- строка 232 -->
+    </div>    <!-- строка 233 -->
+
+    <script>    <!-- строка 234 -->
+        // Конфигурация particles.js    <!-- строка 235 -->
+        particlesJS('particles-js', {    <!-- строка 236 -->
+            particles: {    <!-- строка 237 -->
+                number: { value: 80, density: { enable: true, value_area: 800 } },    <!-- строка 238 -->
+                color: { value: '#00ff88' },    <!-- строка 239 -->
+                shape: { type: 'circle' },    <!-- строка 240 -->
+                opacity: { value: 0.5, random: false },    <!-- строка 241 -->
+                size: { value: 3, random: true },    <!-- строка 242 -->
+                line_linked: {    <!-- строка 243 -->
+                    enable: true,    <!-- строка 244 -->
+                    distance: 150,    <!-- строка 245 -->
+                    color: '#00ff88',    <!-- строка 246 -->
+                    opacity: 0.4,    <!-- строка 247 -->
+                    width: 1    <!-- строка 248 -->
+                },    <!-- строка 249 -->
+                move: {    <!-- строка 250 -->
+                    enable: true,    <!-- строка 251 -->
+                    speed: 2,    <!-- строка 252 -->
+                    direction: 'none',    <!-- строка 253 -->
+                    random: false,    <!-- строка 254 -->
+                    straight: false,    <!-- строка 255 -->
+                    out_mode: 'out',    <!-- строка 256 -->
+                    bounce: false    <!-- строка 257 -->
+                }    <!-- строка 258 -->
+            },    <!-- строка 259 -->
+            interactivity: {    <!-- строка 260 -->
+                detect_on: 'canvas',    <!-- строка 261 -->
+                events: {    <!-- строка 262 -->
+                    onhover: { enable: true, mode: 'repulse' },    <!-- строка 263 -->
+                    onclick: { enable: true, mode: 'push' },    <!-- строка 264 -->
+                    resize: true    <!-- строка 265 -->
+                }    <!-- строка 266 -->
+            },    <!-- строка 267 -->
+            retina_detect: true    <!-- строка 268 -->
+        });    <!-- строка 269 -->
+
+        const phones = [    <!-- строка 270 -->
+            {    <!-- строка 271 -->
+                name: "ASUS ROG Phone 7",    <!-- строка 272 -->
+                price: 69999,    <!-- строка 273 -->
+                img: "/api/placeholder/300/200",    <!-- строка 274 -->
+                specs: {    <!-- строка 275 -->
+                    processor: "Snapdragon 8 Gen 2",    <!-- строка 276 -->
+                    ram: "16 ГБ LPDDR5X",    <!-- строка 277 -->
+                    storage: "512 ГБ UFS 4.0",    <!-- строка 278 -->
+                    display: "6.78\" AMOLED 165 Гц",    <!-- строка 279 -->
+                    battery: "6000 мАч",    <!-- строка 280 -->
+                    cooling: "GameCool 7"    <!-- строка 281 -->
+                },    <!-- строка 282 -->
+                performance: {    <!-- строка 283 -->
+                    antutu: 1250000,    <!-- строка 284 -->
+                    geekbench: 2100,    <!-- строка 285 -->
+                    gpu: 450,    <!-- строка 286 -->
+                    gaming: 98    <!-- строка 287 -->
+                }    <!-- строка 288 -->
+            },    <!-- строка 289 -->
+            // Остальные телефоны...    <!-- строка 290 -->
+        ];    <!-- строка 291 -->
+
+        // Создание карточек телефонов с 3D эффектом    <!-- строка 292 -->
+        const phonesGrid = document.querySelector('.phones-grid');    <!-- строка 293 -->
+        phones.forEach(phone => {    <!-- строка 294 -->
+            const card = document.createElement('div');    <!-- строка 295 -->
+            card.className = 'phone-card';    <!-- строка 296 -->
+            card.innerHTML = `    <!-- строка 297 -->
+                <img src="${phone.img}" alt="${phone.name}" class="phone-img">    <!-- строка 298 -->
+                <h3 class="phone-name">${phone.name}</h3>    <!-- строка 299 -->
+                <div class="price-tag">${phone.price.toLocaleString()} ₽</div>    <!-- строка 300 -->
+                <div class="performance-meter">    <!-- строка 301 -->
+                    <div class="performance-fill" style="width: ${phone.performance.gaming}%"></div>    <!-- строка 302 -->
+                </div>    <!-- строка 303 -->
+            `;    <!-- строка 304 -->
+            
+            // Инициализация 3D эффекта    <!-- строка 305 -->
+            VanillaTilt.init(card, {    <!-- строка 306 -->
+                max: 25,    <!-- строка 307 -->
+                speed: 400,    <!-- строка 308 -->
+                glare: true,    <!-- строка 309 -->
+                'max-glare': 0.5,    <!-- строка 310 -->
+                scale: 1.1    <!-- строка 311 -->
+            });    <!-- строка 312 -->
+            
+            card.addEventListener('click', () => showPhoneDetails(phone));    <!-- строка 313 -->
+            phonesGrid.appendChild(card);    <!-- строка 314 -->
+        });    <!-- строка 315 -->
+
+        // Модальное окно с анимированными графиками    <!-- строка 316 -->
+        const modal = document.getElementById('phoneModal');    <!-- строка 317 -->
+        const closeBtn = document.querySelector('.close-btn');    <!-- строка 318 -->
         
-        <!-- Детальный просмотр -->
-        <div id="detail-view" class="detail-view">
-            <div class="detail-content">
-                <div class="close-button" onclick="hidePhoneDetails()">×</div>
-                <div class="model-viewer"></div>
-                <div class="specs-container">
-                    <canvas id="performance-radar"></canvas>
-                    <canvas id="gaming-chart"></canvas>
-                    <canvas id="thermal-chart"></canvas>
-                </div>
-            </div>
-        </div>
-    </main>
+        closeBtn.onclick = () => {    <!-- строка 319 -->
+            modal.style.opacity = 0;    <!-- строка 320 -->
+            setTimeout(() => modal.style.display = "none", 300);    <!-- строка 321 -->
+        };    <!-- строка 322 -->
 
-    <footer class="cyber-footer">
-        <div class="footer-decoration"></div>
-        <p>© 2024 Gaming Phones Ultra Max</p>
-    </footer>
+        window.onclick = (event) => {    <!-- строка 323 -->
+            if (event.target == modal) {    <!-- строка 324 -->
+                modal.style.opacity = 0;    <!-- строка 325 -->
+                setTimeout(() => modal.style.display = "none", 300);    <!-- строка 326 -->
+            }    <!-- строка 327 -->
+        };    <!-- строка 328 -->
 
-    <!-- Скрипт подключаем в самом конце -->
-    <script src="script.js"></script>
-</body>
-</html>
+        let performanceChart, batteryChart;    <!-- строка 329 -->
+
+        function showPhoneDetails(phone) {    <!-- строка 330 -->
+            modal.style.display = "block";    <!-- строка 331 -->
+            modal.style.opacity = 1;    <!-- строка 332 -->
+            
+            document.getElementById('modalTitle').textContent = phone.name;    <!-- строка 333 -->
+            
+            // Обновление спецификаций с анимацией    <!-- строка 334 -->
+            const specsGrid = document.getElementById('specsGrid');    <!-- строка 335 -->
+            specsGrid.innerHTML = Object.entries(phone.specs)    <!-- строка 336 -->
+                .map(([key, value], index) => `    <!-- строка 337 -->
+                    <div class="spec-item" style="animation: fadeIn 0.5s ${index * 0.1}s forwards;">    <!-- строка 338 -->
+                        <h4>${key}</h4>    <!-- строка 339 -->
+                        <p>${value}</p>    <!-- строка 340 -->
+                    </div>    <!-- строка 341 -->
+                `).join('');    <!-- строка 342 -->
+
+            updateCharts(phone);    <!-- строка 343 -->
+        }    <!-- строка 344 -->
+
+        function updateCharts(phone) {    <!-- строка 345 -->
+            if (performanceChart) performanceChart.destroy();    <!-- строка 346 -->
+            if (batteryChart) batteryChart.destroy();    <!-- строка 347 -->
+
+            const perfCtx = document.getElementById('performanceChart').getContext('2d');    <!-- строка 348 -->
+            performanceChart = new Chart(perfCtx, {    <!-- строка 349 -->
+                type: 'radar',    <!-- строка 350 -->
+                data: {    <!-- строка 351 -->
+                    labels: ['AnTuTu', 'GeekBench', 'GPU Score', 'Gaming'],    <!-- строка 352 -->
+                    datasets: [{    <!-- строка 353 -->
+                        label: 'Производительность',    <!-- строка 354 -->
+                        data: [    <!-- строка 355 -->
+                            phone.performance.antutu / 12500,    <!-- строка 356 -->
+                            phone.performance.geekbench,    <!-- строка 357 -->
+                            phone.performance.gpu,    <!-- строка 358 -->
+                            phone.performance.gaming    <!-- строка 359 -->
+                        ],    <!-- строка 360 -->
+                        backgroundColor: 'rgba(0, 255, 136, 0.2)',    <!-- строка 361 -->
+                        borderColor: 'rgba(0, 255, 136, 1)',    <!-- строка 362 -->
+                        pointBackgroundColor: 'rgba(0, 255, 136, 1)',    <!-- строка 363 -->
+                        pointHoverBackgroundColor: '#fff'    <!-- строка 364 -->
+                    }]    <!-- строка 365 -->
+                },    <!-- строка 366 -->
+                options: {    <!-- строка 367 -->
+                    animation: {    <!-- строка 368 -->
+                        duration: 2000,    <!-- строка 369 -->
+                        easing: 'easeInOutQuart'    <!-- строка 370 -->
+                    },    <!-- строка 371 -->
+                    scales: {    <!-- строка 372 -->
+                        r: {    <!-- строка 373 -->
+                            beginAtZero: true,    <!-- строка 374 -->
+                            grid: {    <!-- строка 375 -->
+                                color: 'rgba(0, 255, 136, 0.1)'    <!-- строка 376 -->
+                            }    <!-- строка 377 -->
+                        }    <!-- строка 378 -->
+                    },    <!-- строка 379 -->
+                    plugins: {    <!-- строка 380 -->
+                        legend: {    <!-- строка 381 -->
+                            labels: {    <!-- строка 382 -->
+                                color: 'white'    <!-- строка 383 -->
+                            }    <!-- строка 384 -->
+                        }    <!-- строка 385 -->
+                    }    <!-- строка 386 -->
+                }    <!-- строка 387 -->
+            });    <!-- строка 388 -->
+        }    <!-- строка 389 -->
+    </script>    <!-- строка 390 -->
+</body>    <!-- строка 391 -->
+</html>    <!-- строка 392 -->
