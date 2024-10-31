@@ -4,29 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Топ Игровых Смартфонов 2024</title>
+    <!-- Сначала подключаем стили -->
     <link rel="stylesheet" href="styles.css">
-    <!-- Three.js для 3D эффектов -->
+    <!-- Затем все внешние библиотеки -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- GSAP для продвинутых анимаций -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <!-- Chart.js для графиков -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 </head>
 <body>
+    <!-- Контейнер для частиц -->
     <div id="particles-container"></div>
     
-    <header class="cyber-header">
-        <div class="glitch-container">
-            <h1 class="glitch" data-text="Топ-5 Игровых Смартфонов 2024">Топ-5 Игровых Смартфонов 2024</h1>
-        </div>
-        <div class="header-decoration"></div>
-    </header>
-
+    <!-- Основной контент -->
     <main>
+        <header class="cyber-header">
+            <div class="glitch-container">
+                <h1 class="glitch" data-text="Топ-5 Игровых Смартфонов 2024">Топ-5 Игровых Смартфонов 2024</h1>
+            </div>
+        </header>
+
+        <!-- Сетка телефонов -->
         <div id="phones-grid" class="phones-grid"></div>
         
+        <!-- Детальный просмотр -->
         <div id="detail-view" class="detail-view">
             <div class="detail-content">
+                <div class="close-button" onclick="hidePhoneDetails()">×</div>
                 <div class="model-viewer"></div>
                 <div class="specs-container">
                     <canvas id="performance-radar"></canvas>
@@ -37,11 +40,12 @@
         </div>
     </main>
 
-    <div class="cyber-footer">
+    <footer class="cyber-footer">
         <div class="footer-decoration"></div>
         <p>© 2024 Gaming Phones Ultra Max</p>
-    </div>
+    </footer>
 
+    <!-- Скрипт подключаем в самом конце -->
     <script src="script.js"></script>
 </body>
 </html>
