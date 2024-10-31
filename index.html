@@ -1,535 +1,705 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
-    
-    :root {
-      --neon-green: #00ffa2;
-      --neon-blue: #00f7ff;
-      --neon-purple: #b000ff;
-      --neon-pink: #ff00ff;
-      --dark-bg: #0a0a0f;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Топ-5 Игровых Смартфонов 2024 | Ультра Версия</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        :root {
+            --neon-blue: #00f7ff;
+            --neon-purple: #bc13fe;
+            --neon-pink: #ff2d55;
+            --dark-bg: #080810;
+        }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+        body {
+            background: var(--dark-bg);
+            color: white;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            overflow-x: hidden;
+        }
 
-    body {
-      background: var(--dark-bg);
-      color: #fff;
-      font-family: 'Orbitron', sans-serif;
-      overflow-x: hidden;
-      min-height: 100vh;
-    }
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-    .cyber-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem;
-      position: relative;
-    }
+        .neon-border {
+            position: relative;
+            overflow: hidden;
+        }
 
-    .title-container {
-      text-align: center;
-      margin-bottom: 4rem;
-      position: relative;
-    }
+        .neon-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                var(--neon-blue), 
+                var(--neon-purple),
+                var(--neon-pink),
+                var(--neon-blue));
+            background-size: 400% 400%;
+            z-index: -1;
+            animation: borderGlow 3s ease infinite;
+        }
 
-    .cyber-title {
-      font-size: 3.5rem;
-      font-weight: 700;
-      color: transparent;
-      -webkit-text-stroke: 1px var(--neon-green);
-      text-shadow: 0 0 15px var(--neon-green);
-      position: relative;
-      animation: titlePulse 2s infinite;
-    }
+        @keyframes borderGlow {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
 
-    @keyframes titlePulse {
-      0%, 100% { text-shadow: 0 0 15px var(--neon-green); }
-      50% { text-shadow: 0 0 30px var(--neon-green), 0 0 50px var(--neon-green); }
-    }
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.3;
+        }
 
-    .phones-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 2rem;
-      perspective: 2000px;
-    }
+        .hologram {
+            position: relative;
+            overflow: hidden;
+        }
 
-    .phone-card {
-      position: relative;
-      background: rgba(10,10,15,0.8);
-      border: 1px solid var(--neon-green);
-      border-radius: 15px;
-      padding: 2rem;
-      transform-style: preserve-3d;
-      transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-    }
+        .hologram::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                45deg,
+                transparent 0%,
+                rgba(0, 247, 255, 0.1) 50%,
+                transparent 100%
+            );
+            animation: hologramScan 3s ease-in-out infinite;
+        }
 
-    .phone-card::before {
-      content: '';
-      position: absolute;
-      inset: -2px;
-      background: linear-gradient(45deg, 
-        var(--neon-green), 
-        var(--neon-blue), 
-        var(--neon-purple), 
-        var(--neon-pink)
-      );
-      border-radius: 15px;
-      z-index: -1;
-      animation: borderFlow 4s linear infinite;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
+        @keyframes hologramScan {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+            50% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
+            100% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+        }
 
-    .phone-card:hover::before {
-      opacity: 1;
-    }
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
 
-    @keyframes borderFlow {
-      0% { filter: hue-rotate(0deg); }
-      100% { filter: hue-rotate(360deg); }
-    }
+        @keyframes float {
+            0% {
+                transform: translateY(0px) rotate3d(1, 1, 1, 0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate3d(1, 1, 1, 10deg);
+            }
+            100% {
+                transform: translateY(0px) rotate3d(1, 1, 1, 0deg);
+            }
+        }
 
-    .phone-rank {
-      position: absolute;
-      top: -20px;
-      left: -20px;
-      width: 60px;
-      height: 60px;
-      background: var(--dark-bg);
-      border: 2px solid var(--neon-green);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      font-weight: 700;
-      z-index: 1;
-      box-shadow: 0 0 20px var(--neon-green);
-    }
+        .cyber-spark {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+        }
 
-    .phone-name {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-      color: #fff;
-      text-shadow: 0 0 10px var(--neon-blue);
-    }
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(0, 247, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 247, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            opacity: 0.2;
+        }
 
-    .phone-price {
-      font-size: 1.4rem;
-      color: var(--neon-green);
-      margin-bottom: 1.5rem;
-    }
+        .phone-card {
+            transform-style: preserve-3d;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-    .specs-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
+        .phone-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 0 30px rgba(0, 247, 255, 0.3);
+        }
 
-    .spec-item {
-      background: rgba(0,255,162,0.1);
-      padding: 1rem;
-      border-radius: 10px;
-      border: 1px solid rgba(0,255,162,0.2);
-    }
+        .stats-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(8, 8, 16, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            overflow-y: auto;
+        }
 
-    .spec-label {
-      font-size: 0.9rem;
-      color: var(--neon-blue);
-      margin-bottom: 0.5rem;
-    }
+        .chart-container {
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(0, 247, 255, 0.2);
+        }
 
-    .spec-value {
-      font-size: 1.1rem;
-      color: #fff;
-    }
+        .chart-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            z-index: -1;
+            border-radius: 16px;
+            opacity: 0.3;
+        }
 
-    .features-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
+        .metric-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
 
-    .feature-tag {
-      background: rgba(0,255,162,0.1);
-      border: 1px solid var(--neon-green);
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      font-size: 0.9rem;
-      animation: tagGlow 2s infinite alternate;
-    }
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(0, 247, 255, 0.2);
+        }
 
-    @keyframes tagGlow {
-      0% { box-shadow: 0 0 5px var(--neon-green); }
-      100% { box-shadow: 0 0 15px var(--neon-green), 0 0 30px var(--neon-green); }
-    }
+        .performance-stat {
+            position: relative;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+        }
 
-    .cyber-particles {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
-    }
+        .performance-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            border-radius: 8px;
+            opacity: 0.3;
+            transition: width 1s ease-out;
+        }
 
-    .scan-line {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 200%;
-      background: linear-gradient(to bottom,
-        transparent 0%,
-        rgba(0,255,162,0.1) 50%,
-        transparent 100%);
-      animation: scanline 8s linear infinite;
-      pointer-events: none;
-      z-index: 2;
-    }
+        .glitch-effect {
+            animation: glitch 2s infinite;
+        }
 
-    @keyframes scanline {
-      0% { transform: translateY(-50%); }
-      100% { transform: translateY(0%); }
-    }
+        @keyframes glitch {
+            0% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translate(-2px, 2px);
+            }
+            40% {
+                transform: translate(-2px, -2px);
+            }
+            60% {
+                transform: translate(2px, 2px);
+            }
+            80% {
+                transform: translate(2px, -2px);
+            }
+            100% {
+                transform: translate(0);
+            }
+        }
 
-    .grid-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: 
-        linear-gradient(to right, rgba(0,255,162,0.1) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(0,255,162,0.1) 1px, transparent 1px);
-      background-size: 30px 30px;
-      pointer-events: none;
-      z-index: -1;
-      animation: gridMove 20s linear infinite;
-    }
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
 
-    @keyframes gridMove {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-30px); }
-    }
-  </style>
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: .5;
+            }
+        }
+
+        #game-benchmarks {
+            width: 100%;
+            height: 300px;
+            position: relative;
+        }
+    </style>
 </head>
 <body>
-  <div class="grid-overlay"></div>
-  <div class="scan-line"></div>
-  <div class="cyber-particles"></div>
+    <canvas id="matrix-background" class="matrix-bg"></canvas>
+    <div class="cyber-grid"></div>
 
-  <div class="cyber-container">
-    <div class="title-container">
-      <h1 class="cyber-title">ТОП-5 ИГРОВЫХ СМАРТФОНОВ 2024</h1>
+    <div id="particle-container"></div>
+
+    <header class="relative z-10 text-center py-16">
+        <h1 class="text-6xl font-bold mb-4 glitch-effect">
+            Топ-5 Игровых Смартфонов 2024
+        </h1>
+        <div class="h-1 w-48 mx-auto bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+    </header>
+
+    <main class="container mx-auto px-4 relative z-10">
+        <div id="phones-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Карточки телефонов генерируются JavaScript -->
+        </div>
+    </main>
+
+    <div id="phone-details" class="stats-screen">
+        <!-- Детальная информация генерируется JavaScript -->
     </div>
-    
-    <div class="phones-grid"></div>
-  </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script>
+        // Данные о телефонах
+        const phones = [
+            {
+                id: 1,
+                name: "ASUS ROG Phone 7 Ultimate",
+                price: 69990,
+                specs: {
+                    processor: "Snapdragon 8 Gen 2 (4 нм)",
+                    ram: "16 ГБ LPDDR5X",
+                    storage: "512 ГБ UFS 4.0",
+                    display: "6.78″ AMOLED, 165 Гц, HDR10+",
+                    battery: "6000 мАч",
+                    charging: "65 Вт HyperCharge"
+                },
+                features: ["ROG Vision", "GameCool 7", "AirTrigger 7", "RGB-подсветка"],
+                performance: {
+                    gaming: 98,
+                    cooling: 95,
+                    battery: 100,
+                    display: 97,
+                    audio: 96
+                },
+                gamePerformance: [
+                    { game: "Genshin Impact", fps: 60, stability: 98 },
+                    { game: "PUBG Mobile", fps: 90, stability: 96 },
+                    { game: "Fortnite", fps: 85, stability: 94 },
+                    { game: "COD Mobile", fps: 120, stability: 97 }
+                ],
+                thermals: [
+                    { time: "5min", cpu: 35, gpu: 38 },
+                    { time: "15min", cpu: 38, gpu: 41 },
+                    { time: "30min", cpu: 40, gpu: 43 },
+                    { time: "45min", cpu: 41, gpu: 44 },
+                    { time: "60min", cpu: 42, gpu: 45 }
+                ],
+                benchmarks: {
+                    antutu: 1250000,
+                    geekbench: 5400,
+                    "3dmark": 3800,
+                    stability: 92
+                }
+            },
+            // Аналогичные данные для остальных телефонов
+        ];
 
-  <script>
-    gsap.registerPlugin(ScrollTrigger);
+        // Инициализация матричного фона
+        function initMatrixBackground() {
+            const canvas = document.getElementById('matrix-background');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
 
-    const phones = [
-      {
-        rank: 1,
-        name: "ASUS ROG Phone 7 Ultimate",
-        price: 69990,
-        specs: {
-          processor: "Snapdragon 8 Gen 2 (4 нм)",
-          ram: "16 ГБ LPDDR5X",
-          storage: "512 ГБ UFS 4.0",
-          display: "6.78″ AMOLED, 165 Гц, HDR10+",
-          battery: "6000 мАч",
-          charging: "65 Вт HyperCharge"
-        },
-        features: ["ROG Vision", "GameCool 7", "AirTrigger 7", "RGB-подсветка"]
-      },
-      {
-        rank: 2,
-        name: "Red Magic 8S Pro+",
-        price: 65990,
-        specs: {
-          processor: "Snapdragon 8 Gen 2",
-          ram: "16 ГБ LPDDR5X",
-          storage: "512 ГБ UFS 4.0",
-          display: "6.8″ AMOLED, 120 Гц",
-          battery: "5000 мАч",
-          charging: "80 Вт Quick Charge"
-        },
-        features: ["ICE 12.0 Cooling", "Встроенный вентилятор", "Триггеры 520 Гц"]
-      },
-      {
-        rank: 3,
-        name: "Black Shark 5 Pro",
-        price: 62990,
-        specs: {
-          processor: "Snapdragon 8 Gen 1",
-          ram: "12 ГБ LPDDR5",
-          storage: "256 ГБ UFS 3.1",
-          display: "6.67″ AMOLED, 144 Гц",
-          battery: "4650 мАч",
-          charging: "120 Вт Hyper Charge"
-        },
-        features: ["Magnetic Pop-up Triggers", "Liquid Cooling Pro"]
-      },
-      {
-        rank: 4,
-        name: "Lenovo Legion Pro",
-        price: 59990,
-        specs: {
-          processor: "Snapdragon 8+ Gen 1",
-          ram: "12 ГБ LPDDR5",
-          storage: "256 ГБ UFS 3.1",
-          display: "6.67″ AMOLED, 144 Гц",
-          battery: "5000 мАч",
-          charging: "90 Вт Turbo Charge"
-        },
-        features: ["Legion Gaming Engine", "Dual Liquid Cooling"]
-      },
-      {
-        rank: 5,
-        name: "OnePlus 11R",
-        price: 54990,
-        specs: {
-          processor: "Snapdragon 8+ Gen 1",
-          ram: "16 ГБ LPDDR5",
-          storage: "256 ГБ UFS 3.1",
-          display: "6.74″ AMOLED, 120 Гц",
-          battery: "5000 мАч",
-          charging: "100 Вт SuperVOOC"
-        },
-        features: ["HyperBoost Gaming", "Vapor Chamber Cooling"]
-      }
-    ];
+            const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*";
+            const fontSize = 14;
+            const columns = canvas.width / fontSize;
+            const drops = Array(Math.floor(columns)).fill(1);
 
-    function createPhoneCards() {
-      const grid = document.querySelector('.phones-grid');
-      
-      phones.forEach((phone, index) => {
-        const card = document.createElement('div');
-        card.className = 'phone-card';
-        
-        card.innerHTML = `
-          <div class="phone-rank">#${phone.rank}</div>
-          <h2 class="phone-name">${phone.name}</h2>
-          <div class="phone-price">${phone.price.toLocaleString()} ₽</div>
-          <div class="specs-grid">
-            ${Object.entries(phone.specs).map(([key, value]) => `
-              <div class="spec-item">
-                <div class="spec-label">${key}</div>
-                <div class="spec-value">${value}</div>
-              </div>
-            `).join('')}
-          </div>
-          <div class="features-container">
-            ${phone.features.map(feature => `
-              <span class="feature-tag">${feature}</span>
-            `).join('')}
-          </div>
-        `;
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        grid.appendChild(card);
+                ctx.fillStyle = '#0ff';
+                ctx.font = fontSize + 'px monospace';
 
-        // Анимация появления карточек
-        gsap.from(card, {
-          y: 100,
-          opacity: 0,
-          duration: 1,
-          delay: index * 0.2,
-          ease: "power4.out",
-          scrollTrigger: {
-            trigger: card,
-            start: "top bottom",
-            end: "top center",
-            toggleActions: "play none none reverse"
-          }
+                for(let i = 0; i < drops.length; i++) {
+                    const text = chars[Math.floor(Math.random() * chars.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                    if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+
+            setInterval(draw, 33);
+        }
+
+        // Создание 3D модели телефона
+        function init3DPhone(containerId) {
+            const container = document.getElementById(containerId);
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+
+            renderer.setSize(width, height);
+            container.appendChild(renderer.domElement);
+
+            // Создание геометрии телефона
+            const phoneGeometry = new THREE.BoxGeometry(2, 4, 0.2);
+            const phoneMaterial = new THREE.MeshPhongMaterial({
+                color: 0x000000,
+                specular: 0x666666,
+                shininess: 100
+            });
+
+            const phone = new THREE.Mesh(phoneGeometry, phoneMaterial);
+            scene.add(phone);
+
+            // Добавление освещения
+            const light1 = new THREE.DirectionalLight(0x00f7ff, 1);
+            light1.position.set(1, 1, 1);
+            scene.add(light1);
+
+            const light2 = new THREE.DirectionalLight(0xbc13fe, 1);
+            light2.position.set(-1, -1, 1);
+            scene.add(light2);
+
+            camera.position.z = 5;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                phone.rotation.y += 0.01;
+                phone.rotation.x += 0.005;
+                renderer.render(scene, camera);
+            }
+
+            animate();
+        }
+
+        function createSparkles() {
+            const container = document.getElementById('particle-container');
+            
+            function createSpark() {
+                const spark = document.createElement('div');
+                spark.className = 'cyber-spark';
+                spark.style.left = Math.random() * window.innerWidth + 'px';
+                spark.style.top = Math.random() * window.innerHeight + 'px';
+                container.appendChild(spark);
+
+                gsap.to(spark, {
+                    opacity: 1,
+                    duration: 0.2,
+                    yoyo: true,
+                    repeat: 1,
+                    onComplete: () => {
+                        spark.remove();
+                    }
+                });
+
+                gsap.to(spark, {
+                    x: 'random(-100, 100)',
+                    y: 'random(-100, 100)',
+                    duration: 0.5
+                });
+            }
+
+            setInterval(createSpark, 100);
+        }
+
+        function createPhoneCard(phone) {
+            const card = document.createElement('div');
+            card.className = 'phone-card glass-morphism neon-border p-6 rounded-xl';
+            card.innerHTML = `
+                <div class="hologram floating">
+                    <h2 class="text-2xl font-bold mb-4">${phone.name}</h2>
+                    <div class="text-3xl text-blue-400 mb-6">${phone.price.toLocaleString()} ₽</div>
+                    <div class="space-y-3">
+                        ${Object.entries(phone.specs).map(([key, value]) => `
+                            <div class="performance-stat">
+                                <div class="performance-bar" style="width: 100%"></div>
+                                <div class="relative z-10">
+                                    <span class="text-blue-300">${key}:</span>
+                                    <span class="float-right">${value}</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="mt-6 flex flex-wrap gap-2">
+                        ${phone.features.map(feature => `
+                            <span class="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                                ${feature}
+                            </span>
+                        `).join('')}
+                    </div>
+                </div>
+                <button class="mt-6 w-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white py-3 px-6 rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl" 
+                    onclick="showPhoneDetails(${phone.id})">
+                    Подробный анализ
+                </button>
+            `;
+            return card;
+        }
+
+        function showPhoneDetails(phoneId) {
+            const phone = phones.find(p => p.id === phoneId);
+            const container = document.getElementById('phone-details');
+
+            container.innerHTML = `
+                <div class="min-h-screen p-8">
+                    <div class="max-w-7xl mx-auto relative">
+                        <button onclick="hidePhoneDetails()" 
+                            class="absolute top-4 right-4 text-white hover:text-blue-400 text-4xl transform hover:rotate-180 transition-all duration-300">
+                            ×
+                        </button>
+
+                        <div class="text-center mb-12">
+                            <h2 class="text-4xl font-bold mb-4 glitch-effect">${phone.name}</h2>
+                            <div class="text-2xl text-blue-400">${phone.price.toLocaleString()} ₽</div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div class="space-y-8">
+                                <div class="chart-container">
+                                    <h3 class="text-xl font-bold mb-6">Производительность</h3>
+                                    <canvas id="performance-radar"></canvas>
+                                </div>
+
+                                <div class="chart-container">
+                                    <h3 class="text-xl font-bold mb-6">Температурный режим</h3>
+                                    <canvas id="thermal-chart"></canvas>
+                                </div>
+                            </div>
+
+                            <div class="space-y-8">
+                                <div class="chart-container">
+                                    <h3 class="text-xl font-bold mb-6">Игровая производительность</h3>
+                                    <div id="game-benchmarks" class="h-64"></div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    ${Object.entries(phone.benchmarks).map(([key, value]) => `
+                                        <div class="metric-card pulse">
+                                            <div class="text-3xl font-bold text-blue-400">
+                                                ${value.toLocaleString()}
+                                            </div>
+                                            <div class="text-gray-400 mt-2">${key}</div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 chart-container">
+                            <h3 class="text-xl font-bold mb-6">Сравнительный анализ игр</h3>
+                            <canvas id="games-comparison"></canvas>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            initCharts(phone);
+            container.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+
+            // Анимация появления контента
+            gsap.from('.chart-container', {
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.2,
+                ease: 'power3.out'
+            });
+
+            // Инициализация 3D модели
+            init3DPhone('game-benchmarks');
+        }
+
+        function hidePhoneDetails() {
+            document.getElementById('phone-details').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function initCharts(phone) {
+            // Радар производительности
+            new Chart(document.getElementById('performance-radar'), {
+                type: 'radar',
+                data: {
+                    labels: Object.keys(phone.performance),
+                    datasets: [{
+                        label: 'Производительность',
+                        data: Object.values(phone.performance),
+                        backgroundColor: 'rgba(0, 247, 255, 0.2)',
+                        borderColor: 'rgba(0, 247, 255, 0.8)',
+                        pointBackgroundColor: 'rgba(0, 247, 255, 1)',
+                        pointBorderColor: '#fff',
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)',
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)',
+                            },
+                            angleLines: {
+                                color: 'rgba(255, 255, 255, 0.1)',
+                            },
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'rgba(255, 255, 255, 0.7)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // График температур
+            new Chart(document.getElementById('thermal-chart'), {
+                type: 'line',
+                data: {
+                    labels: phone.thermals.map(t => t.time),
+                    datasets: [
+                        {
+                            label: 'CPU °C',
+                            data: phone.thermals.map(t => t.cpu),
+                            borderColor: 'rgba(0, 247, 255, 0.8)',
+                            fill: true,
+                            backgroundColor: 'rgba(0, 247, 255, 0.1)',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'GPU °C',
+                            data: phone.thermals.map(t => t.gpu),
+                            borderColor: 'rgba(188, 19, 254, 0.8)',
+                            fill: true,
+                            backgroundColor: 'rgba(188, 19, 254, 0.1)',
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: 'rgba(255, 255, 255, 0.7)' }
+                        },
+                        x: {
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: 'rgba(255, 255, 255, 0.7)' }
+                        }
+                    }
+                }
+            });
+
+            // График игровой производительности
+            new Chart(document.getElementById('games-comparison'), {
+                type: 'bar',
+                data: {
+                    labels: phone.gamePerformance.map(g => g.game),
+                    datasets: [
+                        {
+                            label: 'FPS',
+                            data: phone.gamePerformance.map(g => g.fps),
+                            backgroundColor: 'rgba(0, 247, 255, 0.8)',
+                        },
+                        {
+                            label: 'Стабильность %',
+                            data: phone.gamePerformance.map(g => g.stability),
+                            backgroundColor: 'rgba(188, 19, 254, 0.8)',
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: 'rgba(255, 255, 255, 0.7)' }
+                        },
+                        x: {
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: 'rgba(255, 255, 255, 0.7)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Инициализация
+        window.addEventListener('load', () => {
+            initMatrixBackground();
+            createSparkles();
+            
+            const grid = document.getElementById('phones-grid');
+            phones.forEach(phone => {
+                const card = createPhoneCard(phone);
+                grid.appendChild(card);
+                
+                gsap.from(card, {
+                    y: 100,
+                    opacity: 0,
+                    duration: 1,
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top bottom",
+                        end: "top center",
+                        toggleActions: "play none none reverse"
+                    }
+                });
+            });
         });
-      });
-    }
 
-    // Создаем частицы
-    function createParticles() {
-      const container = document.querySelector('.cyber-particles');
-      
-      for (let i = 0; i < 50; i++) {
-        const particle = document.createElement('div');
-        particle.style.cssText = `
-          position: absolute;
-          width: ${Math.random() * 3}px;
-          height: ${Math.random() * 3}px;
-          background: rgba(0, 255, 162, ${Math.random() * 0.5 + 0.5});
-          border-radius: 50%;
-          pointer-events: none;
-          box-shadow: 0 0 ${Math.random() * 10}px var(--neon-green);
-        `;
-        
-        container.appendChild(particle);
-
-        gsap.to(particle, {
-          x: `random(-50, 50, 5)`,
-          y: `random(-50, 50, 5)`,
-          duration: "random(2, 6)",
-          repeat: -1,
-          yoyo: true,
-          ease: "none"
+        window.addEventListener('resize', () => {
+            const canvas = document.getElementById('matrix-background');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         });
-
-        gsap.to(particle, {
-          opacity: "random(0.3, 1)",
-          duration: "random(1, 3)",
-          repeat: -1,
-          yoyo: true,
-          ease: "none"
-        });
-      }
-    }
-
-    // 3D эффект при движении мышью
-    function init3DEffect() {
-      document.addEventListener('mousemove', (e) => {
-        const cards = document.querySelectorAll('.phone-card');
-        const mouseX = e.clientX;
-        const mouseY = e.clientY;
-
-        cards.forEach(card => {
-          const rect = card.getBoundingClientRect();
-          const cardX = rect.left + rect.width / 2;
-          const cardY = rect.top + rect.height / 2;
-
-          const angleX = (mouseY - cardY) / 30;
-          const angleY = (mouseX - cardX) / -30;
-
-          gsap.to(card, {
-            rotationX: angleX,
-            rotationY: angleY,
-              duration: 0.5,
-            ease: "power2.out"
-          });
-        });
-      });
-
-      // Возврат карточек в исходное положение при отведении мыши
-      document.addEventListener('mouseleave', () => {
-        const cards = document.querySelectorAll('.phone-card');
-        cards.forEach(card => {
-          gsap.to(card, {
-            rotationX: 0,
-            rotationY: 0,
-            duration: 0.5,
-            ease: "power2.out"
-          });
-        });
-      });
-    }
-
-    // Эффект неонового свечения для текста
-    function initTextGlowEffect() {
-      const glowElements = document.querySelectorAll('.phone-name, .feature-tag');
-      
-      glowElements.forEach(element => {
-        gsap.to(element, {
-          textShadow: '0 0 20px var(--neon-green)',
-          duration: 1,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut"
-        });
-      });
-    }
-
-    // Создаем эффект искажения для фона
-    function createDistortionEffect() {
-      const noise = `
-        <svg viewBox="0 0 500 500" xmlns='http://www.w3.org/2000/svg'>
-          <filter id='noiseFilter'>
-            <feTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/>
-          </filter>
-          <rect width='100%' height='100%' filter='url(#noiseFilter)'/>
-        </svg>
-      `;
-      
-      const noiseContainer = document.createElement('div');
-      noiseContainer.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0.05;
-        pointer-events: none;
-        z-index: -1;
-      `;
-      noiseContainer.innerHTML = noise;
-      document.body.appendChild(noiseContainer);
-    }
-
-    // Добавляем эффект пульсации для рейтинга
-    function initRankPulseEffect() {
-      const ranks = document.querySelectorAll('.phone-rank');
-      
-      ranks.forEach((rank, index) => {
-        gsap.to(rank, {
-          boxShadow: '0 0 30px var(--neon-green)',
-          scale: 1.1,
-          duration: 1,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-          delay: index * 0.2
-        });
-      });
-    }
-
-    // Анимация загрузки страницы
-    function initLoadingAnimation() {
-      gsap.from('.cyber-title', {
-        y: -100,
-        opacity: 0,
-        duration: 1.5,
-        ease: "power4.out"
-      });
-
-      gsap.from('.grid-overlay', {
-        opacity: 0,
-        duration: 2,
-        ease: "power2.inOut"
-      });
-    }
-
-    // Инициализация всех эффектов
-    window.addEventListener('load', () => {
-      createPhoneCards();
-      createParticles();
-      init3DEffect();
-      initTextGlowEffect();
-      createDistortionEffect();
-      initRankPulseEffect();
-      initLoadingAnimation();
-    });
-
-    // Оптимизация производительности
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        gsap.ticker.sleep();
-      } else {
-        gsap.ticker.wake();
-      }
-    });
-  </script>
+    </script>
 </body>
 </html>
-              
