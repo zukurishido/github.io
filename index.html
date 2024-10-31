@@ -4,120 +4,172 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Лучшие игровые смартфоны 2024</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tabulator/5.4.4/js/tabulator.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tabulator/5.4.4/css/tabulator.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 16px;
+            background: #f5f5f5;
         }
         .header {
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 24px;
+            margin: 0 0 8px 0;
             text-align: center;
-            margin-bottom: 30px;
         }
-        .table-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        .header p {
+            font-size: 16px;
+            color: #666;
+            margin: 0;
+            text-align: center;
         }
-        #phones-table {
-            margin-top: 20px;
+        .phone-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .tabulator-row.tabulator-selectable:hover {
-            background-color: #f0f8ff !important;
+        .phone-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 12px 0;
+            color: #1a1a1a;
+        }
+        .phone-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2563eb;
+            margin: 0 0 12px 0;
+        }
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            font-size: 14px;
+        }
+        .spec-item {
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        .spec-label {
+            color: #666;
+            margin-bottom: 4px;
+            font-size: 12px;
+        }
+        .spec-value {
+            color: #1a1a1a;
+            font-weight: 500;
+        }
+        @media (min-width: 768px) {
+            body {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            .specs-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>Лучшие игровые смартфоны до 70000 рублей</h1>
+        <h1>Лучшие игровые смартфоны до 70000₽</h1>
         <p>Актуальный рейтинг на 2024 год</p>
     </div>
-    <div class="table-container">
-        <div id="phones-table"></div>
-    </div>
+
+    <div id="phones-container"></div>
 
     <script>
-        const tableData = [
+        const phones = [
             {
                 model: "ASUS ROG Phone 7",
                 price: 69990,
-                processor: "Snapdragon 8 Gen 2",
-                ram: "16",
-                storage: "512",
-                display: "6.78 AMOLED 165Hz",
-                battery: 6000,
-                cooling: "Advanced vapor chamber",
-                rating: 9.5
+                specs: {
+                    "RAM": "16 ГБ",
+                    "Память": "512 ГБ",
+                    "Процессор": "Snapdragon 8 Gen 2",
+                    "Дисплей": "6.78″ 165Hz",
+                    "Батарея": "6000 мАч",
+                    "Охлаждение": "Vapor Chamber"
+                }
             },
             {
                 model: "Red Magic 8 Pro+",
                 price: 65990,
-                processor: "Snapdragon 8 Gen 2",
-                ram: "16",
-                storage: "512",
-                display: "6.8 AMOLED 120Hz",
-                battery: 5000,
-                cooling: "Active fan cooling",
-                rating: 9.2
+                specs: {
+                    "RAM": "16 ГБ",
+                    "Память": "512 ГБ",
+                    "Процессор": "Snapdragon 8 Gen 2",
+                    "Дисплей": "6.8″ 120Hz",
+                    "Батарея": "5000 мАч",
+                    "Охлаждение": "Active Fan"
+                }
             },
             {
                 model: "iPhone 14 Pro",
                 price: 69990,
-                processor: "A16 Bionic",
-                ram: "6",
-                storage: "128",
-                display: "6.1 OLED 120Hz",
-                battery: 3200,
-                cooling: "Standard",
-                rating: 9.0
+                specs: {
+                    "RAM": "6 ГБ",
+                    "Память": "128 ГБ",
+                    "Процессор": "A16 Bionic",
+                    "Дисплей": "6.1″ 120Hz",
+                    "Батарея": "3200 мАч",
+                    "Охлаждение": "Стандартное"
+                }
             },
             {
                 model: "Black Shark 5 Pro",
                 price: 62990,
-                processor: "Snapdragon 8 Gen 1",
-                ram: "12",
-                storage: "256",
-                display: "6.67 AMOLED 144Hz",
-                battery: 4650,
-                cooling: "Liquid cooling",
-                rating: 8.8
+                specs: {
+                    "RAM": "12 ГБ",
+                    "Память": "256 ГБ",
+                    "Процессор": "Snapdragon 8 Gen 1",
+                    "Дисплей": "6.67″ 144Hz",
+                    "Батарея": "4650 мАч",
+                    "Охлаждение": "Liquid Cool"
+                }
             },
             {
                 model: "OnePlus 11",
                 price: 59990,
-                processor: "Snapdragon 8 Gen 2",
-                ram: "16",
-                storage: "256",
-                display: "6.7 AMOLED 120Hz",
-                battery: 5000,
-                cooling: "Vapor chamber",
-                rating: 8.7
+                specs: {
+                    "RAM": "16 ГБ",
+                    "Память": "256 ГБ",
+                    "Процессор": "Snapdragon 8 Gen 2",
+                    "Дисплей": "6.7″ 120Hz",
+                    "Батарея": "5000 мАч",
+                    "Охлаждение": "Vapor Chamber"
+                }
             }
         ];
 
-        const table = new Tabulator("#phones-table", {
-            data: tableData,
-            layout: "fitColumns",
-            responsiveLayout: "hide",
-            columns: [
-                {title: "Модель", field: "model", sorter: "string"},
-                {title: "Цена ₽", field: "price", sorter: "number"},
-                {title: "Процессор", field: "processor", sorter: "string"},
-                {title: "ОЗУ (ГБ)", field: "ram", sorter: "number"},
-                {title: "Память (ГБ)", field: "storage", sorter: "number"},
-                {title: "Дисплей", field: "display", sorter: "string"},
-                {title: "Батарея (мАч)", field: "battery", sorter: "number"},
-                {title: "Охлаждение", field: "cooling", sorter: "string"},
-                {title: "Рейтинг", field: "rating", sorter: "number"}
-            ],
-            initialSort: [
-                {column: "rating", dir: "desc"}
-            ]
+        const container = document.getElementById('phones-container');
+        
+        phones.forEach(phone => {
+            const card = document.createElement('div');
+            card.className = 'phone-card';
+            
+            const specs = Object.entries(phone.specs)
+                .map(([key, value]) => `
+                    <div class="spec-item">
+                        <div class="spec-label">${key}</div>
+                        <div class="spec-value">${value}</div>
+                    </div>
+                `).join('');
+
+            card.innerHTML = `
+                <div class="phone-title">${phone.model}</div>
+                <div class="phone-price">${phone.price.toLocaleString()}₽</div>
+                <div class="specs-grid">
+                    ${specs}
+                </div>
+            `;
+            
+            container.appendChild(card);
         });
     </script>
 </body>
