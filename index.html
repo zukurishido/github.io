@@ -4,19 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Элитные Игровые Смартфоны 2024</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <style>
         :root {
             --primary: #6366f1;
-            --primary-dark: #4338ca;
-            --secondary: #ec4899;
-            --background: #0f172a;
-            --surface: #1e293b;
-            --text: #f1f5f9;
-            --text-secondary: #94a3b8;
+            --secondary: #4f46e5;
+            --accent: #f472b6;
             --success: #22c55e;
-            --warning: #eab308;
-            --error: #ef4444;
+            --background: #0a0c1b;
+            --surface: #1e1f2e;
+            --text: #f1f5f9;
         }
 
         * {
@@ -25,144 +21,145 @@
             box-sizing: border-box;
         }
 
+        @keyframes backgroundPulse {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px var(--primary); }
+            50% { box-shadow: 0 0 20px var(--primary), 0 0 30px var(--secondary); }
+            100% { box-shadow: 0 0 5px var(--primary); }
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--background);
             color: var(--text);
-            line-height: 1.6;
+            min-height: 100vh;
             overflow-x: hidden;
         }
 
         .hero {
+            background: linear-gradient(-45deg, #1a237e, #311b92, #4a148c, #6a1b9a);
+            background-size: 400% 400%;
+            padding: 3rem 1.5rem;
+            text-align: center;
             position: relative;
-            padding: 4rem 2rem;
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
             overflow: hidden;
+            animation: backgroundPulse 15s ease infinite;
         }
 
         .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #fff, #e2e8f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .phones-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            perspective: 1000px;
+        }
+
+        .phone-card {
+            background: var(--surface);
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+            position: relative;
+        }
+
+        .phone-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
+            transform: translateZ(-1px);
+        }
+
+        .phone-card:hover {
+            transform: scale(1.02) translateY(-5px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
+        }
+
+        .phone-header {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .phone-header::after {
             content: '';
             position: absolute;
             top: -50%;
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-            animation: rotate 20s linear infinite;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+            transform: rotate(0deg);
+            transition: transform 0.5s ease;
         }
 
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(to right, #fff, #e2e8f0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: slideIn 1s ease-out;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            color: rgba(255,255,255,0.9);
-            animation: fadeIn 1s ease-out 0.5s both;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(-30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .phone-grid {
-            display: grid;
-            gap: 2rem;
-            padding: 1rem;
-        }
-
-        .phone-card {
-            background: var(--surface);
-            border-radius: 1.5rem;
-            overflow: hidden;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-            transition: transform 0.3s ease;
-        }
-
-        .phone-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .phone-header {
-            position: relative;
-            padding: 2rem;
-            background: linear-gradient(45deg, var(--primary-dark), var(--primary));
-            cursor: pointer;
-            overflow: hidden;
-        }
-
-        .phone-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: 0.5s;
-        }
-
-        .phone-header:hover::before {
-            left: 100%;
-        }
-
-        .phone-title {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .phone-header:hover::after {
+            transform: rotate(180deg);
         }
 
         .phone-name {
             font-size: 1.5rem;
-            font-weight: 700;
+            font-weight: bold;
             color: #fff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .phone-price {
             font-size: 1.25rem;
-            color: var(--success);
-            font-weight: 600;
-        }
-
-        .phone-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .phone-content.active {
-            max-height: 3000px;
+            color: #4ade80;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
         }
 
         .specs-grid {
@@ -170,19 +167,35 @@
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
             padding: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease forwards;
         }
 
-        .spec-section {
-            background: rgba(255,255,255,0.05);
-            border-radius: 1rem;
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .spec-category {
+            background: rgba(255,255,255,0.03);
+            border-radius: 15px;
             padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
-            transform: translateZ(20px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .spec-category:hover {
+            border-color: var(--primary);
+            animation: glow 2s infinite;
         }
 
         .spec-title {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             color: var(--primary);
             margin-bottom: 1rem;
             display: flex;
@@ -191,240 +204,285 @@
         }
 
         .spec-item {
-            background: rgba(255,255,255,0.03);
-            padding: 1rem;
-            border-radius: 0.75rem;
+            padding: 0.75rem;
             margin-bottom: 0.75rem;
-            transition: transform 0.3s ease;
+            border-radius: 10px;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
         }
 
         .spec-item:hover {
-            transform: translateX(5px);
-            background: rgba(255,255,255,0.05);
+            transform: translateX(10px);
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary);
         }
 
         .spec-label {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
+            color: #94a3b8;
+            font-size: 0.9rem;
             margin-bottom: 0.25rem;
         }
 
         .spec-value {
-            font-size: 1rem;
-            color: var(--text);
+            color: #fff;
             font-weight: 500;
         }
 
-        .performance-chart {
-            padding: 1.5rem;
-            background: rgba(0,0,0,0.2);
-            border-radius: 1rem;
-            margin: 1.5rem;
+        .feature-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            padding: 0.25rem 1rem;
+            background: linear-gradient(45deg, var(--accent), var(--secondary));
+            border-radius: 20px;
+            font-size: 0.875rem;
+            transform: rotate(3deg);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            animation: float 3s ease-in-out infinite;
         }
 
-        .chart-container {
-            position: relative;
-            height: 300px;
+        .performance-meter {
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 0.5rem;
         }
 
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            padding: 1.5rem;
+        .performance-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transform-origin: left;
+            animation: fillBar 1s ease-out forwards;
         }
 
-        .feature-item {
-            background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
-            padding: 1rem;
-            border-radius: 0.75rem;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .feature-item:hover {
-            transform: translateY(-3px);
-            border-color: var(--primary);
-        }
-
-        .cooling-system {
-            background: linear-gradient(to right, rgba(99,102,241,0.1), rgba(236,72,153,0.1));
-            padding: 1.5rem;
-            border-radius: 1rem;
-            margin: 1.5rem;
-        }
-
-        .cooling-icon {
-            font-size: 1.5rem;
-            margin-right: 0.5rem;
+        @keyframes fillBar {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
         }
 
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2rem;
             }
-            .specs-grid {
+            .spec-grid {
                 grid-template-columns: 1fr;
             }
-        }
-
-        .benchmark-badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.5rem 1rem;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            border-radius: 2rem;
-            margin: 0.5rem;
-            font-weight: 600;
-        }
-
-        .gaming-features {
-            background: linear-gradient(45deg, rgba(99,102,241,0.1), rgba(236,72,153,0.1));
-            padding: 1.5rem;
-            border-radius: 1rem;
-            margin: 1.5rem;
-        }
-
-        .loading-bar {
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            width: 0;
-            position: fixed;
-            top: 0;
-            left: 0;
-            animation: loading 2s ease-in-out forwards;
-        }
-
-        @keyframes loading {
-            0% { width: 0; }
-            100% { width: 100%; }
-        }
-
-        .category-badge {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background: var(--warning);
-            padding: 0.25rem 0.75rem;
-            border-radius: 1rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            transform: rotate(15deg);
         }
     </style>
 </head>
 <body>
-    <div class="loading-bar"></div>
-    
     <div class="hero">
-        <div class="hero-content">
-            <h1>Элитные Игровые Смартфоны 2024</h1>
-            <p>Экстремальная производительность для максимального gaming-опыта</p>
-        </div>
+        <h1>Элитные Игровые Смартфоны 2024</h1>
+        <p>Экстремальная производительность, продвинутое охлаждение и максимальный gaming-опыт</p>
     </div>
 
-    <div class="container" id="phones-container"></div>
+    <div class="phones-container" id="phones-container"></div>
 
     <script>
-        // Тот же массив phones из предыдущего примера
+        const phones = [
+            {
+                name: "ASUS ROG Phone 7",
+                price: 69990,
+                rating: 98,
+                features: "💎 Топ производительности",
+                specs: {
+                    "Процессор": {
+                        label: "CPU",
+                        value: "Snapdragon 8 Gen 2",
+                        performance: 98
+                    },
+                    "Дисплей": {
+                        label: "Экран",
+                        value: "6.78″ AMOLED 165 Гц",
+                        performance: 95
+                    },
+                    "Память": {
+                        label: "RAM/ROM",
+                        value: "16 ГБ / 512 ГБ",
+                        performance: 100
+                    },
+                    "Батарея": {
+                        label: "Аккумулятор",
+                        value: "6000 мАч, 65 Вт",
+                        performance: 96
+                    },
+                    "Охлаждение": {
+                        label: "GameCool 7",
+                        value: "Vapor Chamber",
+                        performance: 98
+                    }
+                }
+            },
+            {
+                name: "Red Magic 8 Pro+",
+                price: 65990,
+                rating: 95,
+                features: "🌟 Активное охлаждение",
+                specs: {
+                    "Процессор": {
+                        label: "CPU",
+                        value: "Snapdragon 8 Gen 2",
+                        performance: 97
+                    },
+                    "Дисплей": {
+                        label: "Экран",
+                        value: "6.8″ AMOLED 120 Гц",
+                        performance: 92
+                    },
+                    "Память": {
+                        label: "RAM/ROM",
+                        value: "16 ГБ / 512 ГБ",
+                        performance: 100
+                    },
+                    "Батарея": {
+                        label: "Аккумулятор",
+                        value: "5000 мАч, 80 Вт",
+                        performance: 90
+                    },
+                    "Охлаждение": {
+                        label: "ICE 11.0",
+                        value: "Active Fan Cooling",
+                        performance: 99
+                    }
+                }
+            },
+            {
+                name: "Black Shark 5 Pro",
+                price: 62990,
+                rating: 92,
+                features: "🎮 Magnetic Triggers",
+                specs: {
+                    "Процессор": {
+                        label: "CPU",
+                        value: "Snapdragon 8 Gen 1",
+                        performance: 90
+                    },
+                    "Дисплей": {
+                        label: "Экран",
+                        value: "6.67″ OLED 144 Гц",
+                        performance: 94
+                    },
+                    "Память": {
+                        label: "RAM/ROM",
+                        value: "12 ГБ / 256 ГБ",
+                        performance: 88
+                    },
+                    "Батарея": {
+                        label: "Аккумулятор",
+                        value: "4650 мАч, 120 Вт",
+                        performance: 92
+                    },
+                    "Охлаждение": {
+                        label: "Sandwich",
+                        value: "Liquid Cooling",
+                        performance: 93
+                    }
+                }
+            },
+            {
+                name: "OnePlus 11",
+                price: 59990,
+                rating: 90,
+                features: "⚡ HyperBoost Gaming",
+                specs: {
+                    "Процессор": {
+                        label: "CPU",
+                        value: "Snapdragon 8 Gen 2",
+                        performance: 95
+                    },
+                    "Дисплей": {
+                        label: "Экран",
+                        value: "6.7″ AMOLED 120 Гц",
+                        performance: 90
+                    },
+                    "Память": {
+                        label: "RAM/ROM",
+                        value: "16 ГБ / 256 ГБ",
+                        performance: 92
+                    },
+                    "Батарея": {
+                        label: "Аккумулятор",
+                        value: "5000 мАч, 100 Вт",
+                        performance: 94
+                    },
+                    "Охлаждение": {
+                        label: "Vapor Chamber",
+                        value: "3D Cooling",
+                        performance: 88
+                    }
+                }
+            },
+            {
+                name: "iPhone 14 Pro",
+                price: 69990,
+                rating: 89,
+                features: "🎯 ProMotion Gaming",
+                specs: {
+                    "Процессор": {
+                        label: "CPU",
+                        value: "A16 Bionic",
+                        performance: 96
+                    },
+                    "Дисплей": {
+                        label: "Экран",
+                        value: "6.1″ OLED 120 Гц",
+                        performance: 93
+                    },
+                    "Память": {
+                        label: "RAM/ROM",
+                        value: "6 ГБ / 128 ГБ",
+                        performance: 85
+                    },
+                    "Батарея": {
+                        label: "Аккумулятор",
+                        value: "3200 мАч, 20 Вт",
+                        performance: 82
+                    },
+                    "Охлаждение": {
+                        label: "Neural Engine",
+                        value: "Graphite Cooling",
+                        performance: 85
+                    }
+                }
+            }
+        ];
 
         const container = document.getElementById('phones-container');
-        const phoneGrid = document.createElement('div');
-        phoneGrid.className = 'phone-grid';
-
         phones.forEach((phone, index) => {
             const card = document.createElement('div');
             card.className = 'phone-card';
-            card.setAttribute('data-aos', 'fade-up');
             card.style.animationDelay = `${index * 0.2}s`;
 
-            // Создаем радарную диаграмму для характеристик
-            const chartData = {
-                labels: ['CPU', 'GPU', 'RAM', 'Storage', 'Display', 'Battery'],
-                datasets: [{
-                    label: 'Характеристики',
-                    data: [95, 90, 85, 88, 92, 87], // Примерные значения
-                    backgroundColor: 'rgba(99, 102, 241, 0.2)',
-                    borderColor: 'rgba(99, 102, 241, 1)',
-                    pointBackgroundColor: 'rgba(99, 102, 241, 1)',
-                    borderWidth: 2
-                }]
-            };
-
-            const content = `
-                <div class="phone-header">
-                    <div class="phone-title">
-                        <span class="phone-name">${phone.name}</span>
-                        <span class="phone-price">${phone.price.toLocaleString()}₽</span>
+            const specsHTML = Object.entries(phone.specs).map(([category, data]) => `
+                <div class="spec-category">
+                    <div class="spec-title">${data.label}</div>
+                    <div class="spec-item">
+                        <div class="spec-label">${category}</div>
+                        <div class="spec-value">${data.value}</div>
+                        <div class="performance-meter">
+                            <div class="performance-fill" style="width: ${data.performance}%"></div>
+                        </div>
                     </div>
-                    ${index === 0 ? '<span class="category-badge">ТОП-1</span>' : ''}
                 </div>
-                <div class="phone-content">
-                    <div class="performance-chart">
-                        <canvas id="chart${index}"></canvas>
-                    </div>
-                    <div class="specs-grid">
-                        ${Object.entries(phone.specs).map(([section, specs]) => `
-                            <div class="spec-section">
-                                <div class="spec-title">
-                                    <span class="cooling-icon">💫</span>
-                                    ${section}
-                                </div>
-                                ${Object.entries(specs).map(([label, value]) => `
-                                    <div class="spec-item">
-                                        <div class="spec-label">${label}</div>
-                                        <div class="spec-value">${value}</div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        `).join('')}
-                    </div>
+            `).join('');
+
+            card.innerHTML = `
+                <div class="phone-header">
+                    <div class="phone-name">${phone.name}</div>
+                    <div class="phone-price">${phone.price.toLocaleString()}₽</div>
+                </div>
+                <span class="feature-badge">${phone.features}</span>
+                <div class="specs-grid">
+                    ${specsHTML}
                 </div>
             `;
 
-            card.innerHTML = content;
-            phoneGrid.appendChild(card);
-
-            // Инициализация после добавления в DOM
-            setTimeout(() => {
-                const ctx = document.getElementById(`chart${index}`).getContext('2d');
-                new Chart(ctx, {
-                    type: 'radar',
-                    data: chartData,
-                    options: {
-                        scales: {
-                            r: {
-                                beginAtZero: true,
-                                max: 100,
-                                ticks: {
-                                    color: '#94a3b8'
-                                },
-                                grid: {
-                                    color: 'rgba(148, 163, 184, 0.1)'
-                                },
-                                pointLabels: {
-                                    color: '#f1f5f9'
-                                }
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                display: false
-                            }
-                        }
-                    }
-                });
-            }, 100);
-
-            // Обработчик клика
-            const header = card.querySelector('.phone-header');
-            const phoneContent = card.querySelector('.phone-content');
-            header.addEventListener('click', () => {
-                phoneContent.classList.toggle('active');
-            });
+            container.appendChild(card);
         });
-
-        container.appendChild(phoneGrid);
     </script>
 </body>
 </html>
+</antArtifact>
+
