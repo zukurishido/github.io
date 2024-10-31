@@ -1,3 +1,60 @@
+// Проверяем загрузку всех зависимостей
+document.addEventListener('DOMContentLoaded', function() {
+    // Проверяем, загружены ли все необходимые библиотеки
+    if (typeof THREE === 'undefined') {
+        console.error('Three.js не загружен');
+        return;
+    }
+    if (typeof gsap === 'undefined') {
+        console.error('GSAP не загружен');
+        return;
+    }
+    if (typeof Chart === 'undefined') {
+        console.error('Chart.js не загружен');
+        return;
+    }
+
+    // Инициализируем все компоненты
+    try {
+        initParticles();
+        createPhoneCards();
+        
+        // Добавляем тестовый телефон, если массив пустой
+        if (!phones || phones.length === 0) {
+            phones = [{
+                name: "Ultra Gaming Pro X",
+                price: 129999,
+                specs: {
+                    "Процессор": "Snapdragon 8 Gen 3",
+                    "ОЗУ": "24GB LPDDR5X",
+                    "Накопитель": "1TB UFS 4.0",
+                    "Дисплей": "6.8\" 165Hz AMOLED",
+                    "Батарея": "6000mAh"
+                },
+                benchmarks: {
+                    "AnTuTu": 1850000,
+                    "GeekBench": 5890,
+                    "3DMark": 12500
+                },
+                gaming: {
+                    "Genshin Impact": { fps: 60, stability: 98 },
+                    "PUBG Mobile": { fps: 90, stability: 99 },
+                    "Call of Duty Mobile": { fps: 120, stability: 97 }
+                },
+                thermals: {
+                    "Idle": 32,
+                    "Gaming": 42,
+                    "Stress Test": 45
+                }
+            }];
+            createPhoneCards(); // Пересоздаем карточки с тестовыми данными
+        }
+    } catch (error) {
+        console.error('Ошибка при инициализации:', error);
+    }
+});
+
+// Остальной код script.js остается без изменений...
 // Данные телефонов
 const phones = [
     {
