@@ -1,0 +1,212 @@
+:root {
+    --primary-color: #00f7ff;
+    --secondary-color: #ff00ff;
+    --background-color: #0a0a0a;
+    --card-bg: rgba(16, 16, 24, 0.8);
+    --neon-glow: 0 0 10px var(--primary-color),
+                 0 0 20px var(--primary-color),
+                 0 0 30px var(--primary-color);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--background-color);
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif;
+    overflow-x: hidden;
+}
+
+/* Particles Container */
+#particles-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+/* Cyber Header */
+.cyber-header {
+    position: relative;
+    padding: 2rem;
+    text-align: center;
+    overflow: hidden;
+}
+
+.glitch-container {
+    position: relative;
+    display: inline-block;
+}
+
+.glitch {
+    font-size: 3rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    position: relative;
+    text-shadow: 0.05em 0 0 var(--primary-color),
+                 -0.05em -0.025em 0 var(--secondary-color);
+    animation: glitch 1s infinite;
+}
+
+@keyframes glitch {
+    0% {
+        text-shadow: 0.05em 0 0 var(--primary-color),
+                     -0.05em -0.025em 0 var(--secondary-color);
+    }
+    25% {
+        text-shadow: -0.05em -0.025em 0 var(--primary-color),
+                     0.025em 0.025em 0 var(--secondary-color);
+    }
+    50% {
+        text-shadow: 0.025em 0.05em 0 var(--primary-color),
+                     -0.05em -0.05em 0 var(--secondary-color);
+    }
+    100% {
+        text-shadow: -0.025em 0 0 var(--primary-color),
+                     0.025em -0.025em 0 var(--secondary-color);
+    }
+}
+
+/* Phones Grid */
+.phones-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+    perspective: 1000px;
+}
+
+.holo-card {
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 1.5rem;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.holo-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 0%, rgba(255,255,255,0.1) 100%);
+    transform: translateZ(20px);
+    pointer-events: none;
+}
+
+.holo-card:hover {
+    transform: scale(1.02);
+}
+
+/* Phone Model 3D Container */
+.phone-model-3d {
+    width: 100%;
+    height: 200px;
+    margin-bottom: 1rem;
+}
+
+/* Specs Grid */
+.specs-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.spec-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 1rem;
+}
+
+.spec-bar {
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+}
+
+.spec-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2));
+    animation: shine 2s infinite;
+}
+
+@keyframes shine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Detail View */
+.detail-view {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+}
+
+.detail-content {
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    height: 90%;
+    margin: 2.5% auto;
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 2rem;
+    overflow-y: auto;
+    transform-style: preserve-3d;
+}
+
+/* Charts Styling */
+canvas {
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+    margin: 1rem 0;
+}
+
+/* Cyber Footer */
+.cyber-footer {
+    position: relative;
+    padding: 1rem;
+    text-align: center;
+    background: var(--card-bg);
+    margin-top: 2rem;
+}
+
+.footer-decoration {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .glitch {
+        font-size: 2rem;
+    }
+    
+    .phones-grid {
+        grid-template-columns: 1fr;
+    }
+}
