@@ -1,646 +1,535 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Gaming Phones 2024</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <style>
-        :root {
-            --neon-green: #0ffa;
-            --neon-blue: #0ffb;
-            --neon-pink: #f0fb;
-            --dark: #000810;
-            --card-bg: rgba(16, 16, 24, 0.9);
-        }
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
+    
+    :root {
+      --neon-green: #00ffa2;
+      --neon-blue: #00f7ff;
+      --neon-purple: #b000ff;
+      --neon-pink: #ff00ff;
+      --dark-bg: #0a0a0f;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            background-color: var(--dark);
-            min-height: 100vh;
-            overflow-x: hidden;
-            color: #fff;
-        }
+    body {
+      background: var(--dark-bg);
+      color: #fff;
+      font-family: 'Orbitron', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
 
-        .cyber-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: 
-                repeating-linear-gradient(
-                    90deg,
-                    rgba(0, 255, 170, 0.03) 0px,
-                    rgba(0, 255, 170, 0.03) 1px,
-                    transparent 1px,
-                    transparent 20px
-                ),
-                repeating-linear-gradient(
-                    0deg,
-                    rgba(0, 255, 170, 0.03) 0px,
-                    rgba(0, 255, 170, 0.03) 1px,
-                    transparent 1px,
-                    transparent 20px
-                );
-        }
+    .cyber-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      position: relative;
+    }
 
-        .cyber-background::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 50% 50%, 
-                rgba(0, 255, 170, 0.1) 0%,
-                rgba(0, 0, 0, 0.9) 100%);
-        }
+    .title-container {
+      text-align: center;
+      margin-bottom: 4rem;
+      position: relative;
+    }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-            position: relative;
-        }
+    .cyber-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: transparent;
+      -webkit-text-stroke: 1px var(--neon-green);
+      text-shadow: 0 0 15px var(--neon-green);
+      position: relative;
+      animation: titlePulse 2s infinite;
+    }
 
-        .title {
-            text-align: center;
-            font-size: 4.5rem;
-            margin: 2rem 0;
-            position: relative;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            color: transparent;
-            -webkit-text-stroke: 1px var(--neon-green);
-            filter: drop-shadow(0 0 15px var(--neon-green));
-        }
+    @keyframes titlePulse {
+      0%, 100% { text-shadow: 0 0 15px var(--neon-green); }
+      50% { text-shadow: 0 0 30px var(--neon-green), 0 0 50px var(--neon-green); }
+    }
 
-        .title::before {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            height: 100%;
-            color: var(--neon-green);
-            -webkit-text-stroke: 0px;
-            border-right: 4px solid var(--neon-green);
-            overflow: hidden;
-            animation: animate 6s linear infinite;
-        }
+    .phones-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      perspective: 2000px;
+    }
 
-        @keyframes animate {
-            0%, 10%, 100% {
-                width: 0;
-            }
-            70%, 90% {
-                width: 100%;
-            }
-        }
+    .phone-card {
+      position: relative;
+      background: rgba(10,10,15,0.8);
+      border: 1px solid var(--neon-green);
+      border-radius: 15px;
+      padding: 2rem;
+      transform-style: preserve-3d;
+      transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    }
 
-        .phones-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            padding: 1rem;
-            perspective: 1000px;
-        }
+    .phone-card::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: linear-gradient(45deg, 
+        var(--neon-green), 
+        var(--neon-blue), 
+        var(--neon-purple), 
+        var(--neon-pink)
+      );
+      border-radius: 15px;
+      z-index: -1;
+      animation: borderFlow 4s linear infinite;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
 
-        .phone-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 2rem;
-            position: relative;
-            cursor: pointer;
-            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-            transform-style: preserve-3d;
-            box-shadow: 0 0 20px rgba(0, 255, 170, 0.2);
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-        }
+    .phone-card:hover::before {
+      opacity: 1;
+    }
 
-        .phone-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(45deg, 
-                transparent 0%, 
-                rgba(0, 255, 170, 0.2) 45%, 
-                rgba(0, 255, 170, 0.3) 50%,
-                rgba(0, 255, 170, 0.2) 55%,
-                transparent 100%);
-            transform: translateX(-100%);
-            transition: transform 0.6s;
-        }
+    @keyframes borderFlow {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
 
-        .phone-card:hover::before {
-            transform: translateX(100%);
-        }
+    .phone-rank {
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      width: 60px;
+      height: 60px;
+      background: var(--dark-bg);
+      border: 2px solid var(--neon-green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      z-index: 1;
+      box-shadow: 0 0 20px var(--neon-green);
+    }
 
-        .phone-card::after {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            background: linear-gradient(45deg, var(--neon-green), var(--neon-blue), var(--neon-pink));
-            z-index: -1;
-            border-radius: 16px;
-            filter: blur(5px);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
+    .phone-name {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: #fff;
+      text-shadow: 0 0 10px var(--neon-blue);
+    }
 
-        .phone-card:hover::after {
-            opacity: 1;
-        }
+    .phone-price {
+      font-size: 1.4rem;
+      color: var(--neon-green);
+      margin-bottom: 1.5rem;
+    }
 
-        .phone-card:hover {
-            transform: translateY(-10px) rotateX(10deg);
-        }
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
 
-        .phone-name {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            color: var(--neon-green);
-            text-shadow: 0 0 10px var(--neon-green);
-            position: relative;
-            z-index: 1;
-        }
+    .spec-item {
+      background: rgba(0,255,162,0.1);
+      padding: 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(0,255,162,0.2);
+    }
 
-        .price {
-            font-size: 1.5rem;
-            color: var(--neon-pink);
-            margin-bottom: 1.5rem;
-            font-weight: bold;
-        }
+    .spec-label {
+      font-size: 0.9rem;
+      color: var(--neon-blue);
+      margin-bottom: 0.5rem;
+    }
 
-        .spec-bar {
-            height: 4px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 2px;
-            margin: 1rem 0;
-            position: relative;
-            overflow: hidden;
-        }
+    .spec-value {
+      font-size: 1.1rem;
+      color: #fff;
+    }
 
-        .spec-fill {
-            position: absolute;
-            height: 100%;
-            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
-            transform-origin: left;
-            transform: scaleX(0);
-            transition: transform 1s cubic-bezier(0.23, 1, 0.32, 1);
-        }
+    .features-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
 
-        .spec-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-            color: #fff;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-        }
+    .feature-tag {
+      background: rgba(0,255,162,0.1);
+      border: 1px solid var(--neon-green);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      animation: tagGlow 2s infinite alternate;
+    }
 
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            backdrop-filter: blur(20px);
-        }
+    @keyframes tagGlow {
+      0% { box-shadow: 0 0 5px var(--neon-green); }
+      100% { box-shadow: 0 0 15px var(--neon-green), 0 0 30px var(--neon-green); }
+    }
 
-        .modal-content {
-            background: var(--card-bg);
-            padding: 3rem;
-            border-radius: 20px;
-            position: relative;
-            width: 90%;
-            max-width: 800px;
-            border: 1px solid var(--neon-green);
-            box-shadow: 0 0 30px var(--neon-green);
-        }
+    .cyber-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
 
-        .feature-tag {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            margin: 0.5rem;
-            border-radius: 20px;
-            background: linear-gradient(45deg, var(--neon-green), var(--neon-blue));
-            color: var(--dark);
-            font-weight: bold;
-            box-shadow: 0 0 10px rgba(0, 255, 170, 0.5);
-            transform: scale(0);
-        }
+    .scan-line {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 200%;
+      background: linear-gradient(to bottom,
+        transparent 0%,
+        rgba(0,255,162,0.1) 50%,
+        transparent 100%);
+      animation: scanline 8s linear infinite;
+      pointer-events: none;
+      z-index: 2;
+    }
 
-        .close-button {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            color: var(--neon-green);
-            font-size: 2rem;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
+    @keyframes scanline {
+      0% { transform: translateY(-50%); }
+      100% { transform: translateY(0%); }
+    }
 
-        .close-button:hover {
-            transform: rotate(90deg);
-            color: var(--neon-pink);
-        }
+    .grid-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(to right, rgba(0,255,162,0.1) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0,255,162,0.1) 1px, transparent 1px);
+      background-size: 30px 30px;
+      pointer-events: none;
+      z-index: -1;
+      animation: gridMove 20s linear infinite;
+    }
 
-        .spec-item {
-            padding: 1rem;
-            margin: 0.5rem 0;
-            background: rgba(0, 255, 170, 0.1);
-            border-radius: 10px;
-            border-left: 3px solid var(--neon-green);
-            transform: translateX(-100%);
-            opacity: 0;
-        }
-
-        @keyframes glitch {
-            0% {
-                clip-path: inset(50% 0 30% 0);
-                transform: translateX(-5px);
-            }
-            20% {
-                clip-path: inset(20% 0 60% 0);
-                transform: translateX(5px);
-            }
-            40% {
-                clip-path: inset(40% 0 40% 0);
-                transform: translateX(-5px);
-            }
-            60% {
-                clip-path: inset(60% 0 20% 0);
-                transform: translateX(5px);
-            }
-            80% {
-                clip-path: inset(30% 0 50% 0);
-                transform: translateX(-5px);
-            }
-            100% {
-                clip-path: inset(50% 0 30% 0);
-                transform: translateX(5px);
-            }
-        }
-
-        .glitch-effect {
-            position: relative;
-        }
-
-        .glitch-effect::before,
-        .glitch-effect::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        .glitch-effect::before {
-            color: var(--neon-pink);
-            animation: glitch 3s infinite linear alternate-reverse;
-        }
-
-        .glitch-effect::after {
-            color: var(--neon-blue);
-            animation: glitch 2s infinite linear alternate-reverse;
-        }
-    </style>
+    @keyframes gridMove {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-30px); }
+    }
+  </style>
 </head>
 <body>
-    <div class="cyber-background"></div>
+  <div class="grid-overlay"></div>
+  <div class="scan-line"></div>
+  <div class="cyber-particles"></div>
+
+  <div class="cyber-container">
+    <div class="title-container">
+      <h1 class="cyber-title">ТОП-5 ИГРОВЫХ СМАРТФОНОВ 2024</h1>
+    </div>
     
-    <div class="container">
-        <h1 class="title glitch-effect" data-text="Gaming Phones 2024">Gaming Phones 2024</h1>
-        <div class="phones-grid">
-            <!-- Phones will be inserted by JavaScript -->
-        </div>
-    </div>
+    <div class="phones-grid"></div>
+  </div>
 
-    <div class="modal">
-        <div class="modal-content">
-            <button class="close-button">×</button>
-            <h2 class="phone-name glitch-effect"></h2>
-            <div class="specs-container"></div>
-            <div class="features-container"></div>
-        </div>
-    </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
-    <script>
-        // Включаем GSAP ScrollTrigger
-        gsap.registerPlugin(ScrollTrigger);
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
 
-        const phones = [
-            {
-                name: "ASUS ROG Phone 7 Ultimate",
-                price: 69990,
-                specs: {
-                    performance: 98,
-                    display: 95,
-                    battery: 92,
-                    cooling: 96,
-                    details: {
-                        processor: "Snapdragon 8 Gen 2 (4 нм)",
-                        ram: "16 ГБ LPDDR5X",
-                        storage: "512 ГБ UFS 4.0",
-                        display: "6.78″ AMOLED, 165 Гц, HDR10+",
-                        battery: "6000 мАч",
-                        charging: "65 Вт HyperCharge"
-                    },
-                    features: ["ROG Vision", "GameCool 7", "AirTrigger 7", "RGB-подсветка"]
-                }
-            },
-            // Добавьте остальные телефоны здесь
-        ];
+    const phones = [
+      {
+        rank: 1,
+        name: "ASUS ROG Phone 7 Ultimate",
+        price: 69990,
+        specs: {
+          processor: "Snapdragon 8 Gen 2 (4 нм)",
+          ram: "16 ГБ LPDDR5X",
+          storage: "512 ГБ UFS 4.0",
+          display: "6.78″ AMOLED, 165 Гц, HDR10+",
+          battery: "6000 мАч",
+          charging: "65 Вт HyperCharge"
+        },
+        features: ["ROG Vision", "GameCool 7", "AirTrigger 7", "RGB-подсветка"]
+      },
+      {
+        rank: 2,
+        name: "Red Magic 8S Pro+",
+        price: 65990,
+        specs: {
+          processor: "Snapdragon 8 Gen 2",
+          ram: "16 ГБ LPDDR5X",
+          storage: "512 ГБ UFS 4.0",
+          display: "6.8″ AMOLED, 120 Гц",
+          battery: "5000 мАч",
+          charging: "80 Вт Quick Charge"
+        },
+        features: ["ICE 12.0 Cooling", "Встроенный вентилятор", "Триггеры 520 Гц"]
+      },
+      {
+        rank: 3,
+        name: "Black Shark 5 Pro",
+        price: 62990,
+        specs: {
+          processor: "Snapdragon 8 Gen 1",
+          ram: "12 ГБ LPDDR5",
+          storage: "256 ГБ UFS 3.1",
+          display: "6.67″ AMOLED, 144 Гц",
+          battery: "4650 мАч",
+          charging: "120 Вт Hyper Charge"
+        },
+        features: ["Magnetic Pop-up Triggers", "Liquid Cooling Pro"]
+      },
+      {
+        rank: 4,
+        name: "Lenovo Legion Pro",
+        price: 59990,
+        specs: {
+          processor: "Snapdragon 8+ Gen 1",
+          ram: "12 ГБ LPDDR5",
+          storage: "256 ГБ UFS 3.1",
+          display: "6.67″ AMOLED, 144 Гц",
+          battery: "5000 мАч",
+          charging: "90 Вт Turbo Charge"
+        },
+        features: ["Legion Gaming Engine", "Dual Liquid Cooling"]
+      },
+      {
+        rank: 5,
+        name: "OnePlus 11R",
+        price: 54990,
+        specs: {
+          processor: "Snapdragon 8+ Gen 1",
+          ram: "16 ГБ LPDDR5",
+          storage: "256 ГБ UFS 3.1",
+          display: "6.74″ AMOLED, 120 Гц",
+          battery: "5000 мАч",
+          charging: "100 Вт SuperVOOC"
+        },
+        features: ["HyperBoost Gaming", "Vapor Chamber Cooling"]
+      }
+    ];
 
-        function createPhoneCards() {
-            const grid = document.querySelector('.phones-grid');
-            phones.forEach((phone, index) => {
-                const card = document.createElement('div');
-                card.className = 'phone-card';
-                card.innerHTML = `
-                    <h2 class="phone-name glitch-effect" data-text="${phone.name}">${phone.name}</h2>
-                    <p class="price">${phone.price.toLocaleString()} ₽</p>
-                    ${Object.entries(phone.specs)
-                        .filter(([key]) => typeof phone.specs[key] === 'number')
-                        .map(([key, value]) => `
-                            <div class="spec-label">
-                                <span>${key}</span>
-                                <span>${value}%</span>
-                            </div>
-                            <div class="spec-bar">
-                                <div class="spec-fill" style="width: ${value}%"></div>
-                            </div>
-                        `).join('')}
-                `;
+    function createPhoneCards() {
+      const grid = document.querySelector('.phones-grid');
+      
+      phones.forEach((phone, index) => {
+        const card = document.createElement('div');
+        card.className = 'phone-card';
+        
+        card.innerHTML = `
+          <div class="phone-rank">#${phone.rank}</div>
+          <h2 class="phone-name">${phone.name}</h2>
+          <div class="phone-price">${phone.price.toLocaleString()} ₽</div>
+          <div class="specs-grid">
+            ${Object.entries(phone.specs).map(([key, value]) => `
+              <div class="spec-item">
+                <div class="spec-label">${key}</div>
+                <div class="spec-value">${value}</div>
+              </div>
+            `).join('')}
+          </div>
+          <div class="features-container">
+            ${phone.features.map(feature => `
+              <span class="feature-tag">${feature}</span>
+            `).join('')}
+          </div>
+        `;
 
-                grid.appendChild(card);
-                card.addEventListener('click', () => showModal(phone));
+        grid.appendChild(card);
 
-                // Анимация появления карточек
-                gsap.from(card, {
-                    duration: 1,
-                    y: 100,
-                    opacity: 0,
-                    delay: index * 0.2,
-                    ease: "power4.out",
-                    scrollTrigger: {
-                        trigger: card,
-                        start: "top bottom",
-                        end: "top center",
-                        toggleActions: "play none none reverse"
-                    }
-                });
+        // Анимация появления карточек
+        gsap.from(card, {
+          y: 100,
+          opacity: 0,
+          duration: 1,
+          delay: index * 0.2,
+          ease: "power4.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top bottom",
+            end: "top center",
+            toggleActions: "play none none reverse"
+          }
+        });
+      });
+    }
 
-                // Анимация прогресс-баров при появлении
-                card.querySelectorAll('.spec-fill').forEach((fill) => {
-                    gsap.to(fill, {
-                        scaleX: 1,
-                        duration: 1.5,
-                        ease: "power4.out",
-                        scrollTrigger: {
-                            trigger: fill,
-                            start: "top bottom",
-                            toggleActions: "play none none reverse"
-                        }
-                    });
-                });
-            });
-        }
+    // Создаем частицы
+    function createParticles() {
+      const container = document.querySelector('.cyber-particles');
+      
+      for (let i = 0; i < 50; i++) {
+        const particle = document.createElement('div');
+        particle.style.cssText = `
+          position: absolute;
+          width: ${Math.random() * 3}px;
+          height: ${Math.random() * 3}px;
+          background: rgba(0, 255, 162, ${Math.random() * 0.5 + 0.5});
+          border-radius: 50%;
+          pointer-events: none;
+          box-shadow: 0 0 ${Math.random() * 10}px var(--neon-green);
+        `;
+        
+        container.appendChild(particle);
 
-        function showModal(phone) {
-            const modal = document.querySelector('.modal');
-            const content = modal.querySelector('.modal-content');
-            const specsContainer = content.querySelector('.specs-container');
-            const featuresContainer = content.querySelector('.features-container');
-
-            content.querySelector('.phone-name').textContent = phone.name;
-            content.querySelector('.phone-name').setAttribute('data-text', phone.name);
-
-            specsContainer.innerHTML = '';
-            featuresContainer.innerHTML = '';
-
-            // Добавляем спецификации с анимацией
-            Object.entries(phone.specs.details).forEach((spec, index) => {
-                const specItem = document.createElement('div');
-                specItem.className = 'spec-item';
-                specItem.innerHTML = `
-                    <strong>${spec[0]}:</strong> ${spec[1]}
-                    <div class="spec-glow"></div>
-                `;
-                specsContainer.appendChild(specItem);
-
-                gsap.from(specItem, {
-                    x: -100,
-                    opacity: 0,
-                    duration: 0.6,
-                    delay: index * 0.1,
-                    ease: "power2.out"
-                });
-            });
-
-            // Добавляем фичи с анимацией
-            phone.specs.features.forEach((feature, index) => {
-                const featureTag = document.createElement('span');
-                featureTag.className = 'feature-tag';
-                featureTag.textContent = feature;
-                featuresContainer.appendChild(featureTag);
-
-                gsap.from(featureTag, {
-                    scale: 0,
-                    opacity: 0,
-                    duration: 0.5,
-                    delay: 0.5 + (index * 0.1),
-                    ease: "back.out(1.7)"
-                });
-            });
-
-            modal.style.display = 'flex';
-            gsap.fromTo(content,
-                {
-                    scale: 0.8,
-                    opacity: 0,
-                    y: 50
-                },
-                {
-                    scale: 1,
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.6,
-                    ease: "power3.out"
-                }
-            );
-
-            // Добавляем эффект мерцания для неоновых элементов
-            gsap.to('.modal-content', {
-                boxShadow: '0 0 30px rgba(0, 255, 170, 0.8)',
-                duration: 1,
-                repeat: -1,
-                yoyo: true
-            });
-        }
-
-        // Обработка закрытия модального окна
-        document.querySelector('.close-button').addEventListener('click', () => {
-            const modal = document.querySelector('.modal');
-            const content = modal.querySelector('.modal-content');
-
-            gsap.to(content, {
-                scale: 0.8,
-                opacity: 0,
-                y: 50,
-                duration: 0.4,
-                ease: "power3.in",
-                onComplete: () => {
-                    modal.style.display = 'none';
-                }
-            });
+        gsap.to(particle, {
+          x: `random(-50, 50, 5)`,
+          y: `random(-50, 50, 5)`,
+          duration: "random(2, 6)",
+          repeat: -1,
+          yoyo: true,
+          ease: "none"
         });
 
-        // Инициализация
-        createPhoneCards();
-
-        // Добавляем интерактивные эффекты при движении мыши
-        document.addEventListener('mousemove', (e) => {
-            const cards = document.querySelectorAll('.phone-card');
-            const mouseX = e.clientX;
-            const mouseY = e.clientY;
-
-            cards.forEach(card => {
-                const rect = card.getBoundingClientRect();
-                const cardX = rect.left + rect.width / 2;
-                const cardY = rect.top + rect.height / 2;
-
-                const angleX = (mouseY - cardY) / 30;
-                const angleY = (mouseX - cardX) / -30;
-
-                card.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg) translateY(-10px)`;
-            });
+        gsap.to(particle, {
+          opacity: "random(0.3, 1)",
+          duration: "random(1, 3)",
+          repeat: -1,
+          yoyo: true,
+          ease: "none"
         });
+      }
+    }
 
-        // Добавляем эффект параллакса для фона
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            document.querySelector('.cyber-background').style.transform = 
-                `translateY(${scrolled * 0.5}px)`;
+    // 3D эффект при движении мышью
+    function init3DEffect() {
+      document.addEventListener('mousemove', (e) => {
+        const cards = document.querySelectorAll('.phone-card');
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+
+        cards.forEach(card => {
+          const rect = card.getBoundingClientRect();
+          const cardX = rect.left + rect.width / 2;
+          const cardY = rect.top + rect.height / 2;
+
+          const angleX = (mouseY - cardY) / 30;
+          const angleY = (mouseX - cardX) / -30;
+
+          gsap.to(card, {
+            rotationX: angleX,
+            rotationY: angleY,
+              duration: 0.5,
+            ease: "power2.out"
+          });
         });
+      });
 
-        // Добавляем динамические частицы
-        function createParticles() {
-            const container = document.createElement('div');
-            container.className = 'particles-container';
-            document.body.appendChild(container);
-
-            for (let i = 0; i < 50; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'cyber-particle';
-                particle.style.cssText = `
-                    position: fixed;
-                    width: ${Math.random() * 3}px;
-                    height: ${Math.random() * 3}px;
-                    background: rgba(0, 255, 170, ${Math.random() * 0.5 + 0.5});
-                    left: ${Math.random() * 100}vw;
-                    top: ${Math.random() * 100}vh;
-                    pointer-events: none;
-                    border-radius: 50%;
-                    box-shadow: 0 0 ${Math.random() * 10}px var(--neon-green);
-                    animation: floatParticle ${Math.random() * 10 + 5}s linear infinite;
-                `;
-                container.appendChild(particle);
-            }
-        }
-
-        // Добавляем эффект свечения при наведении
-        document.querySelectorAll('.phone-card').forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                gsap.to(card, {
-                    boxShadow: '0 0 30px var(--neon-green)',
-                    duration: 0.3
-                });
-            });
-
-            card.addEventListener('mouseleave', () => {
-                gsap.to(card, {
-                    boxShadow: '0 0 20px rgba(0, 255, 170, 0.2)',
-                    duration: 0.3
-                });
-            });
+      // Возврат карточек в исходное положение при отведении мыши
+      document.addEventListener('mouseleave', () => {
+        const cards = document.querySelectorAll('.phone-card');
+        cards.forEach(card => {
+          gsap.to(card, {
+            rotationX: 0,
+            rotationY: 0,
+            duration: 0.5,
+            ease: "power2.out"
+          });
         });
+      });
+    }
 
-        // Инициализация частиц
-        createParticles();
-
-        // Добавляем дополнительные телефоны в массив
-        phones.push(
-            {
-                name: "Red Magic 8S Pro+",
-                price: 65990,
-                specs: {
-                    performance: 95,
-                    display: 90,
-                    battery: 88,
-                    cooling: 98,
-                    details: {
-                        processor: "Snapdragon 8 Gen 2",
-                        ram: "16 ГБ LPDDR5X",
-                        storage: "512 ГБ UFS 4.0",
-                        display: "6.8″ AMOLED, 120 Гц",
-                        battery: "5000 мАч",
-                        charging: "80 Вт Quick Charge"
-                    },
-                    features: ["ICE 12.0 Cooling", "Встроенный вентилятор", "Триггеры 520 Гц"]
-                }
-            },
-            {
-                name: "Black Shark 5 RS",
-                price: 59990,
-                specs: {
-                    performance: 92,
-                    display: 88,
-                    battery: 85,
-                    cooling: 90,
-                    details: {
-                        processor: "Snapdragon 8 Gen 1+",
-                        ram: "12 ГБ LPDDR5",
-                        storage: "256 ГБ UFS 3.1",
-                        display: "6.67″ AMOLED, 144 Гц",
-                        battery: "4650 мАч",
-                        charging: "120 Вт Hyper Charge"
-                    },
-                    features: ["Magnetic Pop-up Triggers", "Liquid Cooling Pro"]
-                }
-            }
-        );
-
-        // Добавляем эффект glitch при загрузке страницы
-        window.addEventListener('load', () => {
-            document.querySelectorAll('.glitch-effect').forEach(element => {
-                gsap.to(element, {
-                    textShadow: '0 0 10px var(--neon-green)',
-                    duration: 0.1,
-                    repeat: -1,
-                    yoyo: true,
-                    ease: "none"
-                });
-            });
+    // Эффект неонового свечения для текста
+    function initTextGlowEffect() {
+      const glowElements = document.querySelectorAll('.phone-name, .feature-tag');
+      
+      glowElements.forEach(element => {
+        gsap.to(element, {
+          textShadow: '0 0 20px var(--neon-green)',
+          duration: 1,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut"
         });
-    </script>
+      });
+    }
+
+    // Создаем эффект искажения для фона
+    function createDistortionEffect() {
+      const noise = `
+        <svg viewBox="0 0 500 500" xmlns='http://www.w3.org/2000/svg'>
+          <filter id='noiseFilter'>
+            <feTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/>
+          </filter>
+          <rect width='100%' height='100%' filter='url(#noiseFilter)'/>
+        </svg>
+      `;
+      
+      const noiseContainer = document.createElement('div');
+      noiseContainer.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.05;
+        pointer-events: none;
+        z-index: -1;
+      `;
+      noiseContainer.innerHTML = noise;
+      document.body.appendChild(noiseContainer);
+    }
+
+    // Добавляем эффект пульсации для рейтинга
+    function initRankPulseEffect() {
+      const ranks = document.querySelectorAll('.phone-rank');
+      
+      ranks.forEach((rank, index) => {
+        gsap.to(rank, {
+          boxShadow: '0 0 30px var(--neon-green)',
+          scale: 1.1,
+          duration: 1,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+          delay: index * 0.2
+        });
+      });
+    }
+
+    // Анимация загрузки страницы
+    function initLoadingAnimation() {
+      gsap.from('.cyber-title', {
+        y: -100,
+        opacity: 0,
+        duration: 1.5,
+        ease: "power4.out"
+      });
+
+      gsap.from('.grid-overlay', {
+        opacity: 0,
+        duration: 2,
+        ease: "power2.inOut"
+      });
+    }
+
+    // Инициализация всех эффектов
+    window.addEventListener('load', () => {
+      createPhoneCards();
+      createParticles();
+      init3DEffect();
+      initTextGlowEffect();
+      createDistortionEffect();
+      initRankPulseEffect();
+      initLoadingAnimation();
+    });
+
+    // Оптимизация производительности
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        gsap.ticker.sleep();
+      } else {
+        gsap.ticker.wake();
+      }
+    });
+  </script>
 </body>
 </html>
+              
