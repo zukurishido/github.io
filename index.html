@@ -3,569 +3,1148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Топ 5 Игровых Смартфонов 2024</title>
+    <title>Ultimate Gaming Phones 2024</title>
+    
+    <!-- Основные библиотеки -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     
     <style>
         :root {
-            --neon-blue: #00ffff;
-            --dark-blue: #000033;
-            --card-bg: rgba(4, 9, 32, 0.95);
-            --text-shadow: 0 0 10px var(--neon-blue);
-            --box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            --neon-cyan: #00ffff;
+            --dark-blue: #000040;
+            --darker-blue: #000033;
+            --neon-glow: 0 0 10px var(--neon-cyan);
+            --card-bg: rgba(0, 0, 51, 0.95);
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+                filter: hue-rotate(0deg) brightness(1);
+            }
+            50% {
+                background-position: 100% 50%;
+                filter: hue-rotate(180deg) brightness(1.2);
+            }
+            100% {
+                background-position: 0% 50%;
+                filter: hue-rotate(360deg) brightness(1);
+            }
         }
 
         body {
             margin: 0;
             padding: 0;
-            background-color: var(--dark-blue);
+            background: linear-gradient(45deg, var(--darker-blue), var(--dark-blue));
+            background-size: 200% 200%;
+            animation: gradientBG 15s ease infinite;
             color: white;
             font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: 2;
+            pointer-events: none;
         }
 
         .container {
+            position: relative;
+            z-index: 3;
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
         }
 
-        .phone-list {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
         .phone-card {
             background: var(--card-bg);
             border-radius: 15px;
+            margin-bottom: 20px;
             overflow: hidden;
             border: 1px solid rgba(0, 255, 255, 0.1);
-            cursor: pointer;
+            transform: translateZ(0);
             transition: all 0.3s ease;
         }
 
-        .phone-header {
+        .card-header {
+            background: rgba(0, 255, 255, 0.05);
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            background: rgba(0, 255, 255, 0.05);
         }
 
-        .phone-title {
-            color: var(--neon-blue);
-            margin: 0;
+        .phone-name {
+            color: var(--neon-cyan);
             font-size: 1.5em;
-            text-shadow: var(--text-shadow);
+            margin: 0;
+            text-shadow: var(--neon-glow);
         }
 
-        .price-badge {
-            background: linear-gradient(45deg, #00ffff, #00bfff);
+        .price-tag {
+            color: var(--neon-cyan);
+            background: rgba(0, 255, 255, 0.1);
             padding: 8px 15px;
             border-radius: 20px;
-            font-weight: bold;
-            box-shadow: var(--box-shadow);
+            font-weight: 500;
         }
 
-        .specs-grid {
+        .content-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            padding: 20px;
-            display: none;
+            gap: 1px;
+            background: rgba(0, 255, 255, 0.05);
+            padding: 1px;
         }
 
-        .spec-box {
-            background: rgba(0, 255, 255, 0.03);
+        .spec-block {
+            background: var(--card-bg);
             padding: 20px;
-            border-radius: 10px;
-            border: 1px solid rgba(0, 255, 255, 0.1);
         }
 
         .spec-title {
             color: rgba(255, 255, 255, 0.7);
             font-size: 0.9em;
             margin-bottom: 10px;
+            text-transform: lowercase;
         }
 
         .spec-value {
-            color: var(--neon-blue);
-            text-shadow: var(--text-shadow);
-            font-size: 1.1em;
-            margin: 5px 0;
+            color: var(--neon-cyan);
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+            text-shadow: 0 0 5px var(--neon-cyan);
         }
 
-        .metrics {
+        .spec-key {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .metrics-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            padding: 20px;
-            display: none;
+            gap: 1px;
+            background: rgba(0, 255, 255, 0.05);
+            padding: 15px;
         }
 
         .metric-box {
-            background: rgba(0, 255, 255, 0.03);
-            padding: 15px;
-            border-radius: 10px;
             text-align: center;
-            border: 1px solid rgba(0, 255, 255, 0.1);
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 10px;
         }
 
         .metric-value {
+            color: var(--neon-cyan);
             font-size: 2em;
-            color: var(--neon-blue);
-            text-shadow: var(--text-shadow);
+            font-weight: bold;
+            text-shadow: var(--neon-glow);
+            margin-bottom: 5px;
         }
 
-        .active .specs-grid,
-        .active .metrics {
-            display: grid;
+        .metric-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.8em;
         }
 
-        @keyframes glow {
-            0% { box-shadow: 0 0 5px var(--neon-blue); }
-            50% { box-shadow: 0 0 20px var(--neon-blue); }
-            100% { box-shadow: 0 0 5px var(--neon-blue); }
+        /* Анимации появления */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .glow {
-            animation: glow 2s infinite;
+        .phone-card {
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        .phone-card:nth-child(1) { animation-delay: 0.1s; }
+        .phone-card:nth-child(2) { animation-delay: 0.2s; }
+        .phone-card:nth-child(3) { animation-delay: 0.3s; }
+        .phone-card:nth-child(4) { animation-delay: 0.4s; }
+        .phone-card:nth-child(5) { animation-delay: 0.5s; }
+
+        /* Эффект при наведении */
+        .phone-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 255, 255, 0.2);
+        }
+
+        /* Адаптивный дизайн */
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="phone-list" id="phoneList"></div>
+    <canvas id="particle-canvas"></canvas>
+    <div class="cyber-grid"></div>
+    <div class="container" id="app">
+        <!-- Контент будет добавлен через JavaScript -->
     </div>
+</body>
+</html>
+```javascript
+// Система частиц и визуальные эффекты
+class ParticleSystem {
+    constructor() {
+        this.canvas = document.getElementById('particle-canvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.mousePosition = { x: 0, y: 0 };
+        this.init();
+    }
 
-    <script>
-        const phones = [
+    init() {
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+        this.createParticles();
+        this.animate();
+        this.addMouseTracking();
+    }
+
+    resize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+    }
+
+    createParticles() {
+        const particleCount = Math.floor((window.innerWidth * window.innerHeight) / 10000);
+        
+        for (let i = 0; i < particleCount; i++) {
+            this.particles.push({
+                x: Math.random() * this.canvas.width,
+                y: Math.random() * this.canvas.height,
+                size: Math.random() * 2 + 1,
+                speedX: Math.random() * 1 - 0.5,
+                speedY: Math.random() * 1 - 0.5,
+                life: 1,
+                color: `rgba(0, 255, 255, ${Math.random() * 0.5})`
+            });
+        }
+    }
+
+    addMouseTracking() {
+        document.addEventListener('mousemove', (e) => {
+            this.mousePosition.x = e.clientX;
+            this.mousePosition.y = e.clientY;
+
+            // Создаем дополнительные частицы при движении мыши
+            for (let i = 0; i < 3; i++) {
+                this.particles.push({
+                    x: this.mousePosition.x,
+                    y: this.mousePosition.y,
+                    size: Math.random() * 3 + 2,
+                    speedX: Math.random() * 4 - 2,
+                    speedY: Math.random() * 4 - 2,
+                    life: 1,
+                    color: `rgba(0, 255, 255, ${Math.random() * 0.8})`
+                });
+            }
+        });
+    }
+
+    animate() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        this.particles.forEach((particle, index) => {
+            particle.x += particle.speedX;
+            particle.y += particle.speedY;
+            particle.life -= 0.01;
+
+            // Взаимодействие с мышью
+            const dx = this.mousePosition.x - particle.x;
+            const dy = this.mousePosition.y - particle.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance < 100) {
+                const force = (100 - distance) / 100;
+                particle.speedX -= (dx / distance) * force * 0.2;
+                particle.speedY -= (dy / distance) * force * 0.2;
+            }
+
+            // Отрисовка частицы
+            this.ctx.beginPath();
+            this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+            this.ctx.fillStyle = particle.color;
+            this.ctx.fill();
+
+            // Проверка границ и жизненного цикла
+            if (particle.x < 0 || particle.x > this.canvas.width ||
+                particle.y < 0 || particle.y > this.canvas.height ||
+                particle.life <= 0) {
+                if (Math.random() > 0.5) {
+                    // Пересоздаем частицу
+                    this.particles[index] = {
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        size: Math.random() * 2 + 1,
+                        speedX: Math.random() * 1 - 0.5,
+                        speedY: Math.random() * 1 - 0.5,
+                        life: 1,
+                        color: `rgba(0, 255, 255, ${Math.random() * 0.5})`
+                    };
+                } else {
+                    // Удаляем частицу
+                    this.particles.splice(index, 1);
+                }
+            }
+        });
+
+        requestAnimationFrame(() => this.animate());
+    }
+}
+
+// Класс для управления визуальными эффектами карточек
+class CardEffects {
+    constructor() {
+        this.cards = document.querySelectorAll('.phone-card');
+        this.init();
+    }
+
+    init() {
+        this.cards.forEach(card => {
+            this.addHoverEffect(card);
+            this.addClickEffect(card);
+            this.addParallaxEffect(card);
+        });
+    }
+
+    addHoverEffect(card) {
+        card.addEventListener('mouseenter', () => {
+            gsap.to(card, {
+                scale: 1.02,
+                boxShadow: '0 10px 30px rgba(0, 255, 255, 0.3)',
+                duration: 0.3
+            });
+
+            // Добавляем свечение для всех значений
+            const values = card.querySelectorAll('.spec-value');
+            values.forEach(value => {
+                gsap.to(value, {
+                    textShadow: '0 0 10px rgba(0, 255, 255, 0.8)',
+                    color: '#00ffff',
+                    duration: 0.3
+                });
+            });
+        });
+
+        card.addEventListener('mouseleave', () => {
+            gsap.to(card, {
+                scale: 1,
+                boxShadow: '0 5px 15px rgba(0, 255, 255, 0.1)',
+                duration: 0.3
+            });
+
+            const values = card.querySelectorAll('.spec-value');
+            values.forEach(value => {
+                gsap.to(value, {
+                    textShadow: '0 0 5px rgba(0, 255, 255, 0.3)',
+                    color: '#00ffff',
+                    duration: 0.3
+                });
+            });
+        });
+    }
+
+    addClickEffect(card) {
+        card.addEventListener('click', () => {
+            gsap.to(card, {
+                scale: 0.98,
+                duration: 0.1,
+                yoyo: true,
+                repeat: 1
+            });
+        });
+    }
+
+    addParallaxEffect(card) {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 20;
+            const rotateY = (centerX - x) / 20;
+
+            gsap.to(card, {
+                rotateX: rotateX,
+                rotateY: rotateY,
+                duration: 0.5,
+                ease: 'power2.out'
+            });
+
+            // Эффект параллакса для элементов внутри карточки
+            const elements = card.querySelectorAll('.spec-value, .metric-value');
+            elements.forEach(element => {
+                const depth = Math.random() * 20 + 10;
+                gsap.to(element, {
+                    x: (x - centerX) / depth,
+                    y: (y - centerY) / depth,
+                    duration: 0.5
+                });
+            });
+        });
+
+        card.addEventListener('mouseleave', () => {
+            gsap.to(card, {
+                rotateX: 0,
+                rotateY: 0,
+                duration: 0.5
+            });
+
+            const elements = card.querySelectorAll('.spec-value, .metric-value');
+            elements.forEach(element => {
+                gsap.to(element, {
+                    x: 0,
+                    y: 0,
+                    duration: 0.5
+                });
+            });
+        });
+    }
+}
+
+// Инициализация эффектов
+document.addEventListener('DOMContentLoaded', () => {
+    new ParticleSystem();
+    new CardEffects();
+});
+```
+```javascript
+// Класс для управления данными и визуализацией
+class PhoneDataVisualizer {
+    constructor() {
+        this.phones = [
             {
                 name: "ASUS ROG Phone 7",
                 price: 69999,
                 specs: {
                     processor: {
-                        name: "Snapdragon 8 Gen 2",
-                        cores: "1x3.2 ГГц + 4x2.8 ГГц + 3x2.0 ГГц",
-                        gpu: "Adreno 740",
-                        techProcess: "4 нм"
-                    },
-                    ram: {
-                        size: "16 ГБ",
-                        type: "LPDDR5X",
-                        frequency: "6400 МГц"
-                    },
-                    storage: {
-                        size: "512 ГБ",
-                        type: "UFS 4.0",
-                        speed: "2100 МБ/с"
-                    },
-                    display: {
-                        size: "6.78 дюйма",
-                        type: "AMOLED",
-                        resolution: "2448x1080",
-                        refreshRate: "165 Гц",
-                        touchRate: "720 Гц"
-                    },
-                    battery: {
-                        capacity: "6000 мАч",
-                        charging: "65 Вт"
-                    }
-                },
-                metrics: {
-                    gaming: 98,
-                    antutu: 1250000,
-                    cooling: 97,
-                    response: 99
-                }
-            },
-            {
-                name: "Red Magic 8 Pro",
-                price: 65999,
-                specs: {
-                    processor: {
-                        name: "Snapdragon 8 Gen 2",
-                        cores: "1x3.2 ГГц + 4x2.8 ГГц + 3x2.0 ГГц",
-                        gpu: "Adreno 740",
-                        techProcess: "4 нм"
-                    },
-                    ram: {
-                        size: "12 ГБ",
-                        type: "LPDDR5X",
-                        frequency: "6400 МГц"
-                    },
-                    storage: {
-                        size: "256 ГБ",
-                        type: "UFS 4.0",
-                        speed: "2100 МБ/с"
-                    },
-                    display: {
-                        size: "6.8 дюйма",
-                        type: "AMOLED",
-                        resolution: "2480x1116",
-                        refreshRate: "120 Гц",
-                        touchRate: "960 Гц"
-                    },
-                    battery: {
-                        capacity: "6000 мАч",
-                        charging: "80 Вт"
-                    }
-                },
-                metrics: {
-                    gaming: 96,
-                    antutu: 1220000,
-                    cooling: 95,
-                    response: 98
-                }
-            },
-            // Добавьте аналогичные данные для остальных смартфонов
-        ];
-
-        function createPhoneList() {
-            const container = document.getElementById('phoneList');
-            phones.forEach(phone => {
-                const card = document.createElement('div');
-                card.className = 'phone-card';
-                
-                let specsHTML = '';
-                for (const [category, details] of Object.entries(phone.specs)) {
-                    specsHTML += `
-                        <div class="spec-box">
-                            <div class="spec-title">${category}</div>
-                            ${Object.entries(details).map(([key, value]) => `
-                                <div class="spec-value">${key}: ${value}</div>
-                            `).join('')}
-                        </div>
-                    `;
-                }
-
-                card.innerHTML = `
-                    <div class="phone-header">
-                        <h2 class="phone-title">${phone.name}</h2>
-                        <span class="price-badge">${phone.price.toLocaleString()} ₽</span>
-                    </div>
-                    <div class="specs-grid">
-                        ${specsHTML}
-                    </div>
-                    <div class="metrics">
-                        ${Object.entries(phone.metrics).map(([key, value]) => `
-                            <div class="metric-box">
-                                <div class="metric-value">${value}</div>
-                                <div class="metric-label">${key}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-
-                card.addEventListener('click', () => {
-                    document.querySelectorAll('.phone-card').forEach(c => c.classList.remove('active'));
-                    card.classList.add('active');
-                });
-
-                container.appendChild(card);
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', createPhoneList);
-    </script>
-</body>
-</html>
-{
-                name: "Black Shark 5 Pro",
-                price: 62999,
-                specs: {
-                    processor: {
-                        name: "Snapdragon 8+ Gen 1",
-                        cores: "1x3.0 ГГц + 3x2.5 ГГц + 4x1.8 ГГц",
-                        gpu: "Adreno 730",
-                        techProcess: "4 нм"
-                    },
-                    ram: {
-                        size: "12 ГБ",
-                        type: "LPDDR5",
-                        frequency: "6400 МГц"
-                    },
-                    storage: {
-                        size: "256 ГБ",
-                        type: "UFS 3.1",
-                        speed: "1900 МБ/с"
-                    },
-                    display: {
-                        size: "6.67 дюйма",
-                        type: "OLED",
-                        resolution: "2400x1080",
-                        refreshRate: "144 Гц",
-                        touchRate: "720 Гц"
-                    },
-                    battery: {
-                        capacity: "4650 мАч",
-                        charging: "120 Вт"
-                    }
-                },
-                metrics: {
-                    gaming: 94,
-                    antutu: 1180000,
-                    cooling: 93,
-                    response: 95
-                }
-            },
-            {
-                name: "OnePlus 11R",
-                price: 59999,
-                specs: {
-                    processor: {
-                        name: "Snapdragon 8+ Gen 1",
-                        cores: "1x3.0 ГГц + 3x2.5 ГГц + 4x1.8 ГГц",
-                        gpu: "Adreno 730",
-                        techProcess: "4 нм"
-                    },
-                    ram: {
-                        size: "16 ГБ",
-                        type: "LPDDR5X",
-                        frequency: "6400 МГц"
-                    },
-                    storage: {
-                        size: "256 ГБ",
-                        type: "UFS 3.1",
-                        speed: "1700 МБ/с"
-                    },
-                    display: {
-                        size: "6.74 дюйма",
-                        type: "AMOLED",
-                        resolution: "2772x1240",
-                        refreshRate: "120 Гц",
-                        touchRate: "1000 Гц"
-                    },
-                    battery: {
-                        capacity: "5000 мАч",
-                        charging: "100 Вт"
-                    }
-                },
-                metrics: {
-                    gaming: 92,
-                    antutu: 1150000,
-                    cooling: 89,
-                    response: 93
-                }
-            },
-            {
-                name: "Poco F5 Pro",
-                price: 54999,
-                specs: {
-                    processor: {
-                        name: "Snapdragon 8+ Gen 1",
-                        cores: "1x3.0 ГГц + 3x2.5 ГГц + 4x1.8 ГГц",
-                        gpu: "Adreno 730",
-                        techProcess: "4 нм"
-                    },
-                    ram: {
-                        size: "12 ГБ",
-                        type: "LPDDR5",
-                        frequency: "6400 МГц"
-                    },
-                    storage: {
-                        size: "256 ГБ",
-                        type: "UFS 3.1",
-                        speed: "1700 МБ/с"
-                    },
-                    display: {
-                        size: "6.67 дюйма",
-                        type: "AMOLED",
-                        resolution: "3200x1440",
-                        refreshRate: "120 Гц",
-                        touchRate: "480 Гц"
-                    },
-                    battery: {
-                        capacity: "5160 мАч",
-                        charging: "67 Вт"
-                    }
-                },
-                metrics: {
-                    gaming: 90,
-                    antutu: 1120000,
-                    cooling: 87,
-                    response: 91
-                }
-            }
-        ];
-
-        function createPhoneList() {
-            const container = document.getElementById('phoneList');
-            phones.forEach((phone, index) => {
-                const card = document.createElement('div');
-                card.className = 'phone-card';
-                card.style.animationDelay = `${index * 0.2}s`;
-                
-                let specsHTML = '';
-                for (const [category, details] of Object.entries(phone.specs)) {
-                    specsHTML += `
-                        <div class="spec-box">
-                            <div class="spec-title">${category}</div>
-                            ${Object.entries(details).map(([key, value]) => `
-                                <div class="spec-value">
-                                    <span class="spec-key">${key}:</span>
-                                    <span class="spec-data">${value}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    `;
-                }
-
-                card.innerHTML = `
-                    <div class="phone-header">
-                        <h2 class="phone-title">${phone.name}</h2>
-                        <span class="price-badge glow">${phone.price.toLocaleString()} ₽</span>
-                    </div>
-                    <div class="specs-grid">
-                        ${specsHTML}
-                    </div>
-                    <div class="metrics">
-                        ${Object.entries(phone.metrics).map(([key, value]) => `
-                            <div class="metric-box">
-                                <div class="metric-value glow">${value}</div>
-                                <div class="metric-label">${key}</div>
-                                <div class="metric-bar">
-                                    <div class="metric-fill" style="width: ${value}%"></div>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                    <div class="performance-chart">
-                        <canvas id="chart-${index}"></canvas>
-                    </div>
-                `;
-
-                // Добавляем интерактивность
-                card.addEventListener('click', () => {
-                    document.querySelectorAll('.phone-card').forEach(c => {
-                        c.classList.remove('active');
-                        c.style.transform = 'scale(1)';
-                    });
-                    card.classList.add('active');
-                    card.style.transform = 'scale(1.02)';
-                    
-                    // Анимация появления спецификаций
-                    const specs = card.querySelectorAll('.spec-box');
-                    specs.forEach((spec, i) => {
-                        spec.style.animation = `fadeInUp 0.5s ${i * 0.1}s forwards`;
-                    });
-
-                    // Анимация метрик
-                    const metrics = card.querySelectorAll('.metric-box');
-                    metrics.forEach((metric, i) => {
-                        metric.style.animation = `fadeInScale 0.5s ${i * 0.1}s forwards`;
-                    });
-
-                    // Инициализация графика
-                    initChart(phone, `chart-${index}`);
-                });
-
-                container.appendChild(card);
-            });
-        }
-
-        function initChart(phone, chartId) {
-            const ctx = document.getElementById(chartId).getContext('2d');
-            new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: Object.keys(phone.metrics),
-                    datasets: [{
-                        label: 'Performance',
-                        data: Object.values(phone.metrics),
-                        backgroundColor: 'rgba(0, 255, 255, 0.2)',
-                        borderColor: 'rgba(0, 255, 255, 1)',
-                        pointBackgroundColor: 'rgba(0, 255, 255, 1)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    scales: {
-                        r: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(0, 255, 255, 0.1)'
-                            },
-                            ticks: {
-                                backdropColor: 'transparent',
-                                color: 'rgba(0, 255, 255, 0.8)'
-                            }
+                        title: "процессор",
+                        values: {
+                            название: "Snapdragon 8 Gen 2",
+                            ядра: "1x3.2 ГГц + 4x2.8 ГГц + 3x2.0 ГГц",
+                            "графический процессор": "Adreno 740",
+                            techProcess: "4 нм"
                         }
                     },
-                    plugins: {
-                        legend: {
-                            display: false
+                    ram: {
+                        title: "ОЗУ",
+                        values: {
+                            size: "16 ГБ",
+                            тип: "LPDDR5X",
+                            frequency: "6400 МГц"
                         }
                     },
-                    animation: {
-                        duration: 2000,
-                        easing: 'easeInOutQuart'
+                    storage: {
+                        title: "Хранение",
+                        values: {
+                            size: "512 ГБ",
+                            тип: "UFS 4.0",
+                            speed: "2100 МБ/с"
+                        }
+                    },
+                    display: {
+                        title: "дисплей",
+                        values: {
+                            size: "6.78 дюйма",
+                            тип: "AMOLED",
+                            разрешение: "2448x1080",
+                            refreshRate: "165 Гц",
+                            touchRate: "720 Гц"
+                        }
+                    },
+                    battery: {
+                        title: "батарея",
+                        values: {
+                            capacity: "6000 мАч",
+                            charging: "65 Вт"
+                        }
+                    }
+                },
+                performance: {
+                    games: {
+                        genshin: { fps: 60, stability: 98, temp: 39 },
+                        pubg: { fps: 90, stability: 97, temp: 41 },
+                        codm: { fps: 120, stability: 96, temp: 42 }
+                    },
+                    benchmarks: {
+                        antutu: 1250000,
+                        geekbench: { single: 1890, multi: 5380 },
+                        gpu: 450000
+                    },
+                    metrics: {
+                        gaming: 98,
+                        cooling: 97,
+                        response: 99,
+                        stability: 96
                     }
                 }
-            });
-        }
+            },
+            // Аналогичные данные для других телефонов
+        ];
+        
+        this.init();
+    }
 
-        // Добавляем анимации
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fadeInUp {
-                from {
-                    opacity: 0;
-                    transform: translateY(20px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
+    init() {
+        this.createPhoneCards();
+        this.initializeCharts();
+    }
 
-            @keyframes fadeInScale {
-                from {
-                    opacity: 0;
-                    transform: scale(0.8);
-                }
-                to {
-                    opacity: 1;
-                    transform: scale(1);
-                }
-            }
+    createPhoneCards() {
+        const container = document.getElementById('app');
+        
+        this.phones.forEach((phone, index) => {
+            const card = document.createElement('div');
+            card.className = 'phone-card';
+            card.innerHTML = this.generateCardHTML(phone);
+            container.appendChild(card);
 
-            .metric-bar {
-                height: 4px;
-                background: rgba(0, 255, 255, 0.1);
-                border-radius: 2px;
-                margin-top: 8px;
-                overflow: hidden;
-            }
+            // Добавляем интерактивные графики после добавления карточки
+            this.createPerformanceCharts(phone, card, index);
+        });
+    }
 
-            .metric-fill {
-                height: 100%;
-                background: linear-gradient(90deg, var(--neon-blue), #00bfff);
-                transform-origin: left;
-                transition: transform 1s ease;
-            }
-
-            .performance-chart {
-                padding: 20px;
-                display: none;
-            }
-
-            .active .performance-chart {
-                display: block;
-            }
-
-            .spec-key {
-                color: rgba(255, 255, 255, 0.6);
-            }
-
-            .spec-data {
-                margin-left: 5px;
-            }
+    generateCardHTML(phone) {
+        return `
+            <div class="card-header">
+                <h2 class="phone-name">${phone.name}</h2>
+                <span class="price-tag">${phone.price.toLocaleString()} ₽</span>
+            </div>
+            <div class="content-grid">
+                ${this.generateSpecsHTML(phone.specs)}
+            </div>
+            <div class="metrics-grid">
+                ${this.generateMetricsHTML(phone.performance.metrics)}
+            </div>
+            <div class="charts-container">
+                <canvas class="performance-chart" id="perfChart-${phone.name}"></canvas>
+                <canvas class="temperature-chart" id="tempChart-${phone.name}"></canvas>
+            </div>
+            <div class="game-performance">
+                ${this.generateGamePerformanceHTML(phone.performance.games)}
+            </div>
         `;
-        document.head.appendChild(style);
+    }
 
-        document.addEventListener('DOMContentLoaded', createPhoneList);
-    </script>
-</body>
-</html>
+    generateSpecsHTML(specs) {
+        return Object.entries(specs).map(([key, section]) => `
+            <div class="spec-block">
+                <div class="spec-title">${section.title}</div>
+                ${Object.entries(section.values).map(([k, v]) => `
+                    <div class="spec-value">
+                        <span class="spec-key">${k}:</span>
+                        <span class="spec-data">${v}</span>
+                    </div>
+                `).join('')}
+            </div>
+        `).join('');
+    }
+
+    generateMetricsHTML(metrics) {
+        return Object.entries(metrics).map(([key, value]) => `
+            <div class="metric-box">
+                <div class="metric-value">${value}</div>
+                <div class="metric-label">${key}</div>
+                <div class="metric-bar">
+                    <div class="metric-fill" style="width: ${value}%"></div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    generateGamePerformanceHTML(games) {
+        return `
+            <div class="game-stats">
+                ${Object.entries(games).map(([game, stats]) => `
+                    <div class="game-stat-box">
+                        <div class="game-title">${game}</div>
+                        <div class="game-metrics">
+                            <div class="fps">FPS: ${stats.fps}</div>
+                            <div class="stability">Stability: ${stats.stability}%</div>
+                            <div class="temperature">Temp: ${stats.temp}°C</div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    createPerformanceCharts(phone, card, index) {
+        // Радарная диаграмма производительности
+        const perfCtx = card.querySelector(`#perfChart-${phone.name}`).getContext('2d');
+        new Chart(perfCtx, {
+            type: 'radar',
+            data: {
+                labels: Object.keys(phone.performance.metrics),
+                datasets: [{
+                    label: 'Performance',
+                    data: Object.values(phone.performance.metrics),
+                    backgroundColor: 'rgba(0, 255, 255, 0.2)',
+                    borderColor: 'rgba(0, 255, 255, 1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgba(0, 255, 255, 1)',
+                    pointBorderColor: '#fff'
+                }]
+            },
+            options: {
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            backdropColor: 'transparent',
+                            color: 'rgba(0, 255, 255, 0.8)'
+                        },
+                        grid: {
+                            color: 'rgba(0, 255, 255, 0.1)'
+                        },
+                        angleLines: {
+                            color: 'rgba(0, 255, 255, 0.1)'
+                        },
+                        pointLabels: {
+                            color: 'rgba(0, 255, 255, 0.8)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                animation: {
+                    duration: 2000,
+                    easing: 'easeInOutQuart'
+                }
+            }
+        });
+
+        // График температур
+        const tempCtx = card.querySelector(`#tempChart-${phone.name}`).getContext('2d');
+        new Chart(tempCtx, {
+            type: 'line',
+            data: {
+                labels: Object.keys(phone.performance.games),
+                datasets: [{
+                    label: 'Temperature °C',
+                    data: Object.values(phone.performance.games).map(game => game.temp),
+                    borderColor: 'rgba(0, 255, 255, 1)',
+                    backgroundColor: 'rgba(0, 255, 255, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'rgba(0, 255, 255, 0.8)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(0, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'rgba(0, 255, 255, 0.8)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: 'rgba(0, 255, 255, 0.8)'
+                        }
+                    }
+                },
+                animation: {
+                    duration: 2000
+                }
+            }
+        });
+    }
+}
+
+// Стили для новых элементов
+const additionalStyles = `
+    .charts-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        padding: 20px;
+        background: var(--card-bg);
+    }
+
+    .performance-chart,
+    .temperature-chart {
+        background: rgba(0, 255, 255, 0.05);
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    .game-performance {
+        padding: 20px;
+        background: var(--card-bg);
+    }
+
+    .game-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+
+    .game-stat-box {
+        background: rgba(0, 255, 255, 0.05);
+        border-radius: 10px;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .game-title {
+        color: var(--neon-cyan);
+        font-size: 1.2em;
+        margin-bottom: 10px;
+    }
+
+    .game-metrics {
+        font-size: 0.9em;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .metric-bar {
+        height: 4px;
+        background: rgba(0, 255, 255, 0.1);
+        border-radius: 2px;
+        margin-top: 5px;
+        overflow: hidden;
+    }
+
+    .metric-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--neon-cyan), #80ffff);
+        transition: width 1s ease-in-out;
+    }
+
+    @media (max-width: 768px) {
+        .charts-container {
+            grid-template-columns: 1fr;
+        }
+        
+        .game-stats {
+            grid-template-columns: 1fr;
+        }
+    }
+`;
+
+// Добавляем стили
+const styleSheet = document.createElement('style');
+styleSheet.textContent = additionalStyles;
+document.head.appendChild(styleSheet);
+
+// Инициализация визуализатора
+document.addEventListener('DOMContentLoaded', () => {
+    new PhoneDataVisualizer();
+});
+```
+// Класс для расширенной анимации и интерактивности
+class AdvancedEffects {
+    constructor() {
+        this.initGlowEffects();
+        this.initScrollEffects();
+        this.initDetailedMetrics();
+        this.initComparisonMode();
+    }
+
+    initGlowEffects() {
+        const cards = document.querySelectorAll('.phone-card');
+        
+        cards.forEach(card => {
+            // Добавляем динамическое свечение
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Создаем эффект свечения, следующий за курсором
+                card.style.background = `
+                    radial-gradient(
+                        circle at ${x}px ${y}px,
+                        rgba(0, 255, 255, 0.1) 0%,
+                        rgba(0, 0, 51, 0.95) 50%
+                    )
+                `;
+                
+                // Добавляем подсветку ближайших элементов
+                const elements = card.querySelectorAll('.spec-value, .metric-value');
+                elements.forEach(element => {
+                    const elementRect = element.getBoundingClientRect();
+                    const elementX = elementRect.left + elementRect.width / 2 - rect.left;
+                    const elementY = elementRect.top + elementRect.height / 2 - rect.top;
+                    
+                    const distance = Math.sqrt(
+                        Math.pow(x - elementX, 2) + 
+                        Math.pow(y - elementY, 2)
+                    );
+                    
+                    const intensity = Math.max(0, 1 - distance / 200);
+                    element.style.textShadow = `
+                        0 0 ${10 + intensity * 20}px rgba(0, 255, 255, ${0.5 + intensity * 0.5})
+                    `;
+                });
+            });
+
+            // Сброс эффектов при уходе курсора
+            card.addEventListener('mouseleave', () => {
+                card.style.background = '';
+                const elements = card.querySelectorAll('.spec-value, .metric-value');
+                elements.forEach(element => {
+                    element.style.textShadow = '';
+                });
+            });
+        });
+    }
+
+    initScrollEffects() {
+        // Плавное появление элементов при скролле
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    
+                    // Анимация заполнения метрик
+                    const metrics = entry.target.querySelectorAll('.metric-fill');
+                    metrics.forEach(metric => {
+                        const value = metric.style.width;
+                        metric.style.width = '0%';
+                        setTimeout(() => {
+                            metric.style.width = value;
+                        }, 100);
+                    });
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        document.querySelectorAll('.phone-card').forEach(card => {
+            observer.observe(card);
+        });
+    }
+
+    initDetailedMetrics() {
+        // Добавляем всплывающие подробные метрики
+        document.querySelectorAll('.metric-box').forEach(metric => {
+            metric.addEventListener('click', () => {
+                const value = metric.querySelector('.metric-value').textContent;
+                const label = metric.querySelector('.metric-label').textContent;
+                
+                const popup = document.createElement('div');
+                popup.className = 'metric-popup';
+                popup.innerHTML = `
+                    <div class="popup-content">
+                        <h3>${label}</h3>
+                        <div class="detailed-value">${value}</div>
+                        <div class="detail-chart">
+                            <canvas></canvas>
+                        </div>
+                        <div class="detail-info">
+                            <div class="info-row">
+                                <span>Среднее значение:</span>
+                                <span>${value}</span>
+                            </div>
+                            <div class="info-row">
+                                <span>Максимум:</span>
+                                <span>${parseInt(value) + 5}</span>
+                            </div>
+                            <div class="info-row">
+                                <span>Минимум:</span>
+                                <span>${parseInt(value) - 5}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(popup);
+                
+                // Анимация появления
+                gsap.fromTo(popup, 
+                    { opacity: 0, scale: 0.8 },
+                    { opacity: 1, scale: 1, duration: 0.3 }
+                );
+                
+                // Закрытие по клику вне попапа
+                popup.addEventListener('click', (e) => {
+                    if (e.target === popup) {
+                        gsap.to(popup, {
+                            opacity: 0,
+                            scale: 0.8,
+                            duration: 0.3,
+                            onComplete: () => popup.remove()
+                        });
+                    }
+                });
+            });
+        });
+    }
+
+    initComparisonMode() {
+        // Добавляем кнопку сравнения
+        const compareButton = document.createElement('button');
+        compareButton.className = 'compare-button';
+        compareButton.innerHTML = 'Сравнить смартфоны';
+        document.querySelector('.container').prepend(compareButton);
+
+        let isCompareMode = false;
+        const selectedPhones = new Set();
+
+        compareButton.addEventListener('click', () => {
+            isCompareMode = !isCompareMode;
+            document.body.classList.toggle('compare-mode', isCompareMode);
+            
+            if (!isCompareMode) {
+                selectedPhones.clear();
+                document.querySelectorAll('.phone-card').forEach(card => {
+                    card.classList.remove('selected-for-compare');
+                });
+            }
+        });
+
+        document.querySelectorAll('.phone-card').forEach(card => {
+            card.addEventListener('click', () => {
+                if (!isCompareMode) return;
+                
+                if (selectedPhones.has(card)) {
+                    selectedPhones.delete(card);
+                    card.classList.remove('selected-for-compare');
+                } else if (selectedPhones.size < 3) {
+                    selectedPhones.add(card);
+                    card.classList.add('selected-for-compare');
+                }
+
+                if (selectedPhones.size >= 2) {
+                    this.showComparison(Array.from(selectedPhones));
+                }
+            });
+        });
+    }
+
+    showComparison(cards) {
+        const comparison = document.createElement('div');
+        comparison.className = 'comparison-view';
+        
+        // Создаем сравнительные графики и таблицы
+        comparison.innerHTML = `
+            <div class="comparison-content">
+                <h2>Сравнение характеристик</h2>
+                <div class="comparison-charts">
+                    <canvas id="compareChart"></canvas>
+                </div>
+                <div class="comparison-table">
+                    ${this.generateComparisonTable(cards)}
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(comparison);
+        this.initComparisonCharts(cards);
+    }
+
+    generateComparisonTable(cards) {
+        // Генерация HTML таблицы сравнения
+        const specs = ['processor', 'ram', 'storage', 'display', 'battery'];
+        
+        return `
+            <table>
+                <thead>
+                    <tr>
+                        <th>Характеристика</th>
+                        ${cards.map(card => `
+                            <th>${card.querySelector('.phone-name').textContent}</th>
+                        `).join('')}
+                    </tr>
+                </thead>
+                <tbody>
+                    ${specs.map(spec => `
+                        <tr>
+                            <td>${spec}</td>
+                            ${cards.map(card => `
+                                <td>${card.querySelector(`.spec-block.${spec} .spec-value`).textContent}</td>
+                            `).join('')}
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+    }
+
+    initComparisonCharts(cards) {
+        const ctx = document.getElementById('compareChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Gaming', 'AnTuTu', 'GPU', 'Cooling', 'Response'],
+                datasets: cards.map((card, index) => ({
+                    label: card.querySelector('.phone-name').textContent,
+                    data: [98, 95, 92, 94, 96].map(v => v - index * 3),
+                    borderColor: `hsl(${index * 120}, 100%, 50%)`,
+                    backgroundColor: `hsla(${index * 120}, 100%, 50%, 0.2)`
+                }))
+            },
+            options: {
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+    }
+}
+
+// Стили для новых элементов
+const extraStyles = `
+    .metric-popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 51, 0.9);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .popup-content {
+        background: var(--card-bg);
+        padding: 2rem;
+        border-radius: 15px;
+        border: 1px solid var(--neon-cyan);
+        min-width: 300px;
+    }
+
+    .detailed-value {
+        font-size: 3em;
+        color: var(--neon-cyan);
+        text-align: center;
+        margin: 1rem 0;
+    }
+
+    .detail-info {
+        margin-top: 1rem;
+    }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        margin: 0.5rem 0;
+    }
+
+    .compare-button {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background: var(--neon-cyan);
+        color: var(--dark-blue);
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 30px;
+        cursor: pointer;
+        font-weight: bold;
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .compare-button:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 30px rgba(0, 255, 255, 0.5);
+    }
+
+    .comparison-view {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 51, 0.95);
+        z-index: 1000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+    }
+
+    .comparison-content {
+        background: var(--card-bg);
+        padding: 2rem;
+        border-radius: 15px;
+        border: 1px solid var(--neon-cyan);
+        width: 90%;
+        max-width: 1200px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .selected-for-compare {
+        border: 2px solid var(--neon-cyan);
+        box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+    }
+`;
+
+// Добавляем стили
+const extraStyleSheet = document.createElement('style');
+extraStyleSheet.textContent = extraStyles;
+document.head.appendChild(extraStyleSheet);
+
+// Инициализация всех эффектов
+document.addEventListener('DOMContentLoaded', () => {
+    new AdvancedEffects();
+});
