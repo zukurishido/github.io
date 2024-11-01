@@ -5,38 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ultimate Gaming Phones 2024</title>
     
-    <!-- Продвинутые библиотеки -->
+    <!-- Библиотеки для продвинутых эффектов -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     
     <style>
         :root {
-            --ultra-primary: #00fff2;
-            --ultra-secondary: #00ff88;
-            --ultra-accent: #ff00ff;
-            --ultra-dark: #0a0a0f;
+            --neon-pink: #ff69b4;
+            --neon-blue: #00ffff;
+            --neon-purple: #9370db;
+            --deep-dark: #0a0a1f;
             --glass: rgba(255, 255, 255, 0.1);
         }
 
-        @keyframes cosmicGradient {
-            0% {
-                background-position: 0% 50%;
+        @keyframes cosmicPulse {
+            0% { 
                 filter: hue-rotate(0deg) brightness(1);
-            }
-            50% {
-                background-position: 100% 50%;
-                filter: hue-rotate(180deg) brightness(1.2);
-            }
-            100% {
                 background-position: 0% 50%;
-                filter: hue-rotate(360deg) brightness(1);
             }
-        }
-
-        @keyframes floatingCard {
-            0%, 100% { transform: translate3d(0, 0, 0) rotateX(0deg); }
-            25% { transform: translate3d(10px, -20px, 50px) rotateX(5deg); }
-            75% { transform: translate3d(-10px, 20px, -30px) rotateX(-5deg); }
+            50% { 
+                filter: hue-rotate(180deg) brightness(1.2);
+                background-position: 100% 50%;
+            }
+            100% { 
+                filter: hue-rotate(360deg) brightness(1);
+                background-position: 0% 50%;
+            }
         }
 
         body {
@@ -44,225 +39,212 @@
             padding: 0;
             background: linear-gradient(
                 45deg,
-                var(--ultra-dark),
-                #12123a,
-                #1a1a4a,
-                #0a2a4a
+                var(--deep-dark),
+                #1a1a3a,
+                #2a1a4a,
+                #1a2a4a
             );
             background-size: 400% 400%;
-            animation: cosmicGradient 15s ease infinite;
+            animation: cosmicPulse 15s ease infinite;
             font-family: 'Segoe UI', sans-serif;
             color: white;
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        #cosmic-canvas {
+        #cosmic-background {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: 0;
+            backdrop-filter: blur(10px);
         }
 
-        .ultra-container {
-            position: relative;
+        .neon-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(var(--neon-pink) 1px, transparent 1px),
+                            linear-gradient(90deg, var(--neon-pink) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.1;
             z-index: 1;
+        }
+
+        .main-container {
+            position: relative;
+            z-index: 2;
             max-width: 1600px;
             margin: 0 auto;
             padding: 2rem;
         }
 
         .cosmic-title {
-            font-size: 5rem;
+            font-size: 4.5rem;
             text-align: center;
-            margin: 3rem 0;
+            margin: 2rem 0;
             position: relative;
-            perspective: 1000px;
-            transform-style: preserve-3d;
-        }
-
-        .cosmic-title h1 {
-            margin: 0;
-            background: linear-gradient(
-                45deg,
-                var(--ultra-primary),
-                var(--ultra-secondary),
-                var(--ultra-accent)
-            );
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: floatingCard 8s ease-in-out infinite;
+            color: var(--neon-pink);
             text-shadow: 
-                0 0 20px rgba(0, 255, 242, 0.5),
-                0 0 40px rgba(0, 255, 136, 0.3),
-                0 0 60px rgba(255, 0, 255, 0.2);
+                0 0 10px var(--neon-pink),
+                0 0 20px var(--neon-pink),
+                0 0 40px var(--neon-pink);
+            opacity: 0;
+            transform: translateY(-50px);
+            animation: titleAppear 1s ease forwards;
         }
 
-        .ultra-grid {
+        @keyframes titleAppear {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .phones-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 3rem;
-            perspective: 3000px;
             padding: 2rem;
+            perspective: 2000px;
         }
 
-        .ultra-card {
+        .phone-card {
             position: relative;
-            min-height: 600px;
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(20px);
             border-radius: 30px;
             padding: 2rem;
+            border: 1px solid rgba(255, 105, 180, 0.3);
             transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 
-                0 0 40px rgba(0, 255, 242, 0.2),
-                inset 0 0 40px rgba(0, 255, 136, 0.1);
+                0 0 30px rgba(255, 105, 180, 0.2),
+                inset 0 0 20px rgba(255, 105, 180, 0.1);
+            opacity: 0;
+            animation: cardAppear 0.5s ease forwards;
         }
 
-        .ultra-card::before {
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: translateY(50px) rotateX(-10deg);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) rotateX(0);
+            }
+        }
+
+        .phone-card:hover {
+            transform: translateZ(50px) rotateX(10deg);
+        }
+
+        .phone-card::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(
-                circle at center,
-                transparent 30%,
-                rgba(0, 255, 242, 0.1) 70%,
-                transparent 100%
-            );
-            transform: rotate(0deg);
-            animation: cardPulse 10s linear infinite;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent, rgba(255, 105, 180, 0.1));
+            border-radius: 30px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
-        @keyframes cardPulse {
-            0% { transform: rotate(0deg) scale(1); opacity: 0.5; }
-            50% { transform: rotate(180deg) scale(1.2); opacity: 0.8; }
-            100% { transform: rotate(360deg) scale(1); opacity: 0.5; }
-        }
-
-        .ultra-card:hover {
-            transform: translateZ(100px) rotateX(10deg) rotateY(10deg);
+        .phone-card:hover::before {
+            opacity: 1;
         }
 
         .phone-image {
             width: 100%;
-            height: 300px;
+            height: 250px;
             object-fit: contain;
-            transform: translateZ(50px);
-            filter: drop-shadow(0 0 30px rgba(0, 255, 242, 0.5));
-            transition: transform 0.5s ease;
+            transform: translateZ(30px);
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 0 20px rgba(255, 105, 180, 0.5));
+            transition: transform 0.3s ease;
         }
 
         .phone-image:hover {
-            transform: translateZ(80px) scale(1.1);
+            transform: translateZ(50px) scale(1.1);
         }
 
-        .specs-container {
-            margin-top: 2rem;
-            transform-style: preserve-3d;
-        }
-
-        .ultra-spec {
-            background: rgba(0, 255, 242, 0.1);
-            border-radius: 20px;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            border: 1px solid rgba(0, 255, 242, 0.2);
-            transform: translateZ(30px);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .ultra-spec::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                45deg,
-                transparent,
-                rgba(0, 255, 242, 0.1),
-                transparent
-            );
-            transform: translateX(-100%);
-            transition: transform 0.5s ease;
-        }
-
-        .ultra-spec:hover {
-            transform: translateZ(50px) scale(1.05);
-            box-shadow: 0 0 30px rgba(0, 255, 242, 0.3);
-        }
-
-        .ultra-spec:hover::after {
-            transform: translateX(100%);
-        }
-
-        .spec-value {
+        .phone-name {
             font-size: 2rem;
-            font-weight: bold;
-            background: linear-gradient(
-                45deg,
-                var(--ultra-primary),
-                var(--ultra-secondary)
-            );
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 10px rgba(0, 255, 242, 0.5);
+            margin: 1rem 0;
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px var(--neon-pink);
         }
 
-        .performance-indicator {
-            position: relative;
-            width: 100%;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            overflow: hidden;
-            margin: 1rem 0;
+        .price-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
+            border-radius: 20px;
+            font-weight: bold;
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.5);
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .spec-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1rem;
+            border: 1px solid rgba(255, 105, 180, 0.2);
+            transform: translateZ(20px);
+            transition: all 0.3s ease;
+        }
+
+        .spec-item:hover {
+            transform: translateZ(30px) scale(1.05);
+            background: rgba(255, 105, 180, 0.1);
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.3);
         }
 
         .performance-bar {
-            position: absolute;
-            top: 0;
-            left: 0;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .performance-fill {
             height: 100%;
-            background: linear-gradient(
-                90deg,
-                var(--ultra-primary),
-                var(--ultra-secondary)
-            );
-            box-shadow: 0 0 20px var(--ultra-primary);
-            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-purple));
+            transform-origin: left;
+            transform: scaleX(0);
+            transition: transform 1s ease;
         }
 
         @media (max-width: 768px) {
             .cosmic-title {
-                font-size: 3rem;
+                font-size: 2.5rem;
             }
-            .ultra-grid {
+            .phones-grid {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <canvas id="cosmic-canvas"></canvas>
-    <div class="ultra-container">
-        <div class="cosmic-title">
-            <h1>Топ 5 Игровых Смартфонов 2024</h1>
-        </div>
-        <div class="ultra-grid" id="phones-grid"></div>
+    <canvas id="cosmic-background"></canvas>
+    <div class="neon-grid"></div>
+    <div class="main-container">
+        <h1 class="cosmic-title">Топ 5 Игровых Смартфонов 2024</h1>
+        <div class="phones-grid" id="phones-container"></div>
     </div>
 
     <script>
@@ -271,35 +253,34 @@
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             const renderer = new THREE.WebGLRenderer({
-                canvas: document.getElementById('cosmic-canvas'),
+                canvas: document.getElementById('cosmic-background'),
                 alpha: true
             });
             renderer.setSize(window.innerWidth, window.innerHeight);
 
             // Создание космических частиц
-            const starsGeometry = new THREE.BufferGeometry();
-            const particleCount = 7000;
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particleCount = 5000;
             const posArray = new Float32Array(particleCount * 3);
 
             for(let i = 0; i < particleCount * 3; i++) {
-                posArray[i] = (Math.random() - 0.5) * 15;
+                posArray[i] = (Math.random() - 0.5) * 10;
             }
 
-            starsGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            particlesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(posArray, 3));
 
-            // Кастомный шейдерный материал для частиц
-            const starsMaterial = new THREE.ShaderMaterial({
+            const particlesMaterial = new THREE.ShaderMaterial({
                 uniforms: {
                     time: { value: 0 },
-                    baseColor: { value: new THREE.Color(0x00fff2) }
+                    color: { value: new THREE.Color(0xff69b4) }
                 },
                 vertexShader: `
                     uniform float time;
                     void main() {
                         vec3 pos = position;
-                        pos.x += sin(time * 0.001 + position.z) * 0.1;
+                        pos.x += sin(time * 0.001 + position.y) * 0.1;
                         pos.y += cos(time * 0.001 + position.x) * 0.1;
-                        pos.z += sin(time * 0.001 + position.y) * 0.1;
+                        pos.z += sin(time * 0.001 + position.z) * 0.1;
                         
                         vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
                         gl_PointSize = 2.0 * (300.0 / -mvPosition.z);
@@ -307,33 +288,31 @@
                     }
                 `,
                 fragmentShader: `
-                    uniform vec3 baseColor;
+                    uniform vec3 color;
                     void main() {
                         float dist = length(gl_PointCoord - vec2(0.5));
-                        float alpha = 0.1 / (dist);
-                        gl_FragColor = vec4(baseColor, alpha);
+                        float alpha = 0.05 / dist;
+                        gl_FragColor = vec4(color, alpha);
                     }
                 `,
                 transparent: true,
                 blending: THREE.AdditiveBlending
             });
 
-            const stars = new THREE.Points(starsGeometry, starsMaterial);
-            scene.add(stars);
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
             camera.position.z = 5;
 
-            // Анимация
             const animate = () => {
                 requestAnimationFrame(animate);
-                starsMaterial.uniforms.time.value += 1;
-                stars.rotation.x += 0.0003;
-                stars.rotation.y += 0.0005;
+                particlesMaterial.uniforms.time.value += 1;
+                particlesMesh.rotation.x += 0.0005;
+                particlesMesh.rotation.y += 0.0003;
                 renderer.render(scene, camera);
             };
 
             animate();
 
-            // Обработка изменения размера окна
             window.addEventListener('resize', () => {
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
@@ -341,19 +320,10 @@
             });
         };
 
-        // Инициализация после загрузки страницы
-        document.addEventListener('DOMContentLoaded', initCosmicBackground);
-    </script>
-</body>
-</html>
-<script>
-// Основной класс для управления визуализацией данных
-class UltraVisualizer {
-    constructor() {
-        this.init();
-        this.phones = [
+        // Данные о смартфонах
+        const phones = [
             {
-                name: "ASUS ROG Phone 7 Ultimate",
+                name: "ASUS ROG Phone 7",
                 price: 69999,
                 image: "/api/placeholder/400/300",
                 specs: {
@@ -362,423 +332,138 @@ class UltraVisualizer {
                     storage: "512 ГБ UFS 4.0",
                     display: "6.78\" AMOLED 165 Гц",
                     battery: "6000 мАч",
-                    cooling: "GameCool 7 Pro"
+                    cooling: "GameCool 7"
                 },
-                performance: {
-                    gaming: 98,
-                    antutu: 1250000,
-                    gpu: 95,
-                    cooling: 97,
-                    response: 99,
-                    stability: 96
-                }
+                performance: 98
             },
-            // Добавьте остальные телефоны здесь
+            {
+                name: "Red Magic 8 Pro",
+                price: 65999,
+                image: "/api/placeholder/400/300",
+                specs: {
+                    processor: "Snapdragon 8 Gen 2",
+                    ram: "12 ГБ LPDDR5X",
+                    storage: "256 ГБ UFS 4.0",
+                    display: "6.8\" AMOLED 120 Гц",
+                    battery: "6000 мАч",
+                    cooling: "ICE 11"
+                },
+                performance: 95
+            },
+            {
+                name: "Black Shark 5 Pro",
+                price: 62999,
+                image: "/api/placeholder/400/300",
+                specs: {
+                    processor: "Snapdragon 8+ Gen 1",
+                    ram: "12 ГБ LPDDR5",
+                    storage: "256 ГБ UFS 3.1",
+                    display: "6.67\" OLED 144 Гц",
+                    battery: "4650 мАч",
+                    cooling: "Sandwich Liquid Cooling"
+                },
+                performance: 92
+            },
+            {
+                name: "OnePlus 11R",
+                price: 59999,
+                image: "/api/placeholder/400/300",
+                specs: {
+                    processor: "Snapdragon 8+ Gen 1",
+                    ram: "16 ГБ LPDDR5X",
+                    storage: "256 ГБ UFS 3.1",
+                    display: "6.74\" AMOLED 120 Гц",
+                    battery: "5000 мАч",
+                    cooling: "3D Cooling System"
+                },
+                performance: 90
+            },
+            {
+                name: "Poco F5 Pro",
+                price: 54999,
+                image: "/api/placeholder/400/300",
+                specs: {
+                    processor: "Snapdragon 8+ Gen 1",
+                    ram: "12 ГБ LPDDR5",
+                    storage: "256 ГБ UFS 3.1",
+                    display: "6.67\" AMOLED 120 Гц",
+                    battery: "5160 мАч",
+                    cooling: "LiquidCool 3.0"
+                },
+                performance: 88
+            }
         ];
-    }
 
-    init() {
-        this.initPhoneCards();
-        this.initInteractiveEffects();
-    }
-
-    initPhoneCards() {
-        const grid = document.getElementById('phones-grid');
-        this.phones.forEach(phone => {
-            const card = this.createPhoneCard(phone);
-            grid.appendChild(card);
-        });
-    }
-
-    createPhoneCard(phone) {
-        const card = document.createElement('div');
-        card.className = 'ultra-card';
-        
-        // Создаем 3D контейнер для телефона
-        const phoneContainer = document.createElement('div');
-        phoneContainer.className = 'phone-3d-container';
-        phoneContainer.innerHTML = `
-            <img src="${phone.image}" class="phone-image" alt="${phone.name}">
-            <div class="holographic-overlay"></div>
-        `;
-
-        // Создаем контейнер для метрик
-        const metricsContainer = document.createElement('div');
-        metricsContainer.className = 'metrics-container';
-
-        // Добавляем круговой прогресс
-        const progressRing = this.createProgressRing(phone.performance.gaming);
-        metricsContainer.appendChild(progressRing);
-
-        // Добавляем 3D график производительности
-        const perfChart = this.create3DPerformanceChart(phone.performance);
-        metricsContainer.appendChild(perfChart);
-
-        card.appendChild(phoneContainer);
-        card.appendChild(metricsContainer);
-
-        // Добавляем интерактивность
-        this.addCardInteractivity(card, phone);
-
-        return card;
-    }
-
-    createProgressRing(value) {
-        const ring = document.createElement('div');
-        ring.className = 'progress-ring';
-        ring.innerHTML = `
-            <svg class="ring-svg" viewBox="0 0 100 100">
-                <circle class="ring-background" cx="50" cy="50" r="45"/>
-                <circle class="ring-progress" cx="50" cy="50" r="45"
-                    style="stroke-dasharray: ${value * 2.83}px, 283px"/>
-                <text x="50" y="50" class="ring-text">${value}%</text>
-            </svg>
-        `;
-        return ring;
-    }
-
-    create3DPerformanceChart(performance) {
-        const container = document.createElement('div');
-        container.className = 'performance-chart-3d';
-
-        // Инициализация Three.js для 3D графика
-        const width = 300;
-        const height = 300;
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-        renderer.setSize(width, height);
-        container.appendChild(renderer.domElement);
-
-        // Создаем геометрию для визуализации данных
-        const geometry = new THREE.BufferGeometry();
-        const vertices = [];
-        const colors = [];
-        const performanceValues = Object.values(performance);
-
-        performanceValues.forEach((value, index) => {
-            const angle = (index / performanceValues.length) * Math.PI * 2;
-            const radius = value / 100;
-            vertices.push(
-                Math.cos(angle) * radius,
-                Math.sin(angle) * radius,
-                0
-            );
-            colors.push(0, 1, 0.5); // Цвет для каждой вершины
-        });
-
-        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-        geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-
-        // Создаем шейдерный материал
-        const material = new THREE.ShaderMaterial({
-            uniforms: {
-                time: { value: 0 }
-            },
-            vertexShader: `
-                uniform float time;
-                varying vec3 vColor;
-                
-                void main() {
-                    vColor = color;
-                    vec3 pos = position;
-                    pos.z = sin(time * 2.0 + position.x * 10.0) * 0.1;
-                    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-                }
-            `,
-            fragmentShader: `
-                varying vec3 vColor;
-                
-                void main() {
-                    gl_FragColor = vec4(vColor, 1.0);
-                }
-            `,
-            vertexColors: true
-        });
-
-        const mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
-        camera.position.z = 2;
-
-        // Анимация
-        function animate() {
-            requestAnimationFrame(animate);
-            material.uniforms.time.value += 0.01;
-            mesh.rotation.z += 0.005;
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        return container;
-    }
-
-    addCardInteractivity(card, phone) {
-        // Параллакс эффект
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+        // Создание карточек телефонов
+        const createPhoneCards = () => {
+            const container = document.getElementById('phones-container');
             
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            const rotateX = (y - centerY) / 20;
-            const rotateY = (centerX - x) / 20;
-            
-            gsap.to(card, {
-                rotateX: rotateX,
-                rotateY: rotateY,
-                duration: 0.5,
-                ease: 'power2.out'
-            });
-        });
+            phones.forEach((phone, index) => {
+                const card = document.createElement('div');
+                card.className = 'phone-card';
+                card.style.animationDelay = `${index * 0.2}s`;
 
-        // Возврат в исходное положение
-        card.addEventListener('mouseleave', () => {
-            gsap.to(card, {
-                rotateX: 0,
-                rotateY: 0,
-                duration: 0.5,
-                ease: 'power2.out'
-            });
-        });
+                card.innerHTML = `
+                    <img src="${phone.image}" alt="${phone.name}" class="phone-image">
+                    <h2 class="phone-name">${phone.name}</h2>
+                    <div class="price-tag">${phone.price.toLocaleString()} ₽</div>
+                    <div class="performance-bar">
+                        <div class="performance-fill" style="transform: scaleX(${phone.performance / 100})"></div>
+                    </div>
+                    <div class="specs-grid">
+                        ${Object.entries(phone.specs).map(([key, value]) => `
+                            <div class="spec-item">
+                                <h3>${key}</h3>
+                                <p>${value}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
 
-        // Клик для показа детальной информации
-        card.addEventListener('click', () => this.showDetailedInfo(phone));
-    }
+                // Добавляем интерактивность карточке
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateX = (y - centerY) / 20;
+                    const rotateY = (centerX - x) / 20;
+                    
+                    gsap.to(card, {
+                        rotateX: rotateX,
+                        rotateY: rotateY,
+                        duration: 0.5,
+                        ease: 'power2.out'
+                    });
+                });
 
-    showDetailedInfo(phone) {
-        const modal = document.createElement('div');
-        modal.className = 'ultra-modal';
-        modal.innerHTML = `
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>${phone.name}</h2>
-                    <div class="close-btn">×</div>
-                </div>
-                <div class="modal-body">
-                    ${this.createDetailedMetrics(phone)}
-                </div>
-            </div>
-        `;
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, {
+                        rotateX: 0,
+                        rotateY: 0,
+                        duration: 0.5,
+                        ease: 'power2.out'
+                    });
+                });
 
-        document.body.appendChild(modal);
-        
-        // Анимация появления
-        gsap.fromTo(modal.querySelector('.modal-content'),
-            { opacity: 0, y: 50 },
-            { opacity: 1, y: 0, duration: 0.5 }
-        );
+                container.appendChild(card);
 
-        // Обработка закрытия
-        modal.querySelector('.close-btn').onclick = () => {
-            gsap.to(modal.querySelector('.modal-content'), {
-                opacity: 0,
-                y: 50,
-                duration: 0.5,
-                onComplete: () => modal.remove()
+                // Анимация появления полосы производительности
+                setTimeout(() => {
+                    const fill = card.querySelector('.performance-fill');
+                    fill.style.transform = `scaleX(${phone.performance / 100})`;
+                }, (index * 200) + 500);
             });
         };
-    }
 
-    createDetailedMetrics(phone) {
-        // Создаем детальную визуализацию метрик
-        return `
-            <div class="detailed-metrics">
-                <div class="radar-chart-container">
-                    ${this.createRadarChart(phone.performance)}
-                </div>
-                <div class="metrics-grid">
-                    ${Object.entries(phone.performance).map(([key, value]) => `
-                        <div class="metric-card" data-value="${value}">
-                            <div class="metric-title">${key}</div>
-                            <div class="metric-value">${value}</div>
-                            <div class="metric-bar">
-                                <div class="bar-fill" style="width: ${value}%"></div>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        `;
-    }
-
-    createRadarChart(performance) {
-        // Создаем SVG для радарной диаграммы
-        const points = Object.values(performance);
-        const labels = Object.keys(performance);
-        const sides = points.length;
-        const radius = 100;
-        
-        let pathData = '';
-        let labelsHtml = '';
-        
-        points.forEach((value, i) => {
-            const angle = (i / sides) * Math.PI * 2 - Math.PI / 2;
-            const x = radius + Math.cos(angle) * radius * (value / 100);
-            const y = radius + Math.sin(angle) * radius * (value / 100);
-            
-            pathData += (i === 0 ? 'M' : 'L') + `${x},${y}`;
-            
-            // Добавляем метки
-            const labelX = radius + Math.cos(angle) * (radius + 20);
-            const labelY = radius + Math.sin(angle) * (radius + 20);
-            labelsHtml += `
-                <text x="${labelX}" y="${labelY}" class="chart-label">
-                    ${labels[i]}
-                </text>
-            `;
+        // Инициализация после загрузки страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            initCosmicBackground();
+            createPhoneCards();
         });
-        
-        pathData += 'Z';
-        
-        return `
-            <svg viewBox="0 0 ${radius * 2} ${radius * 2}" class="radar-chart">
-                <defs>
-                    <linearGradient id="performanceGradient">
-                        <stop offset="0%" stop-color="var(--ultra-primary)"/>
-                        <stop offset="100%" stop-color="var(--ultra-secondary)"/>
-                    </linearGradient>
-                </defs>
-                <path d="${pathData}" class="performance-path"/>
-                ${labelsHtml}
-            </svg>
-        `;
-    }
-}
-
-// Инициализация визуализатора после загрузки страницы
-document.addEventListener('DOMContentLoaded', () => {
-    new UltraVisualizer();
-});
-</script>
-
-<style>
-/* Стили для продвинутых визуальных эффектов */
-.progress-ring {
-    width: 150px;
-    height: 150px;
-    position: relative;
-    margin: 2rem auto;
-}
-
-.ring-svg {
-    transform: rotate(-90deg);
-}
-
-.ring-background {
-    fill: none;
-    stroke: rgba(0, 255, 242, 0.1);
-    stroke-width: 8;
-}
-
-.ring-progress {
-    fill: none;
-    stroke: url(#performanceGradient);
-    stroke-width: 8;
-    stroke-linecap: round;
-    transition: stroke-dasharray 1s ease;
-}
-
-.ring-text {
-    transform: rotate(90deg);
-    fill: white;
-    font-size: 20px;
-    text-anchor: middle;
-    dominant-baseline: middle;
-}
-
-.performance-chart-3d {
-    width: 300px;
-    height: 300px;
-    margin: 2rem auto;
-}
-
-.ultra-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(20px);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-content {
-    width: 90%;
-    max-width: 1200px;
-    background: rgba(10, 10, 15, 0.95);
-    border-radius: 30px;
-    padding: 2rem;
-    border: 1px solid var(--ultra-primary);
-    box-shadow: 0 0 50px rgba(0, 255, 242, 0.3);
-}
-
-.detailed-metrics {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-.radar-chart {
-    width: 100%;
-    height: auto;
-}
-
-.performance-path {
-    fill: rgba(0, 255, 242, 0.2);
-    stroke: var(--ultra-primary);
-    stroke-width: 2;
-    filter: drop-shadow(0 0 10px var(--ultra-primary));
-}
-
-.chart-label {
-    fill: white;
-    font-size: 12px;
-    text-anchor: middle;
-}
-
-.metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-}
-
-.metric-card {
-    background: rgba(0, 255, 242, 0.1);
-    border-radius: 15px;
-    padding: 1.5rem;
-    border: 1px solid rgba(0, 255, 242, 0.2);
-    transition: transform 0.3s ease;
-}
-
-.metric-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0 30px rgba(0, 255, 242, 0.3);
-}
-
-.metric-bar {
-    height: 6px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 3px;
-    margin-top: 1rem;
-    overflow: hidden;
-}
-
-.bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--ultra-primary), var(--ultra-secondary));
-    transition: width 1s ease-out;
-}
-
-@media (max-width: 768px) {
-    .detailed-metrics {
-        grid-template-columns: 1fr;
-    }
-}
-</style>
+    </script>
+</body>
+</html>
