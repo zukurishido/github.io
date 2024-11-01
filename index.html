@@ -5,96 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ultimate Gaming Phones 2024</title>
     
-    <!-- Библиотеки для продвинутых эффектов -->
+    <!-- Библиотеки -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     
     <style>
         :root {
-            --neon-pink: #ff69b4;
             --neon-blue: #00ffff;
             --neon-purple: #9370db;
-            --deep-dark: #0a0a1f;
+            --cyber-blue: #00bfff;
             --glass: rgba(255, 255, 255, 0.1);
         }
 
-        @keyframes cosmicPulse {
-            0% { 
-                filter: hue-rotate(0deg) brightness(1);
-                background-position: 0% 50%;
+        @keyframes gridPulse {
+            0% {
+                opacity: 0.2;
+                transform: scale(1);
             }
-            50% { 
-                filter: hue-rotate(180deg) brightness(1.2);
-                background-position: 100% 50%;
+            50% {
+                opacity: 0.4;
+                transform: scale(1.05);
             }
-            100% { 
-                filter: hue-rotate(360deg) brightness(1);
-                background-position: 0% 50%;
+            100% {
+                opacity: 0.2;
+                transform: scale(1);
             }
         }
 
         body {
             margin: 0;
             padding: 0;
-            background: linear-gradient(
-                45deg,
-                var(--deep-dark),
-                #1a1a3a,
-                #2a1a4a,
-                #1a2a4a
-            );
-            background-size: 400% 400%;
-            animation: cosmicPulse 15s ease infinite;
+            background: #0a0a1f;
             font-family: 'Segoe UI', sans-serif;
             color: white;
-            min-height: 100vh;
             overflow-x: hidden;
         }
 
-        #cosmic-background {
+        .cyber-grid {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            background: 
+                linear-gradient(90deg, rgba(0, 191, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(rgba(0, 191, 255, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: gridPulse 4s ease infinite;
+            pointer-events: none;
             z-index: 0;
-            backdrop-filter: blur(10px);
-        }
-
-        .neon-grid {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: linear-gradient(var(--neon-pink) 1px, transparent 1px),
-                            linear-gradient(90deg, var(--neon-pink) 1px, transparent 1px);
-            background-size: 50px 50px;
-            opacity: 0.1;
-            z-index: 1;
         }
 
         .main-container {
             position: relative;
-            z-index: 2;
-            max-width: 1600px;
+            z-index: 1;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
         }
 
-        .cosmic-title {
-            font-size: 4.5rem;
+        .title {
+            font-size: 3.5rem;
             text-align: center;
             margin: 2rem 0;
-            position: relative;
-            color: var(--neon-pink);
-            text-shadow: 
-                0 0 10px var(--neon-pink),
-                0 0 20px var(--neon-pink),
-                0 0 40px var(--neon-pink);
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
             opacity: 0;
-            transform: translateY(-50px);
+            transform: translateY(-30px);
             animation: titleAppear 1s ease forwards;
         }
 
@@ -105,227 +83,185 @@
             }
         }
 
-        .phones-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 3rem;
-            padding: 2rem;
-            perspective: 2000px;
+        .phones-list {
+            list-style: none;
+            padding: 0;
+            margin: 3rem 0;
         }
 
-        .phone-card {
-            position: relative;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
-            padding: 2rem;
-            border: 1px solid rgba(255, 105, 180, 0.3);
-            transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 
-                0 0 30px rgba(255, 105, 180, 0.2),
-                inset 0 0 20px rgba(255, 105, 180, 0.1);
+        .phone-item {
+            background: rgba(0, 191, 255, 0.05);
+            margin: 1rem 0;
+            padding: 1.5rem;
+            border-radius: 15px;
+            cursor: pointer;
+            border: 1px solid rgba(0, 191, 255, 0.2);
+            transform: translateX(-100%);
             opacity: 0;
-            animation: cardAppear 0.5s ease forwards;
+            animation: slideIn 0.5s ease forwards;
+            transition: all 0.3s ease;
         }
 
-        @keyframes cardAppear {
-            from {
-                opacity: 0;
-                transform: translateY(50px) rotateX(-10deg);
-            }
+        .phone-item:nth-child(odd) {
+            transform: translateX(100%);
+        }
+
+        @keyframes slideIn {
             to {
+                transform: translateX(0);
                 opacity: 1;
-                transform: translateY(0) rotateX(0);
             }
         }
 
-        .phone-card:hover {
-            transform: translateZ(50px) rotateX(10deg);
+        .phone-item:hover {
+            background: rgba(0, 191, 255, 0.1);
+            transform: translateX(10px) scale(1.02);
+            box-shadow: 0 0 30px rgba(0, 191, 255, 0.2);
         }
 
-        .phone-card::before {
-            content: '';
-            position: absolute;
+        .phone-name {
+            font-size: 1.8rem;
+            color: var(--cyber-blue);
+            margin: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price-badge {
+            font-size: 1.2rem;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 191, 255, 0.3);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at center, transparent, rgba(255, 105, 180, 0.1));
+            background: rgba(10, 10, 31, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: relative;
+            width: 90%;
+            max-width: 1200px;
+            margin: 5vh auto;
+            background: rgba(0, 191, 255, 0.05);
             border-radius: 30px;
+            padding: 2rem;
+            border: 1px solid rgba(0, 191, 255, 0.3);
+            box-shadow: 0 0 50px rgba(0, 191, 255, 0.2);
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transform: translateY(-50px);
+            transition: all 0.5s ease;
         }
 
-        .phone-card:hover::before {
+        .modal.active .modal-content {
             opacity: 1;
+            transform: translateY(0);
         }
 
-        .phone-image {
-            width: 100%;
-            height: 250px;
-            object-fit: contain;
-            transform: translateZ(30px);
-            margin-bottom: 2rem;
-            filter: drop-shadow(0 0 20px rgba(255, 105, 180, 0.5));
-            transition: transform 0.3s ease;
-        }
-
-        .phone-image:hover {
-            transform: translateZ(50px) scale(1.1);
-        }
-
-        .phone-name {
+        .close-btn {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
             font-size: 2rem;
-            margin: 1rem 0;
-            color: var(--neon-pink);
-            text-shadow: 0 0 10px var(--neon-pink);
+            color: var(--cyber-blue);
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .price-tag {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
-            border-radius: 20px;
-            font-weight: bold;
-            box-shadow: 0 0 20px rgba(255, 105, 180, 0.5);
+        .close-btn:hover {
+            transform: rotate(90deg);
+            color: var(--neon-blue);
         }
 
-        .specs-grid {
+        .stats-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(0, 191, 255, 0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(0, 191, 255, 0.2);
+            transform: translateZ(0);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateZ(20px);
+            background: rgba(0, 191, 255, 0.1);
+            box-shadow: 0 0 30px rgba(0, 191, 255, 0.2);
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            margin: 2rem 0;
+        }
+
+        .metrics-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
             margin-top: 2rem;
         }
 
-        .spec-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
+        .metric-item {
+            text-align: center;
             padding: 1rem;
-            border: 1px solid rgba(255, 105, 180, 0.2);
-            transform: translateZ(20px);
-            transition: all 0.3s ease;
+            background: rgba(0, 191, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 191, 255, 0.2);
         }
 
-        .spec-item:hover {
-            transform: translateZ(30px) scale(1.05);
-            background: rgba(255, 105, 180, 0.1);
-            box-shadow: 0 0 20px rgba(255, 105, 180, 0.3);
-        }
-
-        .performance-bar {
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-            margin: 1rem 0;
-            overflow: hidden;
-        }
-
-        .performance-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--neon-pink), var(--neon-purple));
-            transform-origin: left;
-            transform: scaleX(0);
-            transition: transform 1s ease;
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
         }
 
         @media (max-width: 768px) {
-            .cosmic-title {
-                font-size: 2.5rem;
+            .title {
+                font-size: 2rem;
             }
-            .phones-grid {
+            .stats-grid {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <canvas id="cosmic-background"></canvas>
-    <div class="neon-grid"></div>
+    <div class="cyber-grid"></div>
     <div class="main-container">
-        <h1 class="cosmic-title">Топ 5 Игровых Смартфонов 2024</h1>
-        <div class="phones-grid" id="phones-container"></div>
+        <h1 class="title">Топ 5 Игровых Смартфонов 2024</h1>
+        <ul class="phones-list" id="phonesList"></ul>
+    </div>
+    <div class="modal" id="phoneModal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div id="modalContent"></div>
+        </div>
     </div>
 
     <script>
-        // Инициализация космического фона
-        const initCosmicBackground = () => {
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({
-                canvas: document.getElementById('cosmic-background'),
-                alpha: true
-            });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-
-            // Создание космических частиц
-            const particlesGeometry = new THREE.BufferGeometry();
-            const particleCount = 5000;
-            const posArray = new Float32Array(particleCount * 3);
-
-            for(let i = 0; i < particleCount * 3; i++) {
-                posArray[i] = (Math.random() - 0.5) * 10;
-            }
-
-            particlesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(posArray, 3));
-
-            const particlesMaterial = new THREE.ShaderMaterial({
-                uniforms: {
-                    time: { value: 0 },
-                    color: { value: new THREE.Color(0xff69b4) }
-                },
-                vertexShader: `
-                    uniform float time;
-                    void main() {
-                        vec3 pos = position;
-                        pos.x += sin(time * 0.001 + position.y) * 0.1;
-                        pos.y += cos(time * 0.001 + position.x) * 0.1;
-                        pos.z += sin(time * 0.001 + position.z) * 0.1;
-                        
-                        vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-                        gl_PointSize = 2.0 * (300.0 / -mvPosition.z);
-                        gl_Position = projectionMatrix * mvPosition;
-                    }
-                `,
-                fragmentShader: `
-                    uniform vec3 color;
-                    void main() {
-                        float dist = length(gl_PointCoord - vec2(0.5));
-                        float alpha = 0.05 / dist;
-                        gl_FragColor = vec4(color, alpha);
-                    }
-                `,
-                transparent: true,
-                blending: THREE.AdditiveBlending
-            });
-
-            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-            scene.add(particlesMesh);
-            camera.position.z = 5;
-
-            const animate = () => {
-                requestAnimationFrame(animate);
-                particlesMaterial.uniforms.time.value += 1;
-                particlesMesh.rotation.x += 0.0005;
-                particlesMesh.rotation.y += 0.0003;
-                renderer.render(scene, camera);
-            };
-
-            animate();
-
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
-        };
-
-        // Данные о смартфонах
         const phones = [
             {
                 name: "ASUS ROG Phone 7",
                 price: 69999,
-                image: "/api/placeholder/400/300",
                 specs: {
                     processor: "Snapdragon 8 Gen 2",
                     ram: "16 ГБ LPDDR5X",
@@ -334,12 +270,20 @@
                     battery: "6000 мАч",
                     cooling: "GameCool 7"
                 },
-                performance: 98
+                performance: {
+                    gaming: 98,
+                    antutu: 1250000,
+                    gpu: 95,
+                    cooling: 97,
+                    response: 99,
+                    stability: 96,
+                    thermals: 94,
+                    charging: 92
+                }
             },
             {
                 name: "Red Magic 8 Pro",
                 price: 65999,
-                image: "/api/placeholder/400/300",
                 specs: {
                     processor: "Snapdragon 8 Gen 2",
                     ram: "12 ГБ LPDDR5X",
@@ -348,12 +292,20 @@
                     battery: "6000 мАч",
                     cooling: "ICE 11"
                 },
-                performance: 95
+                performance: {
+                    gaming: 96,
+                    antutu: 1220000,
+                    gpu: 94,
+                    cooling: 95,
+                    response: 97,
+                    stability: 93,
+                    thermals: 92,
+                    charging: 95
+                }
             },
             {
                 name: "Black Shark 5 Pro",
                 price: 62999,
-                image: "/api/placeholder/400/300",
                 specs: {
                     processor: "Snapdragon 8+ Gen 1",
                     ram: "12 ГБ LPDDR5",
@@ -362,12 +314,20 @@
                     battery: "4650 мАч",
                     cooling: "Sandwich Liquid Cooling"
                 },
-                performance: 92
+                performance: {
+                    gaming: 94,
+                    antutu: 1180000,
+                    gpu: 92,
+                    cooling: 93,
+                    response: 95,
+                    stability: 91,
+                    thermals: 90,
+                    charging: 96
+                }
             },
             {
                 name: "OnePlus 11R",
                 price: 59999,
-                image: "/api/placeholder/400/300",
                 specs: {
                     processor: "Snapdragon 8+ Gen 1",
                     ram: "16 ГБ LPDDR5X",
@@ -376,12 +336,20 @@
                     battery: "5000 мАч",
                     cooling: "3D Cooling System"
                 },
-                performance: 90
+                performance: {
+                    gaming: 92,
+                    antutu: 1150000,
+                    gpu: 90,
+                    cooling: 89,
+                    response: 93,
+                    stability: 90,
+                    thermals: 88,
+                    charging: 94
+                }
             },
             {
                 name: "Poco F5 Pro",
                 price: 54999,
-                image: "/api/placeholder/400/300",
                 specs: {
                     processor: "Snapdragon 8+ Gen 1",
                     ram: "12 ГБ LPDDR5",
@@ -390,80 +358,259 @@
                     battery: "5160 мАч",
                     cooling: "LiquidCool 3.0"
                 },
-                performance: 88
+                performance: {
+                    gaming: 90,
+                    antutu: 1120000,
+                    gpu: 88,
+                    cooling: 87,
+                    response: 91,
+                    stability: 89,
+                    thermals: 86,
+                    charging: 92
+                }
             }
         ];
 
-        // Создание карточек телефонов
-        const createPhoneCards = () => {
-            const container = document.getElementById('phones-container');
+        // Создание списка телефонов
+        const phonesList = document.getElementById('phonesList');
+        phones.forEach((phone, index) => {
+            const li = document.createElement('li');
+            li.className = 'phone-item';
+            li.style.animationDelay = `${index * 0.2}s`;
             
-            phones.forEach((phone, index) => {
-                const card = document.createElement('div');
-                card.className = 'phone-card';
-                card.style.animationDelay = `${index * 0.2}s`;
+            li.innerHTML = `
+                <h2 class="phone-name">
+                    ${phone.name}
+                    <span class="price-badge">${phone.price.toLocaleString()} ₽</span>
+                </h2>
+            `;
+            
+            li.addEventListener('click', () => showPhoneDetails(phone));
+            phonesList.appendChild(li);
+        });
 
-                card.innerHTML = `
-                    <img src="${phone.image}" alt="${phone.name}" class="phone-image">
-                    <h2 class="phone-name">${phone.name}</h2>
-                    <div class="price-tag">${phone.price.toLocaleString()} ₽</div>
-                    <div class="performance-bar">
-                        <div class="performance-fill" style="transform: scaleX(${phone.performance / 100})"></div>
-                    </div>
-                    <div class="specs-grid">
-                        ${Object.entries(phone.specs).map(([key, value]) => `
-                            <div class="spec-item">
-                                <h3>${key}</h3>
-                                <p>${value}</p>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
+        // Показ детальной информации
+        function showPhoneDetails(phone) {
+            const modal = document.getElementById('phoneModal');
+            const modalContent = document.getElementById('modalContent');
+            
+            modalContent.innerHTML = `
+                <h2 class="phone-name">${phone.name}</h2>
+                <div class="stats-grid">
+                    ${Object.entries(phone.specs).map(([key, value]) => `
+                        <div class="stat-card">
+                            <h3>${key}</h3>
+                            <p>${value}</p>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="chart-container">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+                <div class="metrics-container">
+                    ${Object.entries(phone.performance).map(([key, value]) => `
+                        <div class="metric-item">
+                            <div class="metric-value">${value}</div>
+                            <div class="metric-label">${key}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
 
-                // Добавляем интерактивность карточке
-                card.addEventListener('mousemove', (e) => {
-                    const rect = card.getBoundingClientRect();
+            // Инициализация графика
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: Object.keys(phone.performance),
+                    datasets: [{
+                        label: 'Performance Metrics',
+                        data: Object.values(phone.performance),
+                        backgroundColor: 'rgba(0, 191, 255, 0.2)',
+                        borderColor: 'rgba(0, 191, 255, 1)',
+                        pointBackgroundColor: 'rgba(0, 191, 255, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(0, 191, 255, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 191, 255, 0.1)'
+                            },
+                            pointLabels: {
+                                color: '#fff',
+                                font: {
+                                    size: 14
+                                }
+                            },
+                            ticks: {
+                                backdropColor: 'transparent',
+                                color: 'rgba(0, 191, 255, 0.8)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeInOutQuart'
+                    }
+                }
+            });
+
+            // Показ модального окна с анимацией
+            modal.style.display = 'block';
+            setTimeout(() => {
+                modal.classList.add('active');
+            }, 10);
+
+            // Обработчик закрытия
+            const closeBtn = modal.querySelector('.close-btn');
+            closeBtn.onclick = () => {
+                modal.classList.remove('active');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 500);
+            };
+
+            // Создание 3D эффекта для метрик
+            const metricItems = document.querySelectorAll('.metric-item');
+            metricItems.forEach((item, index) => {
+                gsap.from(item, {
+                    opacity: 0,
+                    y: 50,
+                    delay: index * 0.1,
+                    duration: 0.8,
+                    ease: 'power2.out'
+                });
+
+                // Добавление интерактивности
+                item.addEventListener('mousemove', (e) => {
+                    const rect = item.getBoundingClientRect();
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
                     
                     const centerX = rect.width / 2;
                     const centerY = rect.height / 2;
                     
-                    const rotateX = (y - centerY) / 20;
-                    const rotateY = (centerX - x) / 20;
+                    const rotateX = (y - centerY) / 10;
+                    const rotateY = (centerX - x) / 10;
                     
-                    gsap.to(card, {
+                    gsap.to(item, {
                         rotateX: rotateX,
                         rotateY: rotateY,
-                        duration: 0.5,
+                        scale: 1.1,
+                        duration: 0.3,
                         ease: 'power2.out'
                     });
                 });
 
-                card.addEventListener('mouseleave', () => {
-                    gsap.to(card, {
+                item.addEventListener('mouseleave', () => {
+                    gsap.to(item, {
                         rotateX: 0,
                         rotateY: 0,
-                        duration: 0.5,
+                        scale: 1,
+                        duration: 0.3,
                         ease: 'power2.out'
                     });
                 });
-
-                container.appendChild(card);
-
-                // Анимация появления полосы производительности
-                setTimeout(() => {
-                    const fill = card.querySelector('.performance-fill');
-                    fill.style.transform = `scaleX(${phone.performance / 100})`;
-                }, (index * 200) + 500);
             });
+
+            // Добавление анимации для статистики
+            const statCards = document.querySelectorAll('.stat-card');
+            statCards.forEach((card, index) => {
+                gsap.from(card, {
+                    opacity: 0,
+                    x: index % 2 === 0 ? -50 : 50,
+                    delay: index * 0.1,
+                    duration: 0.8,
+                    ease: 'power2.out'
+                });
+            });
+        }
+
+        // Создание фонового эффекта частиц
+        const createParticles = () => {
+            const canvas = document.createElement('canvas');
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            canvas.style.pointerEvents = 'none';
+            canvas.style.zIndex = '-1';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+
+            const resize = () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            };
+            
+            window.addEventListener('resize', resize);
+            resize();
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 2 + 1;
+                    this.speedX = Math.random() * 2 - 1;
+                    this.speedY = Math.random() * 2 - 1;
+                    this.color = `rgba(0, 191, 255, ${Math.random() * 0.5})`;
+                }
+
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+
+                    if (this.x > canvas.width) this.x = 0;
+                    if (this.x < 0) this.x = canvas.width;
+                    if (this.y > canvas.height) this.y = 0;
+                    if (this.y < 0) this.y = canvas.height;
+                }
+
+                draw() {
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            const initParticles = () => {
+                for (let i = 0; i < 100; i++) {
+                    particles.push(new Particle());
+                }
+            };
+
+            const animate = () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(particle => {
+                    particle.update();
+                    particle.draw();
+                });
+                requestAnimationFrame(animate);
+            };
+
+            initParticles();
+            animate();
         };
 
         // Инициализация после загрузки страницы
         document.addEventListener('DOMContentLoaded', () => {
-            initCosmicBackground();
-            createPhoneCards();
+            createParticles();
         });
     </script>
 </body>
-</html>
+</html>      
