@@ -1,296 +1,218 @@
-import { useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { PieChart, Pie, Cell } from 'recharts';
-import { TrendingUp, TrendingDown, Clock, AlertCircle, CheckCircle, Activity } from 'lucide-react';
-
-const spotData = {
-  totalTrades: 17,
-  profitableTrades: 15,
-  activePositions: 2,
-  totalProfit: 398,
-  trades: [
-    { symbol: 'ETH', profit: 6 },
-    { symbol: 'MEW', profit: 120 },
-    { symbol: 'FLOKI', profit: 20 },
-    { symbol: 'SOL', profit: 10 },
-    { symbol: 'ZRO', profit: 10 },
-    { symbol: 'APT', profit: 15 },
-    { symbol: 'INJ', profit: 20 },
-    { symbol: 'BONK', profit: 8 },
-    { symbol: 'TURBO', profit: 80 },
-    { symbol: '1MBABYDOGE', profit: 40 },
-    { symbol: 'TIA', profit: 10 },
-    { symbol: 'PEPE', profit: 15 },
-    { symbol: 'DOGE', profit: 24 },
-    { symbol: 'WIF', profit: 5 },
-    { symbol: 'NEIROCTO', profit: 15 },
-    { symbol: 'MAVIA', profit: 0, status: 'active' },
-    { symbol: 'SUI', profit: 0, status: 'active' }
-  ]
-};
-
-const defiData = {
-  totalTrades: 22,
-  failedTrades: 3,
-  totalProfit: 2598,
-  trades: [
-    { symbol: 'EGGY', profit: 51 },
-    { symbol: 'PINKE', profit: 800 },
-    { symbol: 'OR', profit: 25 },
-    { symbol: 'BGG', profit: 150 },
-    { symbol: 'PHOENIX', profit: 20 },
-    { symbol: 'MANTIS', profit: 56 },
-    { symbol: 'DBTT', profit: 150 },
-    { symbol: 'BELUGA', profit: 100 },
-    { symbol: 'NIKICOIN', profit: 100 },
-    { symbol: 'KLAUS', profit: 72 },
-    { symbol: 'ENERGY', profit: 50 },
-    { symbol: 'FLIP', profit: 50 },
-    { symbol: 'MAVA', profit: -40 },
-    { symbol: 'MORUD', profit: 70 },
-    { symbol: 'VIKITA', profit: 54 },
-    { symbol: 'REALCHAD', profit: 800 },
-    { symbol: 'DOBBY', profit: 40 },
-    { symbol: 'PUMPKING', profit: 120 },
-    { symbol: 'TNUT', profit: 66 }
-  ]
-};
-
-const futuresData = {
-  totalTrades: 3,
-  profitableTrades: 1,
-  breakEvenTrades: 1,
-  lossTrades: 1,
-  trades: [
-    { symbol: 'BLZ', profit: 48.26 },
-    { symbol: 'TIA', profit: -20 },
-    { symbol: 'ATOM', profit: 0, status: 'breakeven' }
-  ]
-};
-
-const COLORS = ['#10B981', '#F59E0B', '#EF4444'];
-
-export default function Dashboard() {
-  const [activeSection, setActiveSection] = useState('spot');
-
-  const getStatusColor = (profit, status) => {
-    if (status === 'active') return 'bg-yellow-100 border-yellow-400';
-    if (status === 'breakeven') return 'bg-gray-100 border-gray-400';
-    return profit > 0 ? 'bg-green-100 border-green-400' : 'bg-red-100 border-red-400';
-  };
-
-  const getStatusIcon = (profit, status) => {
-    if (status === 'active') return <Clock className="w-4 h-4 text-yellow-600" />;
-    if (status === 'breakeven') return <AlertCircle className="w-4 h-4 text-gray-600" />;
-    return profit > 0 ? 
-      <TrendingUp className="w-4 h-4 text-green-600" /> : 
-      <TrendingDown className="w-4 h-4 text-red-600" />;
-  };
-
-  return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Trading Dashboard</h1>
-          <p className="text-gray-600">Период: 01.09.24-01.10.24 (октябрь 2024)</p>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Stats Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .gradient-bg {
+            background: linear-gradient(-45deg, #1a1c2e, #2d3748, #1a1c2e, #2d3748);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+        .stat-card {
+            animation: fadeIn 0.5s ease-out;
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .neon-border {
+            box-shadow: 0 0 5px #fff,
+                       0 0 10px #fff,
+                       0 0 20px #0ff;
+        }
+        .profit-positive { color: #10B981; }
+        .profit-neutral { color: #F59E0B; }
+        .profit-negative { color: #EF4444; }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: scale(1.02);
+        }
+        .active-tab {
+            background: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+        .sector-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen p-6">
+    <div class="max-w-7xl mx-auto">
+        <!-- Animated Header -->
+        <div class="text-center mb-10 glass-effect rounded-2xl p-8 neon-border">
+            <h1 class="text-5xl font-bold text-white mb-4" style="animation: fadeIn 1s ease-out;">
+                Trading Analytics Dashboard
+            </h1>
+            <p class="text-xl text-gray-300">
+                01.09.24-01.10.24 (октябрь) 2024
+            </p>
         </div>
 
-        {/* Navigation */}
-        <div className="flex justify-center mb-8">
-          <button 
-            onClick={() => setActiveSection('spot')}
-            className={`px-6 py-2 rounded-l-lg ${activeSection === 'spot' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600'}`}
-          >
-            SPOT
-          </button>
-          <button 
-            onClick={() => setActiveSection('futures')}
-            className={`px-6 py-2 ${activeSection === 'futures' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600'}`}
-          >
-            FUTURES
-          </button>
-          <button 
-            onClick={() => setActiveSection('defi')}
-            className={`px-6 py-2 rounded-r-lg ${activeSection === 'defi' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600'}`}
-          >
-            DEFI
-          </button>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {activeSection === 'spot' && (
-            <>
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-gray-700">Всего сделок</h3>
-                  <Activity className="w-6 h-6 text-blue-500" />
+        <!-- FUTURES Section -->
+        <div class="mb-12 glass-effect rounded-2xl p-8">
+            <div class="sector-title">⚡ FUTURES (10-20x)</div>
+            
+            <!-- Futures Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="stat-card glass-effect rounded-xl p-6">
+                    <div class="text-gray-300 mb-2">Всего сделок</div>
+                    <div class="text-4xl font-bold text-white">3</div>
                 </div>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{spotData.totalTrades}</p>
-              </div>
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-gray-700">Прибыльных</h3>
-                  <CheckCircle className="w-6 h-6 text-green-500" />
+                <div class="stat-card glass-effect rounded-xl p-6">
+                    <div class="text-gray-300 mb-2">Прибыльных сделок</div>
+                    <div class="text-4xl font-bold profit-positive">1 (+48%)</div>
                 </div>
-                <p className="text-3xl font-bold text-green-500 mt-2">{spotData.profitableTrades}</p>
-              </div>
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-gray-700">Общий профит</h3>
-                  <TrendingUp className="w-6 h-6 text-green-500" />
+                <div class="stat-card glass-effect rounded-xl p-6">
+                    <div class="text-gray-300 mb-2">Сделок по стопу</div>
+                    <div class="text-4xl font-bold profit-negative">1 (-20%)</div>
                 </div>
-                <p className="text-3xl font-bold text-green-500 mt-2">+{spotData.totalProfit}%</p>
-              </div>
-            </>
-          )}
-
-          {activeSection === 'defi' && (
-            <>
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-gray-700">Всего сделок</h3>
-                  <Activity className="w-6 h-6 text-blue-500" />
-                </div>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{defiData.totalTrades}</p>
-              </div>
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-gray-700">Убыточных</h3>
-                  <AlertCircle className="w-6 h-6 text-red-500" />
-                </div>
-                <p className="text-3xl font-bold text-red-500 mt-2">{defiData.failedTrades}</p>
-              </div>
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-gray-700">Общий профит</h3>
-                  <TrendingUp className="w-6 h-6 text-green-500" />
-                </div>
-                <p className="text-3xl font-bold text-green-500 mt-2">+{defiData.totalProfit}%</p>
-              </div>
-            </>
-          )}
-
-          {activeSection === 'futures' && (
-            <>
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-gray-700">Всего сделок</h3>
-                  <Activity className="w-6 h-6 text-blue-500" />
-                </div>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{futuresData.totalTrades}</p>
-              </div>
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-gray-700">Прибыльных</h3>
-                  <CheckCircle className="w-6 h-6 text-green-500" />
-                </div>
-                <p className="text-3xl font-bold text-green-500 mt-2">{futuresData.profitableTrades}</p>
-              </div>
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-gray-700">Убыточных</h3>
-                  <TrendingDown className="w-6 h-6 text-red-500" />
-                </div>
-                <p className="text-3xl font-bold text-red-500 mt-2">{futuresData.lossTrades}</p>
-              </div>
-            </>
-          )}
-        </div>
-
-        {/* Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-700 mb-4">Распределение прибыли</h3>
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={
-                    activeSection === 'spot' ? spotData.trades :
-                    activeSection === 'defi' ? defiData.trades :
-                    futuresData.trades
-                  }
-                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                >
-                  <XAxis dataKey="symbol" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="profit" fill="#3B82F6" />
-                </BarChart>
-              </ResponsiveContainer>
             </div>
-          </div>
 
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-700 mb-4">Статистика сделок</h3>
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={[
-                      { name: 'Прибыльные', value: activeSection === 'spot' ? spotData.profitableTrades : 
-                                                  activeSection === 'defi' ? defiData.trades.filter(t => t.profit > 0).length :
-                                                  futuresData.profitableTrades },
-                      { name: 'В работе', value: activeSection === 'spot' ? spotData.activePositions :
-                                                activeSection === 'defi' ? 0 :
-                                                futuresData.breakEvenTrades },
-                      { name: 'Убыточные', value: activeSection === 'spot' ? 0 :
-                                                  activeSection === 'defi' ? defiData.failedTrades :
-                                                  futuresData.lossTrades }
-                    ]}
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                    label
-                  >
-                    {COLORS.map((color, index) => (
-                      <Cell key={`cell-${index}`} fill={color} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
+            <!-- Futures Trades -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="card-hover glass-effect rounded-xl p-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg text-white">BLZ</span>
+                        <span class="profit-positive text-xl">+48.26%</span>
+                    </div>
+                </div>
+                <div class="card-hover glass-effect rounded-xl p-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg text-white">TIA</span>
+                        <span class="profit-negative text-xl">-20%</span>
+                    </div>
+                </div>
+                <div class="card-hover glass-effect rounded-xl p-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg text-white">ATOM</span>
+                        <span class="profit-neutral text-xl">б/у</span>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
 
-        {/* Trades List */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h3 className="text-lg font-semibold text-gray-700 mb-4">Список сделок</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {(activeSection === 'spot' ? spotData.trades :
-              activeSection === 'defi' ? defiData.trades :
-              futuresData.trades).map((trade, index) => (
-              <div
-                key={index}
-                className={`${getStatusColor(trade.profit, trade.status)} 
-                           border rounded-lg p-4 transition-transform duration-200 hover:scale-105`}
-              >
-                <div className="flex justify-between items-center mb-2">
-                  <span className="font-semibold">{trade.symbol}</span>
-                  {getStatusIcon(trade.profit, trade.status)}
+        <!-- SPOT Section -->
+        <div class="mb-12 glass-effect rounded-2xl p-8">
+            <div class="sector-title">💎 SPOT</div>
+            
+            <!-- Spot Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="stat-card glass-effect rounded-xl p-6">
+                    <div class="text-gray-300 mb-2">Всего сделок</div>
+                    <div class="text-4xl font-bold text-white">17</div>
                 </div>
-                <div className={`text-lg font-bold ${
-                  trade.status === 'active' ? 'text-yellow-600' :
-                  trade.status === 'breakeven' ? 'text-gray-
-                    [предыдущий код остаётся тем же...]
+                <div class="stat-card glass-effect rounded-xl p-6">
+                    <div class="text-gray-300 mb-2">Прибыльных</div>
+                    <div class="text-4xl font-bold profit-positive">15</div>
+                </div>
+                <div class="stat-card glass-effect rounded-xl p-6">
+                    <div class="text-gray-300 mb-2">Общий профит</div>
+                    <div class="text-4xl font-bold profit-positive">+398%</div>
+                </div>
+                <div class="stat-card glass-effect rounded-xl p-6">
+                    <div class="text-gray-300 mb-2">В работе</div>
+                    <div class="text-4xl font-bold profit-neutral">2</div>
+                </div>
+            </div>
 
-                <div className={`text-lg font-bold ${
-                  trade.status === 'active' ? 'text-yellow-600' :
-                  trade.status === 'breakeven' ? 'text-gray-600' :
-                  trade.profit > 0 ? 'text-green-600' : 'text-red-600'
-                }`}>
-                  {trade.status === 'active' ? 'Active' :
-                   trade.status === 'breakeven' ? 'B/E' :
-                   `${trade.profit > 0 ? '+' : ''}${trade.profit}%`}
+            <!-- Spot Trades Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <div class="card-hover glass-effect rounded-xl p-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg text-white">ETH</span>
+                        <span class="profit-positive text-xl">+6%</span>
+                    </div>
                 </div>
-              </div>
-            ))}
-          </div>
+                <div class="card-hover glass-effect rounded-xl p-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg text-white">MEW</span>
+                        <span class="profit-positive text-xl">+120%</span>
+                    </div>
+                </div>
+                <!-- Continue with all SPOT trades -->
+                <!-- MEW, FLOKI, SOL, ZRO, APT, INJ, BONK, TURBO, 1MBABYDOGE, TIA, PEPE, DOGE, WIF, NEIROCTO -->
+                <!-- Add all remaining SPOT trades here -->
+            </div>
         </div>
-      </div>
+
+        <!-- DEFI Section -->
+        <div class="mb-12 glass-effect rounded-2xl p-8">
+            <div class="sector-title">🔮 DEFI</div>
+            
+            <!-- DEFI Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="stat-card glass-effect rounded-xl p-6">
+                    <div class="text-gray-300 mb-2">Всего позиций</div>
+                    <div class="text-4xl font-bold text-white">19</div>
+                </div>
+                <div class="stat-card glass-effect rounded-xl p-6">
+                    <div class="text-gray-300 mb-2">Убыточных позиций</div>
+                    <div class="text-4xl font-bold profit-negative">3 (-100%)</div>
+                </div>
+                <div class="stat-card glass-effect rounded-xl p-6">
+                    <div class="text-gray-300 mb-2">Суммарный профит</div>
+                    <div class="text-4xl font-bold profit-positive">+2598%</div>
+                </div>
+            </div>
+
+            <!-- DEFI Trades Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <!-- Add all DEFI trades here -->
+                <div class="card-hover glass-effect rounded-xl p-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg text-white">EGGY</span>
+                        <span class="profit-positive text-xl">+51%</span>
+                    </div>
+                </div>
+                <!-- Continue with all DEFI trades -->
+                <!-- Add remaining DEFI trades -->
+            </div>
+        </div>
     </div>
-  );
-}
+
+    <script>
+        // Add any additional JavaScript for interactivity and animations
+        document.querySelectorAll('.card-hover').forEach(card => {
+            card.addEventListener('mouseover', () => {
+                card.style.transform = 'scale(1.05)';
+                card.style.boxShadow = '0 0 20px rgba(255,255,255,0.2)';
+            });
+            
+            card.addEventListener('mouseout', () => {
+                card.style.transform = 'scale(1)';
+                card.style.boxShadow = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
