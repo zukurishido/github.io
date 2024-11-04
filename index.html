@@ -3,216 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trading Stats Dashboard</title>
+    <title>Crypto Sharks - Trading Stats</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <style>
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        :root {
+            --shark-green: #00ff9d;
+            --shark-dark: #0a0a0a;
         }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        body {
+            background-color: var(--shark-dark);
+            color: white;
         }
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .shark-gradient {
+            background: linear-gradient(45deg, var(--shark-dark), #1a1a1a);
         }
-        .gradient-bg {
-            background: linear-gradient(-45deg, #1a1c2e, #2d3748, #1a1c2e, #2d3748);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-        }
-        .stat-card {
-            animation: fadeIn 0.5s ease-out;
-            transition: all 0.3s ease;
-        }
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .neon-border {
-            box-shadow: 0 0 5px #fff,
-                       0 0 10px #fff,
-                       0 0 20px #0ff;
-        }
-        .profit-positive { color: #10B981; }
-        .profit-neutral { color: #F59E0B; }
-        .profit-negative { color: #EF4444; }
-        .card-hover {
-            transition: all 0.3s ease;
+        .green-glow {
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
         }
         .card-hover:hover {
-            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(0, 255, 157, 0.3);
+            transform: translateY(-5px);
         }
-        .active-tab {
-            background: rgba(59, 130, 246, 0.5);
-            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        .glass-dark {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 157, 0.1);
         }
-        .sector-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #fff;
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        .shark-border {
+            border: 1px solid var(--shark-green);
+        }
+        .shark-text {
+            color: var(--shark-green);
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        .grid-masonry {
+            column-count: 3;
+            column-gap: 1rem;
+        }
+        @media (max-width: 768px) {
+            .grid-masonry {
+                column-count: 2;
+            }
+        }
+        @media (max-width: 640px) {
+            .grid-masonry {
+                column-count: 1;
+            }
         }
     </style>
 </head>
-<body class="gradient-bg min-h-screen p-6">
-    <div class="max-w-7xl mx-auto">
-        <!-- Animated Header -->
-        <div class="text-center mb-10 glass-effect rounded-2xl p-8 neon-border">
-            <h1 class="text-5xl font-bold text-white mb-4" style="animation: fadeIn 1s ease-out;">
-                Trading Analytics Dashboard
-            </h1>
-            <p class="text-xl text-gray-300">
-                01.09.24-01.10.24 (октябрь) 2024
-            </p>
+<body>
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header с логотипом -->
+        <div class="flex items-center justify-between mb-12">
+            <div class="flex items-center space-x-4">
+                <!-- Лого акулы в SVG -->
+                <svg class="w-12 h-12" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 5 L95 45 L50 95 L5 45 Z" stroke="var(--shark-green)" stroke-width="2" fill="none"/>
+                </svg>
+                <h1 class="text-3xl font-bold shark-text">CRYPTO SHARKS</h1>
+            </div>
+            <div class="shark-text px-6 py-2 shark-border rounded-full">
+                PRIVAT CLUB ⭐
+            </div>
         </div>
 
+        <h2 class="text-4xl font-bold mb-8 text-center">ИТОГИ МЕСЯЦА</h2>
+        <p class="text-center text-gray-400 mb-12">01.09.24-01.10.24 (октябрь 2024)</p>
+
         <!-- FUTURES Section -->
-        <div class="mb-12 glass-effect rounded-2xl p-8">
-            <div class="sector-title">⚡ FUTURES (10-20x)</div>
-            
-            <!-- Futures Stats -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="stat-card glass-effect rounded-xl p-6">
-                    <div class="text-gray-300 mb-2">Всего сделок</div>
-                    <div class="text-4xl font-bold text-white">3</div>
+        <div class="mb-16 glass-dark rounded-3xl p-8 card-hover transition-all duration-300">
+            <h3 class="text-2xl font-bold mb-6 shark-text">⚡ FUTURES (10-20x)</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-dark rounded-xl p-6">
+                    <div class="text-lg text-gray-400">BLZ</div>
+                    <div class="text-2xl shark-text">+48.26%</div>
                 </div>
-                <div class="stat-card glass-effect rounded-xl p-6">
-                    <div class="text-gray-300 mb-2">Прибыльных сделок</div>
-                    <div class="text-4xl font-bold profit-positive">1 (+48%)</div>
+                <div class="glass-dark rounded-xl p-6">
+                    <div class="text-lg text-gray-400">TIA</div>
+                    <div class="text-2xl text-red-500">-20%</div>
                 </div>
-                <div class="stat-card glass-effect rounded-xl p-6">
-                    <div class="text-gray-300 mb-2">Сделок по стопу</div>
-                    <div class="text-4xl font-bold profit-negative">1 (-20%)</div>
+                <div class="glass-dark rounded-xl p-6">
+                    <div class="text-lg text-gray-400">ATOM</div>
+                    <div class="text-2xl text-yellow-500">б/у</div>
                 </div>
             </div>
-
-            <!-- Futures Trades -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="card-hover glass-effect rounded-xl p-4">
-                    <div class="flex justify-between items-center">
-                        <span class="text-lg text-white">BLZ</span>
-                        <span class="profit-positive text-xl">+48.26%</span>
-                    </div>
-                </div>
-                <div class="card-hover glass-effect rounded-xl p-4">
-                    <div class="flex justify-between items-center">
-                        <span class="text-lg text-white">TIA</span>
-                        <span class="profit-negative text-xl">-20%</span>
-                    </div>
-                </div>
-                <div class="card-hover glass-effect rounded-xl p-4">
-                    <div class="flex justify-between items-center">
-                        <span class="text-lg text-white">ATOM</span>
-                        <span class="profit-neutral text-xl">б/у</span>
-                    </div>
-                </div>
+            <div class="mt-6 text-gray-400">
+                <p>Всего сделок: 3</p>
+                <p>Сделок в Б/У: 1</p>
+                <p>🔴 Сделок по стопу: 1 (-20%)</p>
+                <p>🟢 Прибыльных сделок: 1 (+48%)</p>
             </div>
         </div>
 
         <!-- SPOT Section -->
-        <div class="mb-12 glass-effect rounded-2xl p-8">
-            <div class="sector-title">💎 SPOT</div>
-            
-            <!-- Spot Stats -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                <div class="stat-card glass-effect rounded-xl p-6">
-                    <div class="text-gray-300 mb-2">Всего сделок</div>
-                    <div class="text-4xl font-bold text-white">17</div>
+        <div class="mb-16 glass-dark rounded-3xl p-8 card-hover transition-all duration-300">
+            <h3 class="text-2xl font-bold mb-6 shark-text">💎 SPOT</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">ETH</div>
+                    <div class="shark-text">+6%</div>
                 </div>
-                <div class="stat-card glass-effect rounded-xl p-6">
-                    <div class="text-gray-300 mb-2">Прибыльных</div>
-                    <div class="text-4xl font-bold profit-positive">15</div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">MEW</div>
+                    <div class="shark-text">+120%</div>
                 </div>
-                <div class="stat-card glass-effect rounded-xl p-6">
-                    <div class="text-gray-300 mb-2">Общий профит</div>
-                    <div class="text-4xl font-bold profit-positive">+398%</div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">FLOKI</div>
+                    <div class="shark-text">+20%</div>
                 </div>
-                <div class="stat-card glass-effect rounded-xl p-6">
-                    <div class="text-gray-300 mb-2">В работе</div>
-                    <div class="text-4xl font-bold profit-neutral">2</div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">SOL</div>
+                    <div class="shark-text">+10%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">ZRO</div>
+                    <div class="shark-text">+10%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">APT</div>
+                    <div class="shark-text">+15%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">INJ</div>
+                    <div class="shark-text">+20%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">BONK</div>
+                    <div class="shark-text">+8%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">TURBO</div>
+                    <div class="shark-text">+80%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">1MBABYDOGE</div>
+                    <div class="shark-text">+40%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">TIA</div>
+                    <div class="shark-text">+10%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">PEPE</div>
+                    <div class="shark-text">+15%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">DOGE</div>
+                    <div class="shark-text">+24%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">WIF</div>
+                    <div class="shark-text">+5%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">NEIROCTO</div>
+                    <div class="shark-text">+15%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">MAVIA</div>
+                    <div class="text-yellow-500">в позиции</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">SUI</div>
+                    <div class="text-yellow-500">в позиции</div>
                 </div>
             </div>
-
-            <!-- Spot Trades Grid -->
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                <div class="card-hover glass-effect rounded-xl p-4">
-                    <div class="flex justify-between items-center">
-                        <span class="text-lg text-white">ETH</span>
-                        <span class="profit-positive text-xl">+6%</span>
-                    </div>
-                </div>
-                <div class="card-hover glass-effect rounded-xl p-4">
-                    <div class="flex justify-between items-center">
-                        <span class="text-lg text-white">MEW</span>
-                        <span class="profit-positive text-xl">+120%</span>
-                    </div>
-                </div>
-                <!-- Continue with all SPOT trades -->
-                <!-- MEW, FLOKI, SOL, ZRO, APT, INJ, BONK, TURBO, 1MBABYDOGE, TIA, PEPE, DOGE, WIF, NEIROCTO -->
-                <!-- Add all remaining SPOT trades here -->
+            <div class="mt-6 text-gray-400">
+                <p>Всего сделок: 17</p>
+                <p>Сделок Б/У: 0</p>
+                <p>🔴 Сделок в убыток: 0</p>
+                <p>🟢 Прибыльных сделок: 15 (+398%)</p>
+                <p>🟠 Позиции в работе: 2</p>
             </div>
         </div>
 
         <!-- DEFI Section -->
-        <div class="mb-12 glass-effect rounded-2xl p-8">
-            <div class="sector-title">🔮 DEFI</div>
-            
-            <!-- DEFI Stats -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="stat-card glass-effect rounded-xl p-6">
-                    <div class="text-gray-300 mb-2">Всего позиций</div>
-                    <div class="text-4xl font-bold text-white">19</div>
+        <div class="mb-16 glass-dark rounded-3xl p-8 card-hover transition-all duration-300">
+            <h3 class="text-2xl font-bold mb-6 shark-text">🔮 DEFI</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">EGGY</div>
+                    <div class="shark-text">+51%</div>
                 </div>
-                <div class="stat-card glass-effect rounded-xl p-6">
-                    <div class="text-gray-300 mb-2">Убыточных позиций</div>
-                    <div class="text-4xl font-bold profit-negative">3 (-100%)</div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">PINKE</div>
+                    <div class="shark-text">+800%</div>
                 </div>
-                <div class="stat-card glass-effect rounded-xl p-6">
-                    <div class="text-gray-300 mb-2">Суммарный профит</div>
-                    <div class="text-4xl font-bold profit-positive">+2598%</div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">OR</div>
+                    <div class="shark-text">+25%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">BGG</div>
+                    <div class="shark-text">+150%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">PHOENIX</div>
+                    <div class="shark-text">+20%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">MANTIS</div>
+                    <div class="shark-text">+56%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">DBTT</div>
+                    <div class="shark-text">+150%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">BELUGA</div>
+                    <div class="shark-text">+100%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">NIKICOIN</div>
+                    <div class="shark-text">+100%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">KLAUS</div>
+                    <div class="shark-text">+72%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">ENERGY</div>
+                    <div class="shark-text">+50%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">FLIP</div>
+                    <div class="shark-text">+50%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">MAVA</div>
+                    <div class="text-red-500">-40%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">MORUD</div>
+                    <div class="shark-text">+70%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">VIKITA</div>
+                    <div class="shark-text">+54%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">REALCHAD</div>
+                    <div class="shark-text">+800%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">DOBBY</div>
+                    <div class="shark-text">+40%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">PUMPKING</div>
+                    <div class="shark-text">+120%</div>
+                </div>
+                <div class="glass-dark rounded-xl p-4">
+                    <div class="text-gray-400">TNUT</div>
+                    <div class="shark-text">+66%</div>
                 </div>
             </div>
-
-            <!-- DEFI Trades Grid -->
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                <!-- Add all DEFI trades here -->
-                <div class="card-hover glass-effect rounded-xl p-4">
-                    <div class="flex justify-between items-center">
-                        <span class="text-lg text-white">EGGY</span>
-                        <span class="profit-positive text-xl">+51%</span>
-                    </div>
-                </div>
-                <!-- Continue with all DEFI trades -->
-                <!-- Add remaining DEFI trades -->
+            <div class="mt-6">
+                <p class="text-red-500 mb-4">❌ 3 позиции укатались в -100%</p>
+                <p class="text-xl shark-text">Суммарный процент DEFI сектора: +2598%</p>
             </div>
         </div>
     </div>
-
-    <script>
-        // Add any additional JavaScript for interactivity and animations
-        document.querySelectorAll('.card-hover').forEach(card => {
-            card.addEventListener('mouseover', () => {
-                card.style.transform = 'scale(1.05)';
-                card.style.boxShadow = '0 0 20px rgba(255,255,255,0.2)';
-            });
-            
-            card.addEventListener('mouseout', () => {
-                card.style.transform = 'scale(1)';
-                card.style.boxShadow = 'none';
-            });
-        });
-    </script>
 </body>
 </html>
